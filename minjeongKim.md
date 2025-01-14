@@ -110,3 +110,122 @@ o1 === o2
 1. 대기 (Pretending) - 아직 작업이 완료되지 않은 상태
 2. 성공 (Fulfilled) - 비동기 작업이 성공적으로 마무리 된 상태
 3. 실패 (Rejected) - 비동기 작업이 실패한 상태
+
+# 📌Node. js
+
+- JavaScript 실행 환경(Run Time), 구동기
+- JavaScript 엔진으로 빌드된 JavaScript 런타임
+- 웹 페이지 내부에 필요한 아주 단순한 기능만을 개발하기 위해 만들어짐
+
+- 프로젝트  - 특정 목적을 갖는 프로그램 단위
+- 패키지 - Node.js에서 사용하는 프로그램의 단위
+
+### 모듈 시스템
+
+- 모듈을 생성하고, 불러오고, 사용하는 등의 모듈을 다루는 다양한 기능을 제공하는 시스템
+- 모듈이란 ?
+    
+    ![image.png](https://prod-files-secure.s3.us-west-2.amazonaws.com/58363f9d-30f7-434c-aa78-46a3ac5e6b32/a4df1484-2d35-43a5-b0df-8b1d9667c18f/image.png)
+    
+
+### 라이브러리
+
+- 프로그램을 개발할 때 필요한 다양한 기능들을 미리 만들어 모듈화 해 놓은 것
+
+# 📌 React.js
+
+- Meta(Facebook)이 개발한 오픈소스 JavaScript 라이브러리
+- 대규모 웹 서비스의 UI를 더 편하게 개발하기 위해 만들어진 기술
+- ex. 넷플릭스, 페이스북, 인스타그램, 노션 등
+
+### React의 기술적인 특징
+
+1. **컴포넌트를 기반으로 UI를 표현한다.** 
+- 컴포넌트(component) : 구성요소. 화면을 구성하는 요소, UI를 구성하는 요소
+
+2. **화면 업데이트 구현이 쉽다.**
+- 업데이트 : 사용자의 행동(클릭, 드래그)에 따라 웹 페이지가 스스로 모습을 바꿔 상호작용 하는 것. 
+
+- 선언형 프로그래밍 : 과정은 생략하고 목적만 간결히 명시하는 방법. 
+⇒ 목적만 깔끔하게 명시. 코드가 간결함. ex. React
+⇒업데이트를 위한 복잡한 동작을 직접 정의할 필요 없이 특정 변수의 값을 바꾸는 것 만으로도 화면을 업데이트 시킬 수 있다.
+
+- 명령형 프로그래밍 : 목적을 이루기 위한 모든 일련의 과정을 설명하는 방식.  
+⇒ 모든 과정을 하나 하나 모두 설명. 코드가 길고 복잡함. ex. JS
+
+- 선언형 프로그래밍 예시
+    
+    ![image.png](https://prod-files-secure.s3.us-west-2.amazonaws.com/58363f9d-30f7-434c-aa78-46a3ac5e6b32/568d4041-5a0d-4aa7-a031-6e542e2908dc/image.png)
+    
+3. **화면 업데이트가 빠르게 처리된다.** 
+- 브라우저의 렌더링 과정
+    
+    ![image.png](https://prod-files-secure.s3.us-west-2.amazonaws.com/58363f9d-30f7-434c-aa78-46a3ac5e6b32/f2c1d087-0938-4145-b5d6-80c850c76be3/image.png)
+    
+    ![image.png](https://prod-files-secure.s3.us-west-2.amazonaws.com/58363f9d-30f7-434c-aa78-46a3ac5e6b32/2bf1c65b-5c08-4302-bffe-c87ae2ac4789/image.png)
+    
+    -Render Tree : 웹페이지의 청사진
+    - Layout : 요소의 배치를 잡는 작업
+    - Painting : 실제로 화면에 그려내는 과정 
+    
+- JavaScript가 DOM을 수정하면 업데이트가 발생한다.
+    
+    ![image.png](https://prod-files-secure.s3.us-west-2.amazonaws.com/58363f9d-30f7-434c-aa78-46a3ac5e6b32/3ef2e537-68c2-444b-ad68-fc95cce9a7f7/image.png)
+    
+    ![image.png](https://prod-files-secure.s3.us-west-2.amazonaws.com/58363f9d-30f7-434c-aa78-46a3ac5e6b32/6cc1321b-df73-4093-9016-fd373026d4bc/image.png)
+    
+    ![image.png](https://prod-files-secure.s3.us-west-2.amazonaws.com/58363f9d-30f7-434c-aa78-46a3ac5e6b32/5d4513eb-2d7a-42e9-853a-0013fdb88809/image.png)
+    
+    ![image.png](https://prod-files-secure.s3.us-west-2.amazonaws.com/58363f9d-30f7-434c-aa78-46a3ac5e6b32/fe4ba05f-dda5-40e2-8299-0e8b8de478bd/image.png)
+    
+    ![image.png](https://prod-files-secure.s3.us-west-2.amazonaws.com/58363f9d-30f7-434c-aa78-46a3ac5e6b32/da4302f2-053b-474a-95c4-a96c7356276a/image.png)
+    
+    ![image.png](https://prod-files-secure.s3.us-west-2.amazonaws.com/58363f9d-30f7-434c-aa78-46a3ac5e6b32/51cfbe8a-1b1b-41cc-9eea-d88acc71bbf6/image.png)
+    
+
+- Virtual DOM ?
+- DOM을 자바스크립트 객체로 흉내낸 것으로 일종의 복제판.
+- React는 업데이트가 발생하면 실제 DOM을 수정하기 전에 이 가상의 복제판 DOM에 먼저 반영.
+
+![image.png](https://prod-files-secure.s3.us-west-2.amazonaws.com/58363f9d-30f7-434c-aa78-46a3ac5e6b32/cf7bdd9f-c174-47ee-be4d-173fd69b2f3f/image.png)
+
+![image.png](https://prod-files-secure.s3.us-west-2.amazonaws.com/58363f9d-30f7-434c-aa78-46a3ac5e6b32/c0be2b02-ab7a-49a2-b8d1-22f1aad1c736/image.png)
+
+![image.png](https://prod-files-secure.s3.us-west-2.amazonaws.com/58363f9d-30f7-434c-aa78-46a3ac5e6b32/f9c049cb-99bc-4dba-b6dc-75fd826860fe/image.png)
+
+### Vite
+
+: 차세대 프론트엔드 개발 툴 
+기본 설정이 적용된 React App 생성 가능
+
+1. React App 생성(with Vite) 
+- npm create vite@latest
+2. React App 가동 
+- npm run dev
+3. React App 접속
+- https://localhost:5173/
+
+### JSX
+
+: JavaScript Extensions , 확장된 자바스크립트의 문법
+
+![image.png](https://prod-files-secure.s3.us-west-2.amazonaws.com/58363f9d-30f7-434c-aa78-46a3ac5e6b32/b21e04b6-536d-4dd2-8a20-7dbb66fd1296/image.png)
+
+![image.png](https://prod-files-secure.s3.us-west-2.amazonaws.com/58363f9d-30f7-434c-aa78-46a3ac5e6b32/db5b9b9c-54be-4d58-b3f3-9c0f1abd3738/image.png)
+
+### Props
+
+: 컴포넌트에 값 전달
+
+![image.png](https://prod-files-secure.s3.us-west-2.amazonaws.com/58363f9d-30f7-434c-aa78-46a3ac5e6b32/9728b12b-345e-4ac9-bd94-9506138d5248/image.png)
+
+### Event Handling
+
+: 웹 내부에서 발생하는 사용자의 행동
+ex. 버튼 클릭, 메세지 입력, 스크롤 등등 처리 할 수 있는 것
+
+⇒ 이벤트가 발생했을 때 그것을 처리하는 것
+
+### 합성 이벤트
+
+: 모든 웹 브라우저의 이벤트 객체를 하나로 통일한 형태
