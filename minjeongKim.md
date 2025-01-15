@@ -229,3 +229,82 @@ ex. 버튼 클릭, 메세지 입력, 스크롤 등등 처리 할 수 있는 것
 ### 합성 이벤트
 
 : 모든 웹 브라우저의 이벤트 객체를 하나로 통일한 형태
+
+
+# 📌State
+
+- State : 현재 가지고 있는 형태나 모양을 정의. 
+변화할 수 있는 동적인 값
+
+⇒ State를 갖는 React 컴포넌트는 State의 값에 따라 렌더링 되는 UI가 결정된다.
+
+# 📌useRef, useState
+
+- useRef : 새로운 Reference 객체를 생성하는 기능
+
+```jsx
+const refObject = useRef()
+```
+
+### useRef 와 useState의 차이점과 공통점
+
+- useRef
+- Reference 객체를 생성
+- 컴포넌트 내부의 변수로 활용 가능
+- 어떤 경우에도 리렌더링을 유발하지 않음
+
+```jsx
+const refObject = useRef()
+
+// 특정 DOM 요소에 접근 가능
+<div>
+	<textarea
+		ref={refObject}
+		name="bio"
+		value={input.bio}
+		onChange={onChange}
+	/>
+</div>
+```
+
+- useState
+- State를 생성
+- 컴포넌트 내부의 변수로 활용 가능
+- 값이 변경되면 컴포넌트 리렌더링
+- 공통점
+- 컴포넌트 내부에서 사용할 변수를 생성
+
+# 📌 React Hooks
+
+- React Hooks : 클래스 컴포넌트의 기능을 함수 컴포넌트에서도 이용할 수 있도록
+- 이름 앞에 동일한 접두사 use가 붙음
+- ex. useState, useRef, useEffect, useReducer 등등
+
+```jsx
+		const Register = () => {
+			//useState : 함수 컴포넌트 내부에서만 호출 가능
+			const [input, setInput] = useState({ 
+				name: "",
+				birth: "",
+				country: "",
+				bio: "",
+			})
+			
+		// 조건문, 반복문 내부에서는 호출 불가
+		if (true) {
+			const [state, setState] = useState()
+		}
+```
+
+```jsx
+// 나만의 Hook도 제작 가능(Custom Hook)
+function useInput () {
+	//input의 값을 관리하는 Custom Hook
+	// ...
+}
+```
+
+# 📌 라이프 사이클
+
+1. Mount
+- Like. 탄생
