@@ -9,4 +9,8 @@ public interface UserRepository {
 	
 	// 이메일 존재 여부 확인
     public int existsByEmail(String email);
+    
+    // 이메일로 사용자 정보 조회
+    public UserDTO getUserByEmail(String email);
+
 }

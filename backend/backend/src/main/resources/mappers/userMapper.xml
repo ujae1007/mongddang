@@ -9,9 +9,16 @@
         SELECT COUNT(*) FROM user WHERE email = #{email}
     </select>
     
-     <!-- 사용자 등록 -->
+     <!-- 회원가입 -->
     <insert id="insertUser" parameterType="UserDTO">
         INSERT INTO user (email, password, nickname, like_region1, like_region2, like_region3, like_genre1, like_genre2, like_genre3, profile_image_URL, introduce)
         VALUES (#{email}, #{password}, #{nickname}, #{likeRegion1}, #{likeRegion2}, #{likeRegion3}, #{likeGenre1}, #{likeGenre2}, #{likeGenre3}, #{profileImageURL}, #{introduce})
     </insert>
+    
+    <!-- 로그인 -->
+    <select id = "getUserByEmail" parameterType="String" resultType="UserDTO">
+    	SELECT *
+    	FROM user
+    	WHERE email = #{email}
+    </select>
 </mapper>
