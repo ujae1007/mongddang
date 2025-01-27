@@ -4,7 +4,7 @@
 <mapper namespace="com.mongddang.backend.user.repository.UserRepository"> <!-- 내가 지금 연결하고  싶은 Dao 풀패키지명 -->
 
 
- <!-- 사용자 이메일로 존재 여부 확인 -->
+ 	<!-- 사용자 이메일로 존재 여부 확인 -->
     <select id="existsByEmail" parameterType="String" resultType="int">
         SELECT COUNT(*) FROM user WHERE email = #{email}
     </select>
@@ -21,4 +21,39 @@
     	FROM user
     	WHERE email = #{email}
     </select>
+    
+    <!-- 회원정보 수정  -->
+    <update id="updateUser" parameterType="UserDTO">
+    	UPDATE user
+    	<set>
+    		<if test="nickname != null">
+            	nickname = #{nickname},
+       		</if>
+       		<if test="likeRegion1 != null">
+            	like_region1 = #{likeRegion1},
+		    </if>
+		    <if test="likeRegion2 != null">
+	            like_region2 = #{likeRegion2},
+		    </if>
+		    <if test="likeRegion3 != null">
+		    	like_region3 = #{likeRegion3},
+		    </if>
+		    <if test="likeGenre1 != null">
+		    	like_genre1 = #{likeGenre1},
+		    </if>
+		    <if test="likeGenre2 != null">
+		        like_genre2 = #{likeGenre2},
+		    </if>
+		    <if test="likeGenre3 != null">
+		        like_genre3 = #{likeGenre3},
+		    </if>
+		    <if test="introduce != null">
+		        introduce = #{introduce},
+		    </if>
+		    <if test="profileImageURL != null">
+		        profile_image_URL = #{profileImageURL},
+		    </if>
+       	</set>
+        WHERE email = #{email}
+    </update>
 </mapper>
