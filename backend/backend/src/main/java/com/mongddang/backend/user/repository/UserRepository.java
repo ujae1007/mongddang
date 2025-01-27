@@ -12,5 +12,8 @@ public interface UserRepository {
     
     // 이메일로 사용자 정보 조회
     public UserDTO getUserByEmail(String email);
+    
+    // 회원정보 수정 
+    public int updateUser(UserDTO userDTO);
 
 }
