@@ -27,10 +27,12 @@ public class SecurityConfig {
     //AuthenticationManager가 인자로 받을 AuthenticationConfiguraion 객체 생성자 주입
     private final AuthenticationConfiguration authenticationConfiguration;
     private final JWTUtil jwtUtil;
+ 
     public SecurityConfig(AuthenticationConfiguration authenticationConfiguration, JWTUtil jwtUtil) {
 
         this.authenticationConfiguration = authenticationConfiguration;
         this.jwtUtil = jwtUtil;
+        
     }
 	
 	// 암호화
@@ -91,11 +93,9 @@ public class SecurityConfig {
         http
         	.addFilterBefore(new JWTFilter(jwtUtil), LoginFilter.class);
 
-        
-        
         http
         	.addFilterAt(new LoginFilter(authenticationManager(authenticationConfiguration), jwtUtil), UsernamePasswordAuthenticationFilter.class);
-        
+
         //세션 stateless 상태로 변경
         http
         .sessionManagement((session) -> session

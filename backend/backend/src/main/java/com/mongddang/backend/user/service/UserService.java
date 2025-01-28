@@ -30,6 +30,12 @@ public class UserService {
 		this.localStorageService = localStorageService;
 		
 	}
+	// 존재하는 이메일인지 확인
+	public boolean isExistsEmail(String email) throws Exception {
+		int cnt = userRepository.existsByEmail(email);
+		return cnt >= 1;
+	}
+	
 	
 	// 회원가입
 	public boolean signUp(SignupRequestDTO signupRequestDTO) throws Exception {
