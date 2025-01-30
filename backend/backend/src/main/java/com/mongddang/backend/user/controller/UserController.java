@@ -6,6 +6,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
@@ -31,6 +32,7 @@ public class UserController {
 		this.userService = userService;
 		this.emailVerificationService = emailVerificationService;
 	}
+	
 	// 이메일로 인증번호 전송
 	@PostMapping("/sendemail")
 	public ResponseEntity<?> sendVerificationCode(@RequestParam("email") String email){
@@ -96,6 +98,28 @@ public class UserController {
                     .body("Error: " + e.getMessage());
         }
 	}
+	
+	// 현재 로그인 한 회원정보 조회
+	@GetMapping("/current")
+	public ResponseEntity<?> currentUserInfo(Principal principal){
+		try {
+			String currentEmail = principal.getName();		// 현재 인증된 사용자 정보 추출
+			
+			UserDTO userDTO = userService.getUserByEmail(currentEmail);
+			if (userDTO == null) {
+				return ResponseEntity.status(HttpStatus.NOT_FOUND).body("사용자를 찾지 못했습니다.");
+				
+			}
+			// 비밀번호 null로 표시
+			userDTO.setPassword(null);
+			return ResponseEntity.ok(userDTO);
+		} catch (Exception e) {
+			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body("서버 에러: " + e.getMessage());
+		}
+	}
+	
+	// 
 	
 }
  

@@ -87,7 +87,7 @@ public class SecurityConfig {
         // 접근 허용 및 인증 절차
         http
         	.authorizeHttpRequests((auth) -> auth
-                    .requestMatchers("/", "/api/auth/**").permitAll()
+                    .requestMatchers("/", "/api/auth/signup", "/api/auth/login", "/api/auth/sendemail","/api/auth/verifycode").permitAll()
                     .anyRequest().authenticated());
         //jwtfilter 등록
         http

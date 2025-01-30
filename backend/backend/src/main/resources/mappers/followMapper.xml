@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.mongddang.backend.follow.repository.FollowRepository"> <!-- 내가 지금 연결하고  싶은 Dao 풀패키지명 -->
+	<!-- 이미 팔로우 중인지 확인  -->
+	<select id="isAlreadyFollow" parameterType="map" resultType="int">
+		SELECT COUNT(*)
+		FROM follow
+		WHERE following_id = #{followingId}
+		AND	followed_id = #{followedId}
+	</select>
+	
+	<!-- 팔로우 생성 -->
+	<insert id="insertFollow" parameterType="followDTO">
+		INSERT INTO follow (following_id, followed_id)
+		VALUES (#{followingId}, #{followedId})
+	</insert>
+	
+	<!-- 팔로우 삭제 -->
+	<delete id="deleteFollow" parameterType="map">
+		DELETE FROM follow
+		WHERE following_id = #{followingId}
+		AND followed_id = #{followedId}
+	</delete>
+ 	
+ 	
+ 	<!-- follow 유저 검색 -->
+ 	<select id="followingList" parameterType="int" resultType="followDTO">
+ 		SELECT *
+ 		FROM follow
+ 		WHERE following_id = #{followingId}
+ 	</select>
+ 	
+ 	<!-- followed 유저 검색 -->
+ 	<select id="followedList" parameterType="int" resultType="followDTO">
+ 		SELECT *
+ 		FROM follow
+ 		WHERE followed_id=#{followedId}
+ 	</select>
+</mapper>

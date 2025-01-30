@@ -51,7 +51,7 @@ public class LoginFilter extends UsernamePasswordAuthenticationFilter {
 		String email = customUserDetailsDTO.getUsername();
 		String token = jwtUtil.createJwt(email);
 		
-		response.addHeader("Authorization", "Baearer " + token);
+		response.addHeader("Authorization", "Bearer " + token);
     }
 	
 	//로그인 실패시 실행하는 메소드
