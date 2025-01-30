@@ -3,13 +3,9 @@ package com.mongddang.backend.user.dto;
 import org.springframework.web.multipart.MultipartFile;
 
 public class SignupRequestDTO {
-//	@NotBlank(message = "이메일은 필수 입력 사항입니다.")
-//    @Email(message = "유효한 이메일 형식이어야 합니다.")
+
 	private String email;
-//	@NotBlank(message = "비밀번호는 필수 입력 사항입니다.")
-//	@Size(min = 6, max = 40, message = "비밀번호는 6자 이상 40자 이하여야 합니다.")
 	private String password;
-//	@NotBlank(message = "닉네임은 필수 입력 사항입니다.")
 	private String nickname;
 	private String likeRegion1;
     private String likeRegion2;

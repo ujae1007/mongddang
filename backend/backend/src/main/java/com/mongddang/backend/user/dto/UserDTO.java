@@ -3,6 +3,7 @@ package com.mongddang.backend.user.dto;
 
 
 public class UserDTO {
+	private int userId;			// 회원 아이디
 	private String email;		// 이메일 id 대신
 	private String password; 	// 비밀번호
 	private String nickname;	// 사용자가 사용한 닉네임
@@ -14,6 +15,14 @@ public class UserDTO {
     private String likeGenre3;   // 좋아하는 장르 3
     private String profileImageURL;  // 프로필 이미지 URL
     private String introduce;    // 자기소개
+    
+    
+	public int getUserId() {
+		return userId;
+	}
+	public void setUserId(int userId) {
+		this.userId = userId;
+	}
 	public String getEmail() {
 		return email;
 	}

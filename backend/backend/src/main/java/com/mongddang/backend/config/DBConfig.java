@@ -6,7 +6,8 @@ import org.springframework.context.annotation.Configuration;
 @Configuration
 @MapperScan(basePackages = {
 		"com.mongddang.backend.user.repository",
-		"com.mongddang.backend.email.repository"
+		"com.mongddang.backend.email.repository",
+		"com.mongddang.backend.follow.repository"
 })
 public class DBConfig {
 
