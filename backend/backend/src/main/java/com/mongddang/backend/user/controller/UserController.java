@@ -16,10 +16,15 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.mongddang.backend.email.service.EmailVerificationService;
+import com.mongddang.backend.jwt.service.RedisService;
 import com.mongddang.backend.user.dto.SignupRequestDTO;
 import com.mongddang.backend.user.dto.UpdateUserDTO;
 import com.mongddang.backend.user.dto.UserDTO;
 import com.mongddang.backend.user.service.UserService;
+
+import jakarta.servlet.http.Cookie;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 
 @RestController
 @RequestMapping("/api/auth")
@@ -27,10 +32,12 @@ public class UserController {
 	
 	private final UserService userService;
 	private final EmailVerificationService emailVerificationService;
+	private final RedisService redisService;
 	
-	public UserController(UserService userService, EmailVerificationService emailVerificationService) {
+	public UserController(UserService userService, EmailVerificationService emailVerificationService, RedisService redisService) {
 		this.userService = userService;
 		this.emailVerificationService = emailVerificationService;
+		this.redisService = redisService;
 	}
 	
 	// 이메일로 인증번호 전송
@@ -119,7 +126,36 @@ public class UserController {
 		}
 	}
 	
-	// 
+	// logout
+	@PostMapping("/logout")
+	public ResponseEntity<?> logout(HttpServletRequest request, HttpServletResponse response) {
+		// 쿠키에서 refreshToken 가져오기
+		String refreshToken = null;
+		Cookie[] cookies = request.getCookies();
+		for (Cookie cookie : cookies) {
+			if (cookie.getName().equals("refresh")) {
+				refreshToken = cookie.getValue();
+				break;
+			}
+		}
+		// 만약 refresh 토큰이 존재한다면 삭제 진행
+		if (refreshToken != null) {
+			redisService.deleteRefreshToken(refreshToken);
+		}
+		
+		//클라이언트 쿠기 없애기
+		Cookie deleteCookie = new Cookie("refresh", null);
+		deleteCookie.setPath("/");
+		deleteCookie.setHttpOnly(true);
+        deleteCookie.setMaxAge(0); // 0초로 설정하여 브라우저에서 삭제되도록 함
+        response.addCookie(deleteCookie);
+        
+        // 4. 로그아웃 성공 응답
+        return ResponseEntity.ok("로그아웃 성공");
+		
+		
+	}
+	
 	
 }
  

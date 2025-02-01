@@ -18,7 +18,7 @@ import org.springframework.web.cors.CorsConfigurationSource;
 import com.mongddang.backend.jwt.JWTFilter;
 import com.mongddang.backend.jwt.JWTUtil;
 import com.mongddang.backend.jwt.LoginFilter;
-
+import com.mongddang.backend.jwt.service.RedisService;
 import jakarta.servlet.http.HttpServletRequest;
 
 @Configuration
@@ -27,12 +27,12 @@ public class SecurityConfig {
     //AuthenticationManager가 인자로 받을 AuthenticationConfiguraion 객체 생성자 주입
     private final AuthenticationConfiguration authenticationConfiguration;
     private final JWTUtil jwtUtil;
- 
-    public SecurityConfig(AuthenticationConfiguration authenticationConfiguration, JWTUtil jwtUtil) {
+    private final RedisService redisService;
+    public SecurityConfig(AuthenticationConfiguration authenticationConfiguration, JWTUtil jwtUtil, RedisService redisService) {
 
         this.authenticationConfiguration = authenticationConfiguration;
         this.jwtUtil = jwtUtil;
-        
+        this.redisService = redisService;
     }
 	
 	// 암호화
@@ -84,17 +84,22 @@ public class SecurityConfig {
         http
             .httpBasic((auth) -> auth.disable());
         
+        // 기본 LogoutFilter 비활성화 (JWT 기반 인증에서는 필요하지 않으므로)
+        http.
+        	logout(logout -> logout.disable());
+        
         // 접근 허용 및 인증 절차
         http
         	.authorizeHttpRequests((auth) -> auth
-                    .requestMatchers("/", "/api/auth/signup", "/api/auth/login", "/api/auth/sendemail","/api/auth/verifycode").permitAll()
+                    .requestMatchers("/", "/api/auth/signup", "/api/auth/login", "/api/auth/sendemail","/api/auth/verifycode",
+                    		"/api/auth/reissue","/api/auth/logout").permitAll()
                     .anyRequest().authenticated());
         //jwtfilter 등록
         http
         	.addFilterBefore(new JWTFilter(jwtUtil), LoginFilter.class);
 
         http
-        	.addFilterAt(new LoginFilter(authenticationManager(authenticationConfiguration), jwtUtil), UsernamePasswordAuthenticationFilter.class);
+        	.addFilterAt(new LoginFilter(authenticationManager(authenticationConfiguration), jwtUtil, redisService), UsernamePasswordAuthenticationFilter.class);
 
         //세션 stateless 상태로 변경
         http
