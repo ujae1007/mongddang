@@ -6,6 +6,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.mongddang.backend.follow.dto.FollowDTO;
+import com.mongddang.backend.follow.dto.FollowListDTO;
 import com.mongddang.backend.follow.repository.FollowRepository;
 
 @Service
@@ -43,12 +44,12 @@ public class FollowService {
 	}
 	
 	// 팔로잉한 유저 검색(특정 사용자가 팔로잉하는 사람)
-	public List<FollowDTO> followingList(int followingId) {
-		return followRepository.followingList(followingId);
+	public List<FollowListDTO> followingList(int userId) {
+		return followRepository.followingList(userId);
 	}
 	
 	// 팔로잉 하는 유저 검색(특정 사용자를 팔로잉하는 사람)
-	public List<FollowDTO> followedList(int followedId) {
-		return followRepository.followedList(followedId);
+	public List<FollowListDTO> followedList(int userId) {
+		return followRepository.followedList(userId);
 	}
 }

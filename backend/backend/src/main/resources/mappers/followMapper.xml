@@ -25,16 +25,19 @@
  	
  	
  	<!-- follow 유저 검색 -->
- 	<select id="followingList" parameterType="int" resultType="followDTO">
- 		SELECT *
- 		FROM follow
- 		WHERE following_id = #{followingId}
+ 	<select id="followingList" parameterType="int" resultType="FollowListDTO">
+ 		SELECT user.user_id, user.nickname, user.profile_image_URL
+ 		FROM user 
+ 		JOIN follow ON user.user_id = follow.followed_id
+ 		WHERE follow.following_id = #{userId}
+ 	
  	</select>
  	
  	<!-- followed 유저 검색 -->
- 	<select id="followedList" parameterType="int" resultType="followDTO">
- 		SELECT *
- 		FROM follow
- 		WHERE followed_id=#{followedId}
+ 	<select id="followedList" parameterType="int" resultType="FollowListDTO">
+ 		SELECT user.user_id, user.nickname, user.profile_image_URL
+ 		FROM user 
+ 		JOIN follow ON user.user_id = follow.following_id
+ 		WHERE follow.followed_id = #{userId}
  	</select>
 </mapper>

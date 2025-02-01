@@ -1,6 +1,7 @@
 package com.mongddang.backend.follow.controller;
 
 import java.security.Principal;
+import java.util.List;
 
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -10,6 +11,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.service.annotation.GetExchange;
 
+import com.mongddang.backend.follow.dto.FollowListDTO;
 import com.mongddang.backend.follow.service.FollowService;
 import com.mongddang.backend.user.dto.UserDTO;
 import com.mongddang.backend.user.service.UserService;
@@ -56,9 +58,24 @@ public class FollowController {
 	
 	}
 	
-//	@GetMapping("/find-following/{followingId}")
-//	public ResponseEntity<?> findFollowing(@PathVariable("followingId") int followingId) {
-//		
-//		
-//	}
+	@GetMapping("/find-followingUsers/{userId}")
+	public ResponseEntity<?> findFollowing(@PathVariable("userId") int userId) {
+		try {
+			List<FollowListDTO> followingList = followService.followingList(userId);
+			return ResponseEntity.ok(followingList);
+		} catch (Exception e) {
+            return ResponseEntity.status(500).body("서버 에러: " + e.getMessage());
+        }
+	}
+	
+	@GetMapping("/find-followedUsers/{userId}")
+	public ResponseEntity<?> findFollowed(@PathVariable("userId") int userId) {
+		try {
+			List<FollowListDTO> followedList = followService.followedList(userId);
+			return ResponseEntity.ok(followedList);
+		} catch (Exception e) {
+            return ResponseEntity.status(500).body("서버 에러: " + e.getMessage());
+        }
+		
+	}
 }
