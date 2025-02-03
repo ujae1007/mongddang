@@ -15,5 +15,8 @@ public interface UserRepository {
     
     // 회원정보 수정 
     public int updateUser(UserDTO userDTO);
+    
+    // 회원탈퇴
+    public int deleteUser(String email);
 
 }

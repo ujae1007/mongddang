@@ -56,4 +56,11 @@
        	</set>
         WHERE email = #{email}
     </update>
+    
+    
+    <!-- 회원탈퇴 -->
+    <delete id="deleteUser" parameterType="String">
+    	DELETE FROM user
+    	WHERE email = #{email}
+    </delete>
 </mapper>

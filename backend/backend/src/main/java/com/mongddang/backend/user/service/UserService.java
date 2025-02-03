@@ -5,6 +5,7 @@ import java.nio.file.attribute.UserPrincipalNotFoundException;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.mongddang.backend.user.dto.SignupRequestDTO;
@@ -12,7 +13,7 @@ import com.mongddang.backend.user.dto.UpdateUserDTO;
 import com.mongddang.backend.user.dto.UserDTO;
 import com.mongddang.backend.user.repository.UserRepository;
 
-import jakarta.transaction.Transactional;
+
 
 @Service
 public class UserService {
@@ -39,6 +40,7 @@ public class UserService {
 	
 	
 	// 회원가입
+	@Transactional
 	public boolean signUp(SignupRequestDTO signupRequestDTO) throws Exception {
 		int cnt = userRepository.existsByEmail(signupRequestDTO.getEmail());
 		if (cnt >= 1) {
@@ -124,6 +126,13 @@ public class UserService {
 	public UserDTO getUserByEmail(String email) {
 		return userRepository.getUserByEmail(email);
 	}
+	
+	//회원탈퇴
+	@Transactional
+	public boolean signout(String email) {
+		return userRepository.deleteUser(email) == 1;
+	}
+	
 	
 	
 }
