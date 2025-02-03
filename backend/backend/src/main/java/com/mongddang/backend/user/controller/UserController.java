@@ -2,10 +2,12 @@ package com.mongddang.backend.user.controller;
 
 import java.security.Principal;
 
+import org.apache.ibatis.annotations.Delete;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -154,6 +156,21 @@ public class UserController {
         return ResponseEntity.ok("로그아웃 성공");
 		
 		
+	}
+	
+	// 회원탈퇴
+	@DeleteMapping("/signout")
+	public ResponseEntity<?> signout(Principal principal) {
+		try {
+			String currentUserEmail = principal.getName();
+			userService.signout(currentUserEmail);
+			
+			return ResponseEntity.ok("회원탈퇴 성공");
+		} catch (Exception e) {
+			return ResponseEntity
+                    .badRequest()
+                    .body("Error: " + e.getMessage());
+		}
 	}
 	
 	
