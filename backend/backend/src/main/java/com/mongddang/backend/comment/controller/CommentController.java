@@ -16,7 +16,7 @@ import com.mongddang.backend.comment.dto.CommentRequestDTO;
 import com.mongddang.backend.comment.service.CommentService;
 import com.mongddang.backend.user.dto.UserDTO;
 import com.mongddang.backend.user.service.UserService;
-import com.nimbusds.oauth2.sdk.Response;
+
 
 @RestController
 @RequestMapping("/api-comment")
