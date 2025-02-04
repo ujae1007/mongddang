@@ -3,7 +3,7 @@ import { useEffect, useState } from "react"
 //더미데이터
 const User = {
   email: "B209@ssafy.com",
-  password: "1234qwer!"
+  password: "1234qwer!@"
 }
 
 function Login () {
@@ -15,7 +15,7 @@ function Login () {
   const [passwordValid, setPasswordValid] = useState(false) 
   const [notAllow, setNotAllow] = useState(true)
 
-  const handleEmail = (e) =>{
+  const handleEmail = (e: React.ChangeEvent<HTMLInputElement>) =>{
     setEmail(e.target.value)
     const regex = 
       /^(([^<>()\[\].,;:\s@"]+(\.[^<>()\[\].,;:\s@"]+)*)|(".+"))@(([^<>()[\].,;:\s@"]+\.)+[^<>()[\].,;:\s@"]{2,})$/i;
@@ -26,7 +26,7 @@ function Login () {
     }
   }
 
-  const handlePassword = (e) => {
+  const handlePassword = (e: React.ChangeEvent<HTMLInputElement>) => {
     setPassword(e.target.value)
     const regex = 
       /^(?=.*[a-zA-z])(?=.*[0-9])(?=.*[$`~!@$!%*#^?&\\(\\)\-_=+])(?!.*[^a-zA-z0-9$`~!@$!%*#^?&\\(\\)\-_=+]).{8,20}$/;
@@ -44,7 +44,7 @@ function Login () {
     } else {
       alert('등록되지 않은 회원입니다.')
     }
-  }  
+  }
 
   useEffect(()=> {
     if(emailValid && passwordValid) {
