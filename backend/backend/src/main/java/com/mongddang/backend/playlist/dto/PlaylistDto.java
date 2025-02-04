@@ -1,6 +1,9 @@
 package com.mongddang.backend.playlist.dto;
 
 import com.mongddang.backend.playlist.entity.Playlist;
+import com.mongddang.backend.photo.entity.Photo;
+import java.util.List;
+import java.util.stream.Collectors;
 
 public class PlaylistDto {
     private int playlistId;
@@ -9,16 +12,18 @@ public class PlaylistDto {
     private Integer startTime;
     private Integer endTime;
     private String locationAddress;
+    private List<String> photoUrls;
 
     public PlaylistDto() {}
 
-    public PlaylistDto(int playlistId, int albumId, Integer musicId, Integer startTime, Integer endTime, String locationAddress) {
+    public PlaylistDto(int playlistId, int albumId, Integer musicId, Integer startTime, Integer endTime, String locationAddress, List<String> photoUrls) {
         this.playlistId = playlistId;
         this.albumId = albumId;
         this.musicId = musicId;
         this.startTime = startTime;
         this.endTime = endTime;
         this.locationAddress = locationAddress;
+        this.photoUrls = photoUrls;
     }
     
     public PlaylistDto(Playlist playlist) {
@@ -28,6 +33,12 @@ public class PlaylistDto {
         this.startTime = playlist.getStartTime();
         this.endTime = playlist.getEndTime();
         this.locationAddress = playlist.getLocationAddress();
+        // Photo URL 리스트 변환 (Photo 객체의 photoUrl)
+        if (playlist.getPhotos() != null) {
+            this.photoUrls = playlist.getPhotos().stream()
+                    .map(Photo::getPhotoUrl)
+                    .collect(Collectors.toList());
+        }
     }
 
     public int getPlaylistId() { return playlistId; }
@@ -36,86 +47,6 @@ public class PlaylistDto {
     public Integer getStartTime() { return startTime; }
     public Integer getEndTime() { return endTime; }
     public String getLocationAddress() { return locationAddress; }
+    public List<String> getPhotoUrls() { return photoUrls; }
 }
 
-
-//package com.mongddang.backend.playlist.dto;
-//
-//import java.time.LocalDateTime;
-//
-//public class PlaylistDto {
-//
-//    private Integer playlistId;
-//    private Integer albumId;
-//    private Integer musicId;
-//    private int startTime;
-//    private int endTime;
-//    private String locationAddress;
-//    private LocalDateTime createdAt;
-//    private LocalDateTime updatedAt;
-//
-//    public PlaylistDto() {
-//    }
-//
-//    public PlaylistDto(Integer playlistId, Integer albumId, Integer musicId,
-//                       int startTime, int endTime, String locationAddress,
-//                       LocalDateTime createdAt, LocalDateTime updatedAt) {
-//        this.playlistId = playlistId;
-//        this.albumId = albumId;
-//        this.musicId = musicId;
-//        this.startTime = startTime;
-//        this.endTime = endTime;
-//        this.locationAddress = locationAddress;
-//        this.createdAt = createdAt;
-//        this.updatedAt = updatedAt;
-//    }
-//
-//    public Integer getPlaylistId() {
-//        return playlistId;
-//    }
-//    public void setPlaylistId(Integer playlistId) {
-//        this.playlistId = playlistId;
-//    }
-//
-//    public Integer getAlbumId() {
-//        return albumId;
-//    }
-//    public void setAlbumId(Integer albumId) {
-//        this.albumId = albumId;
-//    }
-//
-//    public Integer getMusicId() {
-//        return musicId;
-//    }
-//    public void setMusicId(Integer musicId) {
-//        this.musicId = musicId;
-//    }
-//
-//    public int getStartTime() {
-//        return startTime;
-//    }
-//    public void setStartTime(int startTime) {
-//        this.startTime = startTime;
-//    }
-//
-//    public int getEndTime() {
-//        return endTime;
-//    }
-//    public void setEndTime(int endTime) {
-//        this.endTime = endTime;
-//    }
-//
-//    public LocalDateTime getCreatedAt() {
-//        return createdAt;
-//    }
-//    public void setCreatedAt(LocalDateTime createdAt) {
-//        this.createdAt = createdAt;
-//    }
-//
-//    public LocalDateTime getUpdatedAt() {
-//        return updatedAt;
-//    }
-//    public void setUpdatedAt(LocalDateTime updatedAt) {
-//        this.updatedAt = updatedAt;
-//    }
-//}

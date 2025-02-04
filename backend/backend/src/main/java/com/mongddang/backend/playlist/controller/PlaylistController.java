@@ -24,12 +24,11 @@ public class PlaylistController {
         Playlist updatedPlaylist = playlistService.updatePlaylist(playlistId, dto);
         return ResponseEntity.ok(new PlaylistDto(updatedPlaylist)); // 🚀 DTO로 변환 후 반환
     }
-
-
-//    @PutMapping("/{playlistId}")
-//    public ResponseEntity<Playlist> updatePlaylist(@PathVariable("playlistId") int playlistId, @RequestBody PlaylistDto dto) {
-//        return ResponseEntity.ok(playlistService.updatePlaylist(playlistId, dto));
-//    }
+    @DeleteMapping("/{playlistId}")
+    public ResponseEntity<String> deletePlaylist(@PathVariable("playlistId") int playlistId) {
+        playlistService.deletePlaylist(playlistId);
+        return ResponseEntity.ok("Playlist 삭제 완료");
+    }
 }
 
 

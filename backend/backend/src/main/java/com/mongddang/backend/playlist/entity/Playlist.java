@@ -1,8 +1,10 @@
 package com.mongddang.backend.playlist.entity;
 
 import com.mongddang.backend.album.entity.Album;
+import com.mongddang.backend.photo.entity.Photo;
 import jakarta.persistence.*;
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Entity
 @Table(name = "playlist")
@@ -28,7 +30,11 @@ public class Playlist {
 
     @Column(name = "location_address", nullable = true)
     private String locationAddress;
-
+    
+    // Playlist와 Photo의 1:N 관계 추가
+    @OneToMany(mappedBy = "playlist", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Photo> photos;
+    
     @Column(name = "created_at", updatable = false)
     private LocalDateTime createdAt = LocalDateTime.now();
 
@@ -53,6 +59,7 @@ public class Playlist {
     public Integer getStartTime() { return startTime; }
     public Integer getEndTime() { return endTime; }
     public String getLocationAddress() { return locationAddress; }
+    public List<Photo> getPhotos() { return photos; }
     public LocalDateTime getCreatedAt() { return createdAt; }
     public LocalDateTime getUpdatedAt() { return updatedAt; }
 
@@ -60,117 +67,6 @@ public class Playlist {
     public void setStartTime(Integer startTime) { this.startTime = startTime; }
     public void setEndTime(Integer endTime) { this.endTime = endTime; }
     public void setLocationAddress(String locationAddress) { this.locationAddress = locationAddress; }
+    public void setPhotos(List<Photo> photos) { this.photos = photos; }
 }
 
-
-//package com.mongddang.backend.playlist.entity;
-//
-//import jakarta.persistence.*;
-//import java.time.LocalDateTime;
-//
-//@Entity
-//@Table(name = "playlist")
-//public class Playlist {
-//
-//    @Id
-//    @GeneratedValue(strategy = GenerationType.IDENTITY)
-//    @Column(name = "playlist_id")
-//    private Integer playlistId;
-//
-//    @Column(name = "album_id", nullable = false)
-//    private Integer albumId;
-//
-//    @Column(name = "music_id", nullable = false)
-//    private Integer musicId;
-//
-//    @Column(name = "start_time", columnDefinition = "INT default 0")
-//    private int startTime;
-//
-//    @Column(name = "end_time", columnDefinition = "INT default 0")
-//    private int endTime;
-//
-//    @Column(name = "created_at", insertable = false, updatable = false)
-//    private LocalDateTime createdAt;
-//
-//    @Column(name = "updated_at", insertable = false, updatable = false)
-//    private LocalDateTime updatedAt;
-//    
-//    @Column(name = "location_address", nullable = false)
-//    private String locationAddress;
-//
-//    @PreUpdate  // ✅ 업데이트 시 자동으로 갱신
-//    public void preUpdate() {
-//        this.updatedAt = LocalDateTime.now();
-//    }
-//    
-//    public Playlist() {
-//    }
-//
-//    public Playlist(Integer playlistId, Integer albumId, Integer musicId,
-//                    int startTime, int endTime, LocalDateTime createdAt, LocalDateTime updatedAt, String locationAddress) {
-//        this.playlistId = playlistId;
-//        this.albumId = albumId;
-//        this.musicId = musicId;
-//        this.startTime = startTime;
-//        this.endTime = endTime;
-//        this.createdAt = createdAt;
-//        this.updatedAt = updatedAt;
-//        this.locationAddress = locationAddress;
-//    }
-//
-//    // Getter 생성
-//	public Integer getPlaylistId() {
-//		return playlistId;
-//	}
-//
-//	public Integer getAlbumId() {
-//		return albumId;
-//	}
-//
-//	public Integer getMusicId() {
-//		return musicId;
-//	}
-//
-//	public int getStartTime() {
-//		return startTime;
-//	}
-//
-//	public int getEndTime() {
-//		return endTime;
-//	}
-//
-//	public LocalDateTime getCreatedAt() {
-//		return createdAt;
-//	}
-//
-//	public LocalDateTime getUpdatedAt() {
-//		return updatedAt;
-//	}
-//
-//	public String getLocationAddress() {
-//		return locationAddress;
-//	}
-//
-//	// Setter 생성
-//	public void setMusicId(Integer musicId) {
-//		this.musicId = musicId;
-//	}
-//	
-//	public void setAlbumId(Integer albumId) {
-//		this.albumId = albumId;
-//	}
-//	
-//	public void setStartTime(int startTime) {
-//		this.startTime = startTime;
-//	}
-//	
-//	public void setEndTime(int endTime) {
-//		this.endTime = endTime;
-//	}
-//	
-//	public void setLocationAddress(String locationAddress) {
-//		this.locationAddress = locationAddress;
-//	}
-//
-//
-//}
