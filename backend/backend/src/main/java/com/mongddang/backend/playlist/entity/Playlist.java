@@ -5,6 +5,7 @@ import com.mongddang.backend.photo.entity.Photo;
 import jakarta.persistence.*;
 import java.time.LocalDateTime;
 import java.util.List;
+import java.math.BigDecimal;
 
 @Entity
 @Table(name = "playlist")
@@ -28,6 +29,12 @@ public class Playlist {
     @Column(name = "end_time", nullable = true)
     private Integer endTime;
 
+    @Column(name = "latitude", nullable = true)
+    private BigDecimal latitude;
+    
+    @Column(name = "longitude", nullable = true)
+    private BigDecimal longitude;
+    
     @Column(name = "location_address", nullable = true)
     private String locationAddress;
     
@@ -59,6 +66,8 @@ public class Playlist {
     public Integer getStartTime() { return startTime; }
     public Integer getEndTime() { return endTime; }
     public String getLocationAddress() { return locationAddress; }
+    public BigDecimal getLatitude() { return latitude; }
+    public BigDecimal getLongitude() { return longitude; }
     public List<Photo> getPhotos() { return photos; }
     public LocalDateTime getCreatedAt() { return createdAt; }
     public LocalDateTime getUpdatedAt() { return updatedAt; }
@@ -67,6 +76,8 @@ public class Playlist {
     public void setStartTime(Integer startTime) { this.startTime = startTime; }
     public void setEndTime(Integer endTime) { this.endTime = endTime; }
     public void setLocationAddress(String locationAddress) { this.locationAddress = locationAddress; }
+    public void setLatitude(BigDecimal latitude) { this.latitude = latitude; }
+    public void setLongitude(BigDecimal longitude) { this.longitude = longitude; }
     public void setPhotos(List<Photo> photos) { this.photos = photos; }
 }
 
