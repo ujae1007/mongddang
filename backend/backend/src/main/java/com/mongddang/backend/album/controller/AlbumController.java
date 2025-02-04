@@ -25,9 +25,9 @@ public class AlbumController {
     @PostMapping("/create")
     public ResponseEntity<AlbumResponseDto> createAlbum(Principal principal, @RequestBody AlbumRequestDto albumRequestDto) {
     	String email = principal.getName();
-    	
+    	// email로 받고
     	UserDTO userDTO = userService.getUserByEmail(email);
-    	
+    	// 해당 email을 통해 db에서 해당 user_id 찾기
     	int userId = userDTO.getUserId();
     	
         AlbumResponseDto createdAlbum = albumService.createAlbum(albumRequestDto, userId);
