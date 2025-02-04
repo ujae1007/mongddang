@@ -2,7 +2,6 @@ package com.mongddang.backend.photo.entity;
 
 import com.mongddang.backend.playlist.entity.Playlist;
 import jakarta.persistence.*;
-
 import java.time.LocalDateTime;
 
 @Entity
