@@ -22,9 +22,10 @@ public class AlbumService {
     }
 
     @Transactional
-    public AlbumResponseDto createAlbum(AlbumRequestDto albumRequestDto) {  
+    public AlbumResponseDto createAlbum(AlbumRequestDto albumRequestDto, int userId) {  
         Album album = new Album(
-            albumRequestDto.getUserId(),
+        	userId,
+//            albumRequestDto.getUserId(),
             albumRequestDto.getTitle(),
             albumRequestDto.getAlbumImageUrl(),
             albumRequestDto.isStatus()
@@ -37,7 +38,6 @@ public class AlbumService {
             savedAlbum.getUserId(),
             savedAlbum.getTitle(),
             savedAlbum.getAlbumImageUrl(),
-            savedAlbum.getViewCount(),
             savedAlbum.isStatus(),
             savedAlbum.getCreatedAt(),
             savedAlbum.getUpdatedAt()
