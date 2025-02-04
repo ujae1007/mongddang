@@ -40,6 +40,8 @@ public class PlaylistService {
 
         playlist.setStartTime(dto.getStartTime());
         playlist.setEndTime(dto.getEndTime());
+        playlist.setLatitude(dto.getLatitude());
+        playlist.setLongitude(dto.getLongitude());
         playlist.setLocationAddress(dto.getLocationAddress());
         playlist.setMusicId(dto.getMusicId());  // ✅ musicId만 저장하도록 변경
 

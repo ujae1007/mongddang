@@ -28,9 +28,6 @@ public class Album {
     @Column(name = "album_image_URL")
     private String albumImageUrl;
 
-    @Column(name = "view_cnt", columnDefinition = "INT DEFAULT 0")
-    private int viewCount = 0;
-
     @Column(name = "status", columnDefinition = "BOOLEAN DEFAULT FALSE")
     private boolean status = false;
 
@@ -72,11 +69,7 @@ public class Album {
     public String getAlbumImageUrl() {
     	return albumImageUrl;
     }
-    
-    public int getViewCount() {
-    	return viewCount;
-    }
-    
+
     public boolean isStatus() {
     	return status;
     }
