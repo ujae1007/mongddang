@@ -8,7 +8,7 @@ import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
 import com.mongddang.backend.jwt.service.RedisService;
-
+import com.mongddang.backend.jwt.service.RefreshTokenService;
 
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.http.Cookie;
@@ -19,12 +19,12 @@ public class LoginFilter extends UsernamePasswordAuthenticationFilter {
 	
 	private final AuthenticationManager authenticationManager;
 	private final JWTUtil jwtUtil;
-	private final RedisService redisService;
+	private final RefreshTokenService refreshTokenService;
 	
-	public LoginFilter(AuthenticationManager authenticationManager, JWTUtil jwtUtil, RedisService redisService) {
+	public LoginFilter(AuthenticationManager authenticationManager, JWTUtil jwtUtil, RefreshTokenService refreshTokenService) {
 		this.authenticationManager = authenticationManager;
 		this.jwtUtil = jwtUtil;
-		this.redisService = redisService;
+		this.refreshTokenService = refreshTokenService;
 		setFilterProcessesUrl("/api/auth/login");
 	}
 	
@@ -63,7 +63,7 @@ public class LoginFilter extends UsernamePasswordAuthenticationFilter {
 		response.addHeader("Authorization", "Bearer " + accessToken);
 		response.addCookie(createCookie("refresh", refreshToken));
 		response.setStatus(HttpStatus.OK.value());
-		redisService.saveRefreshToken(refreshToken, email, ttlMillis);
+		refreshTokenService.saveRefreshToken(refreshToken, email, ttlMillis);
     }
 	
 	//로그인 실패시 실행하는 메소드

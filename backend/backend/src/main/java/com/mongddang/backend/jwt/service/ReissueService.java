@@ -5,14 +5,15 @@ import org.springframework.stereotype.Service;
 import com.mongddang.backend.jwt.JWTUtil;
 import com.mongddang.backend.jwt.dto.ReissueResponseDTO;
 
+
 @Service
 public class ReissueService {
 	
-	private final RedisService redisService;
+	private final RefreshTokenService refreshTokenService;
 	private final JWTUtil jwtUtil;
 	
-	public ReissueService(RedisService redisService, JWTUtil jwtUtil) {
-		this.redisService = redisService;
+	public ReissueService(RefreshTokenService refreshTokenService, JWTUtil jwtUtil) {
+		this.refreshTokenService = refreshTokenService;
 		this.jwtUtil = jwtUtil;
 	}
 	
@@ -24,20 +25,20 @@ public class ReissueService {
             return null; 
         }
         
-		// redis에서 refreshtoken이 유효한지 확인
-		String email = redisService.getEmailByRefreshToken(refreshToken);
+		// refreshtoken이 유효한지 확인
+		String email = refreshTokenService.getEmailByRefreshToken(refreshToken);
 		if(email == null) {
 			return null;
 		}
 		
-		redisService.deleteRefreshToken(refreshToken);
+		refreshTokenService.deleteRefreshToken(refreshToken);
 		
 		// 새로운 access token과 refresh token 생성
 		String newAccessToken = jwtUtil.createAccessToken("access", email);
 		String newRefreshToken = jwtUtil.createRefreshToken("refresh", email);
 		
-		// 새로운 refreshToken redis에 저장
-		redisService.saveRefreshToken(newRefreshToken, email, jwtUtil.getRefreshTokenExpirationTime());
+		// 새로운 refreshToken  저장
+		refreshTokenService.saveRefreshToken(newRefreshToken, email, jwtUtil.getRefreshTokenExpirationTime());
 		
 		ReissueResponseDTO reissueResponseDTO = new ReissueResponseDTO();
 		reissueResponseDTO.setNewAccessToken(newAccessToken);

@@ -8,7 +8,9 @@ import org.springframework.context.annotation.Configuration;
 		"com.mongddang.backend.user.repository",
 		"com.mongddang.backend.email.repository",
 		"com.mongddang.backend.follow.repository",
-		"com.mongddang.backend.comment.repository"
+		"com.mongddang.backend.comment.repository",
+		"com.mongddang.backend.jwt.repository"
+
 })
 public class DBConfig {
 
