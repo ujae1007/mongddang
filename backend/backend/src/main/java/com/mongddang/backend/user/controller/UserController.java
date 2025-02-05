@@ -18,7 +18,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.mongddang.backend.email.service.EmailVerificationService;
-import com.mongddang.backend.jwt.service.RedisService;
+import com.mongddang.backend.jwt.service.RefreshTokenService;
 import com.mongddang.backend.user.dto.SignupRequestDTO;
 import com.mongddang.backend.user.dto.UpdateUserDTO;
 import com.mongddang.backend.user.dto.UserDTO;
@@ -34,12 +34,12 @@ public class UserController {
 	
 	private final UserService userService;
 	private final EmailVerificationService emailVerificationService;
-	private final RedisService redisService;
+	private final RefreshTokenService refreshTokenService;
 	
-	public UserController(UserService userService, EmailVerificationService emailVerificationService, RedisService redisService) {
+	public UserController(UserService userService, EmailVerificationService emailVerificationService, RefreshTokenService refreshTokenService) {
 		this.userService = userService;
 		this.emailVerificationService = emailVerificationService;
-		this.redisService = redisService;
+		this.refreshTokenService = refreshTokenService;
 	}
 	
 	// 이메일로 인증번호 전송
@@ -142,7 +142,7 @@ public class UserController {
 		}
 		// 만약 refresh 토큰이 존재한다면 삭제 진행
 		if (refreshToken != null) {
-			redisService.deleteRefreshToken(refreshToken);
+			refreshTokenService.deleteRefreshToken(refreshToken);
 		}
 		
 		//클라이언트 쿠기 없애기
