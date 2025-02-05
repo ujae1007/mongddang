@@ -1,58 +1,66 @@
-import { useEffect, useState } from "react"
+// api 따로 관리하기 
+// 서버주소 변경하고, VITE_API_URL 환경변수 만들어서 import 해오기 
+// input components 만들기
 
-//더미데이터
-const User = {
-  email: "B209@ssafy.com",
-  password: "1234qwer!@"
-}
+import { useEffect, useState } from "react"
+import axios from "axios"
+import { useNavigate } from "react-router-dom"
+import Button from "../../components/common/Button"
 
 function Login () {
 
-  const [email, setEmail] = useState("")
-  const [password, setPassword] = useState("")
+  const nav = useNavigate()
 
-  const [emailValid, setEmailValid] = useState(false)
-  const [passwordValid, setPasswordValid] = useState(false) 
-  const [notAllow, setNotAllow] = useState(true)
+  //사용자 입력에 따른 상태관리
+  const [email, setEmail] = useState<string>("")
+  const [password, setPassword] = useState<string>("")
 
+  //이메일, 비밀번호, 로그인버튼튼 유효성 검사 
+  const [emailValid, setEmailValid] = useState<boolean>(false)
+  const [passwordValid, setPasswordValid] = useState<boolean>(false) 
+  const [notAllow, setNotAllow] = useState<boolean>(true)
+
+  //에러메세지 
+  const [errorMessage, setErrorMessage] =useState<string>("")
+
+  //이메일 & 비밀번호 핸들러
   const handleEmail = (e: React.ChangeEvent<HTMLInputElement>) =>{
     setEmail(e.target.value)
     const regex = 
       /^(([^<>()\[\].,;:\s@"]+(\.[^<>()\[\].,;:\s@"]+)*)|(".+"))@(([^<>()[\].,;:\s@"]+\.)+[^<>()[\].,;:\s@"]{2,})$/i;
-    if(regex.test(e.target.value)) {
-      setEmailValid(true)
-    }else {
-      setEmailValid(false)
-    }
+      // console.log(e.target)
+    setEmailValid(regex.test(e.target.value))
   }
-
   const handlePassword = (e: React.ChangeEvent<HTMLInputElement>) => {
     setPassword(e.target.value)
     const regex = 
       /^(?=.*[a-zA-z])(?=.*[0-9])(?=.*[$`~!@$!%*#^?&\\(\\)\-_=+])(?!.*[^a-zA-z0-9$`~!@$!%*#^?&\\(\\)\-_=+]).{8,20}$/;
-    if(regex.test(e.target.value)) {
-      setPasswordValid(true)
-    }else {
-      setPasswordValid(false)
-    }
+    setPasswordValid(regex.test(e.target.value))
 
   }
 
-  const onClickConfirmButton = () => {
-    if(email === User.email &&  password === User.password) {
-      alert('로그인에 성공했습니다.')
-    } else {
-      alert('등록되지 않은 회원입니다.')
-    }
-  }
+  //로그인 API 요청
+    const onClickConfirmButton = async () => {
+      setErrorMessage("") //기존 오류 메시지 초기화
+      try {
+        const res = await axios.post("http://localhost:8080/api/auth/signup",{
+          email: email,
+          password: password,
+      })
 
-  useEffect(()=> {
-    if(emailValid && passwordValid) {
-      setNotAllow(false)
-      return
+      console.log(res.data, "로그인 성공")
+      alert("로그인에 성공했습니다.")
+      nav("/", {replace:true})
+      }catch(err) {
+        console.log(err, "로그인실패")
+        setErrorMessage("에메일 또는 비밀번호가 잘못되었습니다.")
+      }
     }
-    setNotAllow(true)
-  }, [emailValid, passwordValid ])
+      
+      
+  useEffect(() => {
+    setNotAllow(!(emailValid && passwordValid))
+  }, [emailValid, passwordValid])
 
   return (
 
@@ -78,7 +86,6 @@ function Login () {
               <div>올바른 이메일을 입력해주세요.</div>
             )
           }
-
         </div>
 
         <div className="inputTitle">비밀번호</div>
@@ -101,11 +108,16 @@ function Login () {
 
       </div>
 
+      {/* 에러메세지 */}
+      {errorMessage && <p>{errorMessage}</p>}
+
       <div>
-        <button 
-          onClick={onClickConfirmButton}
-          disabled={notAllow} 
-          className="bottomButton">로그인</button>
+          <Button 
+            text="로그인" 
+            type="button"
+            onClick={()=> {onClickConfirmButton()}}
+            disabled={notAllow} 
+          />
       </div>
     </div>
   ) 

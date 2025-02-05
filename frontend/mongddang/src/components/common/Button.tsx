@@ -1,13 +1,22 @@
 interface ButtonProps {
   text: string
   type: string
-  // ? : 선택적 속성으로 onClick을 전달하지 않아도 오류 발생 없음. 매개변수가 없는 함수는 반환값이 없도록
+  buttonType?: "button" | "submit" | "reset" // HTML 기본 type
   onClick?: () => void
+  disabled?: boolean
 }
 
-const Button = ({text, type, onClick}: ButtonProps) => {
+const Button = ({text, type, buttonType="button", onClick, disabled}:ButtonProps) => {
   return (
-    <button onClick={onClick} className={`Button Button_${type}`}>{text}</button>
+    <button 
+      className={`Button Button_${type}`}
+      type={buttonType}
+      onClick={onClick}
+      disabled={disabled}
+
+    >
+      {text}
+    </button>
   )
 }
 
