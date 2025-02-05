@@ -1,4 +1,4 @@
-package com.mongddang.backend.user.service;
+ package com.mongddang.backend.user.service;
 
 import java.nio.file.attribute.UserPrincipalNotFoundException;
 
@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
+import com.mongddang.backend.storage.service.S3StorageService;
 import com.mongddang.backend.user.dto.SignupRequestDTO;
 import com.mongddang.backend.user.dto.UpdateUserDTO;
 import com.mongddang.backend.user.dto.UserDTO;
@@ -20,15 +21,15 @@ public class UserService {
 	
 	private final UserRepository userRepository;
 	private final BCryptPasswordEncoder bCryptPasswordEncoder;
-	private final LocalStorageService localStorageService; // 추후 s3로 수정
+	private final S3StorageService s3StorageService; // 추후 s3로 수정
 	
 	@Value("${default.profile.image.url}")
     private String defaultProfileImageUrl; // 수정: 기본 이미지 URL 주입
 	
-	public UserService(UserRepository userRepository, BCryptPasswordEncoder bCryptPasswordEncoder, LocalStorageService localStorageService) {
+	public UserService(UserRepository userRepository, BCryptPasswordEncoder bCryptPasswordEncoder, S3StorageService s3StorageService) {
 		this.userRepository = userRepository;
 		this.bCryptPasswordEncoder = bCryptPasswordEncoder;
-		this.localStorageService = localStorageService;
+		this.s3StorageService = s3StorageService;
 		
 	}
 	
@@ -62,10 +63,10 @@ public class UserService {
         userDTO.setLikeGenre3(signupRequestDTO.getLikeGenre3());
         userDTO.setIntroduce(signupRequestDTO.getIntroduce());
         
-        //프로필 이미지 업로드 처리 (로컬 저장)
+        //프로필 이미지 업로드 처리 (S3 저장)
         MultipartFile profileimage = signupRequestDTO.getProfileImage();
         if(profileimage != null && !profileimage.isEmpty()) {
-        	String imageUrl = localStorageService.uploadFile(profileimage);
+        	String imageUrl = s3StorageService.uploadFile(profileimage, "profile");
         	userDTO.setProfileImageURL(imageUrl);
         } else {
         	// 프로필 이미지을 업로드 하지 않을 경우 defaultimage
@@ -112,7 +113,7 @@ public class UserService {
 		// 프로필 이미지 업로드 처리 (선택적)
 		MultipartFile profileImage = updateUserDTO.getProfileImage();
 		if(profileImage != null && !profileImage.isEmpty()) {
-			String imageUrl = localStorageService.uploadFile(profileImage);
+			String imageUrl = s3StorageService.uploadFile(profileImage, "profile");
 			currentUser.setProfileImageURL(imageUrl);
 		} // 업로드하지 않을 경우 기존 이미지 유지
 		
