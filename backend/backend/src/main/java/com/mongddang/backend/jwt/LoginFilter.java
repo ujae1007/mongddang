@@ -1,12 +1,17 @@
 package com.mongddang.backend.jwt;
 
+import java.io.IOException;
+
 import org.springframework.http.HttpStatus;
 import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.AuthenticationServiceException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.mongddang.backend.jwt.dto.LoginDTO;
 import com.mongddang.backend.jwt.service.RedisService;
 import com.mongddang.backend.jwt.service.RefreshTokenService;
 
@@ -30,22 +35,32 @@ public class LoginFilter extends UsernamePasswordAuthenticationFilter {
 	
 	
 	@Override
-	public Authentication attemptAuthentication(HttpServletRequest requset, HttpServletResponse response) throws AuthenticationException {
+	public Authentication attemptAuthentication(HttpServletRequest request, HttpServletResponse response) throws AuthenticationException {
 		
-		
-		// 클라이언트 요청에서 username, password 꺼내기
-		String email = obtainUsername(requset);
-		String password = obtainPassword(requset);
-		
-//		System.out.println(email);
-		
-		//스프링 시큐리티에서 username과 password를 검증하기 위해서는 token에 담아야 함
-        UsernamePasswordAuthenticationToken authToken = new UsernamePasswordAuthenticationToken(email, password, null);
-
+		// 요청 확인
+		if (request.getContentType() != null && request.getContentType().startsWith("application/json")) {
+			try {
+				// Json 데이터 파싱
+				ObjectMapper objectMapper = new ObjectMapper();
+				LoginDTO loginDTO = objectMapper.readValue(request.getInputStream(), LoginDTO.class);
+				String email = loginDTO.getEmail();
+				String password = loginDTO.getPassword();
 				//token에 담은 검증을 위한 AuthenticationManager로 전달
-        return authenticationManager.authenticate(authToken);
-		
-	}
+		        UsernamePasswordAuthenticationToken authToken = new UsernamePasswordAuthenticationToken(email, password, null);
+		        return authenticationManager.authenticate(authToken);
+			} catch (IOException e) {
+	            throw new AuthenticationServiceException("JSON 파싱에 실패했습니다.", e);
+	        }
+	    } else {
+	        // JSON이 아닌 경우 기존 방식(form-data)으로 처리
+	        String email = obtainUsername(request);
+	        String password = obtainPassword(request);
+	        
+	        UsernamePasswordAuthenticationToken authToken = new UsernamePasswordAuthenticationToken(email, password, null);
+	        setDetails(request, authToken);
+	        return authenticationManager.authenticate(authToken);
+	    }		
+}
 	
 	// 로그인 성공시 jwt 토큰을 위해 실행하는 메소드
 	@Override
@@ -71,7 +86,6 @@ public class LoginFilter extends UsernamePasswordAuthenticationFilter {
     protected void unsuccessfulAuthentication(HttpServletRequest request, HttpServletResponse response, AuthenticationException failed) {
     	response.setStatus(401);
     }
-    
     
     
     

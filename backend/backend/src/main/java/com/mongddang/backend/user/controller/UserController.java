@@ -1,6 +1,7 @@
 package com.mongddang.backend.user.controller;
 
 import java.security.Principal;
+import java.util.Map;
 
 import org.apache.ibatis.annotations.Delete;
 import org.springframework.http.HttpStatus;
@@ -44,14 +45,14 @@ public class UserController {
 	
 	// 이메일로 인증번호 전송
 	@PostMapping("/sendemail")
-	public ResponseEntity<?> sendVerificationCode(@RequestParam("email") String email){
+	public ResponseEntity<?> sendVerificationCode(@RequestBody Map<String, String> requestData){
 		try {
 			// 이미 가입된 이메일인지 확인
-			if(userService.isExistsEmail(email)) {
+			if(userService.isExistsEmail(requestData.get("email"))) {
 				return ResponseEntity.badRequest().body("이미 가입된 이메일입니다.");
 			}
 			// 인증번호 발송
-			emailVerificationService.sendVerificationCode(email);
+			emailVerificationService.sendVerificationCode(requestData.get("email"));
 			return ResponseEntity.ok("인증 번호 발송");
 		} catch (Exception e) {
 			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
@@ -61,7 +62,9 @@ public class UserController {
 	
 	// 사용자가 입력한 인증번호 인증
 	@PostMapping("/verifycode")
-	public ResponseEntity<?> verifyCode(@RequestParam("email") String email, @RequestParam("code") String code){
+	public ResponseEntity<?> verifyCode(@RequestBody Map<String, String> requestData){
+		String email = requestData.get("email");
+		String code = requestData.get("code");
 		boolean result = emailVerificationService.verifyCode(email, code);
 		if (result) {
 			return ResponseEntity.ok("인증 성공");
