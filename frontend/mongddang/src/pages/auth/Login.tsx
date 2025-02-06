@@ -1,11 +1,10 @@
-// api 따로 관리하기 
 // 서버주소 변경하고, VITE_API_URL 환경변수 만들어서 import 해오기 
-// input components 만들기
 
 import { useEffect, useState } from "react"
 import axios from "axios"
 import { useNavigate } from "react-router-dom"
 import Button from "../../components/common/Button"
+import InputBox from "../../components/common/input"
 
 function Login () {
 
@@ -15,7 +14,7 @@ function Login () {
   const [email, setEmail] = useState<string>("")
   const [password, setPassword] = useState<string>("")
 
-  //이메일, 비밀번호, 로그인버튼튼 유효성 검사 
+  //이메일, 비밀번호, 로그인버튼 유효성 검사 
   const [emailValid, setEmailValid] = useState<boolean>(false)
   const [passwordValid, setPasswordValid] = useState<boolean>(false) 
   const [notAllow, setNotAllow] = useState<boolean>(true)
@@ -26,6 +25,7 @@ function Login () {
   //이메일 & 비밀번호 핸들러
   const handleEmail = (e: React.ChangeEvent<HTMLInputElement>) =>{
     setEmail(e.target.value)
+    // console.log(e.target.value)
     const regex = 
       /^(([^<>()\[\].,;:\s@"]+(\.[^<>()\[\].,;:\s@"]+)*)|(".+"))@(([^<>()[\].,;:\s@"]+\.)+[^<>()[\].,;:\s@"]{2,})$/i;
       // console.log(e.target)
@@ -40,10 +40,11 @@ function Login () {
   }
 
   //로그인 API 요청
-    const onClickConfirmButton = async () => {
+    const handleLogin = async () => {
       setErrorMessage("") //기존 오류 메시지 초기화
+      console.log("로그인 버튼 클릭")
       try {
-        const res = await axios.post("http://localhost:8080/api/auth/signup",{
+        const res = await axios.post("http://localhost:8080/api/auth/login",{
           email: email,
           password: password,
       })
@@ -53,7 +54,7 @@ function Login () {
       nav("/", {replace:true})
       }catch(err) {
         console.log(err, "로그인실패")
-        setErrorMessage("에메일 또는 비밀번호가 잘못되었습니다.")
+        setErrorMessage("이메일 또는 비밀번호가 잘못되었습니다.")
       }
     }
       
@@ -61,6 +62,11 @@ function Login () {
   useEffect(() => {
     setNotAllow(!(emailValid && passwordValid))
   }, [emailValid, passwordValid])
+
+  //이미 계정이 있을 경우
+  const goToSignUp = () => {
+    nav("/signup", { replace: true });
+  };
 
   return (
 
@@ -72,13 +78,12 @@ function Login () {
 
         <div className="inputTitle">이메일 주소</div>
         <div className="inputWrap">
-          <input 
-            type="text"
-            value={email} 
-            className="input" 
+          <InputBox 
+            type="default"
             placeholder="이메일을 입력해주세요."
-            onChange={handleEmail}            
-          />
+            onChange={handleEmail}
+            value={email}
+            />
         </div>
         <div className="errorMessageWrap">
           {
@@ -90,12 +95,11 @@ function Login () {
 
         <div className="inputTitle">비밀번호</div>
         <div className="inputWrap">
-          <input 
-            value={password} 
-            className="input" 
-            type="password" 
+          <InputBox 
+            type="password"
             placeholder="비밀번호를 입력해주세요."
             onChange={handlePassword}
+            value={password}
           />
         </div>
         <div className="errorMessageWrap">
@@ -114,10 +118,11 @@ function Login () {
       <div>
           <Button 
             text="로그인" 
-            type="button"
-            onClick={()=> {onClickConfirmButton()}}
+            type="Large"
+            onClick={handleLogin}
             disabled={notAllow} 
           />
+          <p onClick={goToSignUp}>이미 계정이 있으신가요?</p>
       </div>
     </div>
   ) 
