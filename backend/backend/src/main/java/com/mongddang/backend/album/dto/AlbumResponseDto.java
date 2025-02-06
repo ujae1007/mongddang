@@ -1,6 +1,8 @@
 package com.mongddang.backend.album.dto;
 
+import com.mongddang.backend.playlist.dto.PlaylistDto;
 import java.time.LocalDateTime;
+import java.util.List;
 
 public class AlbumResponseDto {
     private int albumId;
@@ -10,8 +12,13 @@ public class AlbumResponseDto {
     private boolean status;
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
+    private List<PlaylistDto> playlists;
 
-    public AlbumResponseDto(int albumId, int userId, String title, String albumImageUrl, boolean status, LocalDateTime createdAt, LocalDateTime updatedAt) {
+    public AlbumResponseDto() {}
+    
+    // ✅ 기존 생성자도 유지 (플레이리스트 없는 경우)
+    public AlbumResponseDto(int albumId, int userId, String title, String albumImageUrl, boolean status, 
+                            LocalDateTime createdAt, LocalDateTime updatedAt) {
         this.albumId = albumId;
         this.userId = userId;
         this.title = title;
@@ -19,6 +26,18 @@ public class AlbumResponseDto {
         this.status = status;
         this.createdAt = createdAt;
         this.updatedAt = updatedAt;
+        this.playlists = null; // ✅ 기본값으로 null 설정
+    }
+    
+    public AlbumResponseDto(int albumId, int userId, String title, String albumImageUrl, boolean status, LocalDateTime createdAt, LocalDateTime updatedAt, List<PlaylistDto> playlists) {
+        this.albumId = albumId;
+        this.userId = userId;
+        this.title = title;
+        this.albumImageUrl = albumImageUrl;
+        this.status = status;
+        this.createdAt = createdAt;
+        this.updatedAt = updatedAt;
+        this.playlists = playlists;
     }
 
     public int getAlbumId() { return albumId; }
@@ -28,4 +47,8 @@ public class AlbumResponseDto {
     public boolean isStatus() { return status; }
     public LocalDateTime getCreatedAt() { return createdAt; }
     public LocalDateTime getUpdatedAt() { return updatedAt; }
+    public List<PlaylistDto> getPlaylists() { return playlists; }
+    
+    // ✅ Setter 추가 (선택적으로 사용 가능)
+    public void setPlaylists(List<PlaylistDto> playlists) { this.playlists = playlists; }
 }
