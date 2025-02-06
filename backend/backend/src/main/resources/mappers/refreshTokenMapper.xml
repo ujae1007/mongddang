@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.mongddang.backend.jwt.repository.RefreshTokenRepository"> <!-- 내가 지금 연결하고  싶은 Dao 풀패키지명 -->
+	 
+	 <!-- 토큰으로 refresh token 정보 조회 -->
+	<select id="getEmailByRefreshToken" parameterType="String" resultType="RefreshTokenDTO">
+        SELECT refresh_token_id, email, token, created_at, expired_at
+        FROM refresh_token
+        WHERE token = #{token}
+    </select>
+	
+	 <!-- Refresh Token 저장 (INSERT) -->
+    <insert id="saveRefreshToken" parameterType="RefreshTokenDTO" useGeneratedKeys="true" keyProperty="refreshTokenId">
+        INSERT INTO refresh_token (email, token, expired_at)
+        VALUES (#{email}, #{token}, #{expiredAt})
+    </insert>
+    
+   
+    
+    <!-- 토큰 삭제 -->
+    <delete id="deleteRefreshToken" parameterType="String">
+        DELETE FROM refresh_token
+        WHERE token = #{token}
+    </delete>
+
+</mapper>

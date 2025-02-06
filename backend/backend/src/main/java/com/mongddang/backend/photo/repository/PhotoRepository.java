@@ -1,0 +1,36 @@
+package com.mongddang.backend.photo.repository;
+
+import com.mongddang.backend.photo.entity.Photo;
+import com.mongddang.backend.playlist.entity.Playlist;
+import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Modifying;
+import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
+import org.springframework.stereotype.Repository;
+import java.util.List;
+
+@Repository
+public interface PhotoRepository extends JpaRepository<Photo, Integer> {
+    // Playlist 기준으로 Photo 목록 조회
+    List<Photo> findByPlaylist(Playlist playlist);
+
+    @Modifying
+    @Query("delete from Photo p where p.playlist.playlistId = :playlistId")
+    void deleteByPlaylist_PlaylistId(@Param("playlistId") int playlistId);
+    
+//    // Playlist 기준으로 Photo 삭제 (JPQL 사용)
+//    void deleteByPlaylist(Playlist playlist);
+//    List<Photo> findByPlaylist_PlaylistId(int playlistId);
+//    void deleteByPlaylist_PlaylistId(int playlistId);
+}
+
+//package com.mongddang.backend.photo.repository;
+//
+//import com.mongddang.backend.photo.entity.Photo;
+//import com.mongddang.backend.playlist.entity.Playlist;
+//import org.springframework.data.jpa.repository.JpaRepository;
+//import java.util.List;
+//
+//public interface PhotoRepository extends JpaRepository<Photo, Integer> {
+//    List<Photo> findByPlaylist(Playlist playlist);  // ✅ Playlist 기준으로 Photo 조회
+//}

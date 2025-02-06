@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.mongddang.backend.email.repository.EmailVerificationRepository"> <!-- 내가 지금 연결하고  싶은 Dao 풀패키지명 -->
+
+	<!-- 인증코드 및 이메일 저장 -->
+	<insert id="insertEmailVerification" parameterType="VerificationDTO">
+	    INSERT INTO email_verification (email, verification_code, created_at, expired_at)
+	    VALUES (#{email}, #{verificationCode}, #{createdAt}, #{expiredAt})
+	    ON DUPLICATE KEY UPDATE
+	        verification_code = VALUES(verification_code),
+	        created_at = VALUES(created_at),
+	        expired_at = VALUES(expired_at)
+	</insert>
+	
+	<!-- 이메일로 인증 레코드 찾기 -->
+	<select id="findByEmail" parameterType="String" resultType="VerificationDTO">
+	    SELECT email, verification_code, created_at, expired_at
+	    FROM email_verification
+	    WHERE email = #{email}
+	</select>
+	
+	<!-- 인증완료 된 레코드 삭제 -->
+	<delete id="deleteByEmail" parameterType="String">
+		DELETE FROM email_verification
+		WHERE email = #{email}
+	</delete>
+
+
+</mapper>
