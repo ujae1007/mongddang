@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.mongddang.backend.comment.repository.CommentRepository"> <!-- 내가 지금 연결하고  싶은 Dao 풀패키지명 -->
+
+	<!-- 댓글 생성 -->
+	<insert id="insertComment" parameterType="map">
+		INSERT INTO comment (user_id, album_id, content)
+		VALUES (#{userId}, #{albumId}, #{dto.content});
+	</insert>
+
+	<!-- 댓글 수정 -->
+	<update id="updateComment" parameterType="map">
+		UPDATE comment
+		SET content = #{dto.content}
+		WHERE user_id = #{userId}
+		AND comment_id = #{commentId}
+	</update>
+	
+	<!-- 댓글 삭제 -->
+	<delete id="deleteComment" parameterType="map">
+		DELETE FROM comment
+		WHERE user_id = #{userId}
+		AND comment_id = #{commentId}
+	</delete>
+</mapper>
