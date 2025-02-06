@@ -1,10 +1,10 @@
 // 서버주소 변경하고, VITE_API_URL 환경변수 만들어서 import 해오기 
 
 import { useEffect, useState } from "react"
-import axios from "axios"
 import { useNavigate } from "react-router-dom"
 import Button from "../../components/common/Button"
 import InputBox from "../../components/common/input"
+import axiosInstance from "../../api/axiosInstance"
 
 function Login () {
 
@@ -44,7 +44,7 @@ function Login () {
       setErrorMessage("") //기존 오류 메시지 초기화
       console.log("로그인 버튼 클릭")
       try {
-        const res = await axios.post("http://localhost:8080/api/auth/login",{
+        const res = await axiosInstance.post("/auth/login",{
           email: email,
           password: password,
       })
