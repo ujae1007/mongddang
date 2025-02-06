@@ -1,50 +1,52 @@
 services:
-  # Frontend: Vue
-  frontend:
-    image: node:16
-    working_dir: /app
-    volumes:
-      - ./frontend:/app
-    ports:
-      - "8081:8080"
-    command: /bin/sh -c "npm install && npm run serve"
-    # command: tail -f /dev/null
-    environment:
-      - CHOKIDAR_USEPOLLING=true
-    depends_on:
-      - backend
 
-  # Backend: Spring Boot
-  backend:
-    build:
-      context: ./backend-java
-      dockerfile: Dockerfile
-    # image: openjdk:17
-    # working_dir: /app/backend-java
-    # volumes:
-    #   - ./backend-java:/app/backend-java # host:docker
-    ports:
-      - "8080:8080"
-    # command: ./mvnw spring-boot:run
-    # command: tail -f /dev/nullf
-    environment:
-      SPRING_DATASOURCE_URL: jdbc:mariadb://db:3306/mydb
-      SPRING_DATASOURCE_USERNAME: root
-      SPRING_DATASOURCE_PASSWORD: example
-    depends_on:
-      - db
-    # restart: always
-
-  # Database: MariaDB
   db:
-    image: mariadb:latest
-    environment:
-      MYSQL_ROOT_PASSWORD: root
-      MYSQL_DATABASE: test
-    volumes:
-      - db-data:/var/lib/mysql
+    image: mysql:8.0
     ports:
       - "3306:3306"
+    environment:
+      MYSQL_DATABASE: mongddang
+      MYSQL_USER: REMOVED
+      MYSQL_PASSWORD: REMOVED
+      MYSQL_ROOT_PASSWORD: REMOVED
+    volumes:
+      - db_data:/var/lib/mysql
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  backend:
+    image: nimoot/mongddang-backend:2.0
+    # build: ./backend
+    ports:
+      - "8080:8080"
+    environment:
+      - SPRING_DATASOURCE_URL=jdbc:mysql://db:3306/mongddang?useSSL=false&serverTimezone=UTC&allowPublicKeyRetrieval=true
+      - SPRING_DATASOURCE_USERNAME=REMOVED
+      - SPRING_DATASOURCE_PASSWORD=REMOVED
+      - AWS_ACCESS_KEY_ID=REMOVED
+      - AWS_SECRET_ACCESS_KEY=REMOVED
+      - AWS_DEFAULT_REGION=us-east-1
+      - S3_BUCKET_NAME=nimoot
+    depends_on:
+      db:
+        condition: service_healthy
+    volumes:
+      - db_data:/var/lib/mysql
+    #   - ~/.aws:root/.aws:ro
+
+  # frontend:
+  #   build: ./frontend
+  #   ports:
+  #     - "3000:3000"
+  #   depends_on:
+  #     - backend
 
 volumes:
-  db-data:
+  db_data:
+
+networks:
+  app-network:
+    driver: bridge
