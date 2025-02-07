@@ -2,7 +2,9 @@ package com.mongddang.backend.album.controller;
 
 import com.mongddang.backend.album.dto.AlbumResponseDto;
 import com.mongddang.backend.album.dto.AlbumRequestDto;
+import com.mongddang.backend.album.dto.AlbumUpdateDto;
 import com.mongddang.backend.album.service.AlbumService;
+import com.mongddang.backend.playlist.dto.PlaylistDto;
 import com.mongddang.backend.user.dto.UserDTO;
 import com.mongddang.backend.user.service.UserService;
 
@@ -35,6 +37,14 @@ public class AlbumController {
         return ResponseEntity.ok(createdAlbum);
     }
     
+    @PutMapping("/{albumId}")
+    public ResponseEntity<AlbumResponseDto> albumUpdate(@PathVariable("albumId") int albumId, @RequestBody AlbumUpdateDto albumUpdateDto){
+    	AlbumResponseDto updatedAlbum = albumService.updateAlbum(albumId, albumUpdateDto);
+    	return ResponseEntity.ok(updatedAlbum);
+    }
+    
+    
+    
     @DeleteMapping("/{albumId}")
     public ResponseEntity<String> deleteAlbum(@PathVariable("albumId") int albumId) {
         albumService.deleteAlbum(albumId);
@@ -63,10 +73,11 @@ public class AlbumController {
     }
 
     // ✅ 특정 앨범 상세 조회 (Playlist 정보 포함)
-    @GetMapping("/{albumId}")
+    @GetMapping("/detail/{albumId}")
     public ResponseEntity<AlbumResponseDto> getAlbum(@PathVariable("albumId") int albumId) {
         AlbumResponseDto albumResponse = albumService.getAlbumById(albumId);
         return ResponseEntity.ok(albumResponse);
     }
     
 }
+
