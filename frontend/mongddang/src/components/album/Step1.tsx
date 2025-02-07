@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { Album } from "../../types";
+import axiosInstance from "../../api/axiosInstance"
 
 interface Step1Props {
   onCreateAlbum: (album: Album) => void;
@@ -26,22 +27,11 @@ function Step1({ onCreateAlbum }: Step1Props) {
 
     try {
       // -------------- 실제 API 호출  --------------
-      // const response = await fetch('api/albums/create', {
-      //   method: 'POST',
-      //   headers: {
-      //     'Content-Type': 'application/json',
-      //   },
-      //   body: JSON.stringify({
-      //     title: title,
-      //     status: false
-      //   })
+      // const { data } = await axiosInstance.post<CreateAlbumResponse>('/albums/create', {
+      //   title: title,
+      //   status: false
       // });
-
-      // if (!response.ok) {
-      //   throw new Error('앨범 생성에 실패했습니다.');
-      // }
-
-      // const data: CreateAlbumResponse = await response.json();
+      
       // const newAlbum: Album = {
       //   id: data.albumId,
       //   title: data.title,
@@ -51,7 +41,7 @@ function Step1({ onCreateAlbum }: Step1Props) {
       // };
       // --------------------------------------------
 
-      // ------------ 백엔드 연결 전 확인용 -------------
+      // ------------ 시뮬레이션 -------------
       // API 호출을 시뮬레이션하기 위한 지연
       await new Promise(resolve => setTimeout(resolve, 1000));
 
