@@ -9,6 +9,7 @@ public class AlbumDTO {
 	private int albumId;
 	private String title;
 	private Date createdAt;
+	private String albumImageURL;
 	private List<PlaylistDTO> playlists;
 	
 	
@@ -35,6 +36,12 @@ public class AlbumDTO {
 	}
 	public void setPlaylists(List<PlaylistDTO> playlists) {
 		this.playlists = playlists;
+	}
+	public String getAlbumImageURL() {
+		return albumImageURL;
+	}
+	public void setAlbumImageURL(String albumImageURL) {
+		this.albumImageURL = albumImageURL;
 	}
 	
 	

@@ -1,9 +1,9 @@
 package com.mongddang.backend.profile.dto;
 
-import java.util.Date;
+
 import java.util.List;
 
-import javax.xml.crypto.Data;
+
 
 public class ProfileResponseDTO {
 	private int userId;
