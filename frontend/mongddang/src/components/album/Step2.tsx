@@ -1,4 +1,5 @@
 import { useState } from "react";
+import axiosInstance from "../../api/axiosInstance"
 
 interface Step2Props {
   title: string;
@@ -6,7 +7,7 @@ interface Step2Props {
   onMoveToStep3: () => void;
   onComplete: () => void;
   onTempSave: () => void;
-  albumId: number; // albumId prop 추가
+  albumId: number;
 }
 
 interface CreatePlaylistResponse {
@@ -52,23 +53,14 @@ function Step2({
     setIsCreating(true);
 
     try {
-      // -------------- 실제 API 호출 코드 (현재는 주석 처리) --------------
-      // const response = await fetch(`api/playlists/${albumId}`, {
-      //   method: 'POST',
-      //   headers: {
-      //     'Content-Type': 'application/json',
-      //   }
-      // });
-
-      // if (!response.ok) {
-      //   throw new Error('플레이리스트 생성에 실패했습니다.');
-      // }
-
-      // const data: CreatePlaylistResponse = await response.json();
+      // -------------- 실제 API 호출--------------
+      // const { data } = await axiosInstance.post<CreatePlaylistResponse>(
+      //   `/playlists/${albumId}`
+      // );
       // console.log('Playlist created successfully:', data);
-      // -------------- 실제 API 호출 코드 끝 --------------
+      // -------------------------------------------
 
-      // -------------- 시뮬레이션 코드 --------------
+      // ------------ 시뮬레이션 -------------
       // API 호출을 시뮬레이션하기 위한 지연
       await new Promise(resolve => setTimeout(resolve, 1000));
 
