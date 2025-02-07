@@ -1,11 +1,9 @@
-// 이메일 인증할 때 DB에 있는지 확인하는 과정. 
-
 import {useState } from "react"
-import axios from "axios"
 import { useNavigate } from "react-router-dom"
 import Button from "../../components/common/Button"
 import InputBox from "../../components/common/input"
 import FavoriteInput from "../../components/common/favoriteInput"
+import axiosInstance from "../../api/axiosInstance"
 
 function SignUp () {
 
@@ -22,41 +20,59 @@ function SignUp () {
   const [secondPassword, setSecondPassword] = useState("")
   const [selecetedGenres, setSelecetedGenres] = useState<string[]>([])
   const [selecetedPlaces, setSelecetedPlaces] = useState<string[]>([])
+  
+  // 사진, 이메일, 인증코드, 비밀번호 유효성 검사
+  const [profileImageValid, setProfileImageValid] = useState<boolean>(true)
 
-
-
+  const [emailValid, setEmailValid] = useState<boolean>(false)
+  const [isEmailAvailable, setisEmailAvailable] = useState<boolean>(false)
+  
+  const [certifyValid, setCertifyValid] = useState<boolean>(false)
+  const [isCertifyConfirmed, setIsCertifyConfirmed] = useState(false);
+  
+  const [passwordValid, setPasswordValid] = useState<boolean>(false)
+  const [secondpasswordValid, setSecondPasswordValid] = useState<boolean>(false)
+  const [passwordMatchMessage, setPasswordMatchMessage] = useState<string | null>(null)
 
   // 프로파일 이미지 핸들러
   const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0]
     if(file) {
+      if(file.size > 5 * 1024 * 1024) {
+        alert('파일 크기는 5MB를 초과할 수 없습니다. 다른 이미지를 선택해주세요.')
+        setProfileImageValid(false)
+        e.target.value=''
+        setProfileImage(defaultImage)
+        return 
+      }
       const reader = new FileReader()
       reader.onload = () => {
         setProfileImage(reader.result as string)
+        setProfileImageValid(true)
       }
       reader.readAsDataURL(file)
     }
   }
 
-  // 이메일, 인증코드, 비밀번호 유효성 검사
-  const [emailValid, setEmailValid] = useState<boolean>(false)
-  const [certifyValid, setCertifyValid] = useState<boolean>(false)
-  const [passwordValid, setPasswordValid] = useState<boolean>(false)
-  const [secondpasswordValid, setSecondPasswordValid] = useState<boolean>(false)
-  const [passwordMatchMessage, setPasswordMatchMessage] = useState<string | null>(null)
-  const [isCertifyConfirmed, setIsCertifyConfirmed] = useState(false);
-
   // 이메일 인증 axios
   const handleEmailVerification = () => {
-    console.log("이메일 코드 전송시도")
-    axios
-      .post("http://localhost:8080/api/auth/sendemail", {email})
+    console.log("이메일 존재확인 시도")
+    axiosInstance
+      .post("/auth/sendemail", {email})
       .then((res) => {
-          console.log("코드 전송 시도", res.data)
+        if (res.status === 200)
+          console.log("새로운 사용자 확인 완료", res.data)
           alert("이메일 인증 코드가 발송되었습니다.")
+          setisEmailAvailable(true)
       })
       .catch((err) => {
-        console.log("이메일 코드 전송실패", err)
+        if(err.response?.status === 400) {
+          console.log("이미 가입된 회원입니다.")
+          alert("이미 가입된 이메일입니다.")
+        } else {
+          console.log("인증코드 발송 중 오류 발생:", err)
+          alert("인증과정에서 오류가 발생했습니다. 다시 시도해주세요.")
+        }
       })
   }
 
@@ -76,7 +92,7 @@ function SignUp () {
     setPasswordValid(regex.test(e.target.value))
 
   }
-  //인증코드, 확인용 비밀번호, 회원가입 버튼 활성화 핸들러
+  //인증코드, 확인용 비밀번호 핸들러
   const handlerCertifyChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setCertify(e.target.value)
     setCertifyValid(e.target.value.length > 0)
@@ -85,12 +101,15 @@ function SignUp () {
     setSecondPassword(e.target.value)
     setSecondPasswordValid(e.target.value.length > 0)
   }
+
+  // 모든 작업이 완료될 시 회원가입 버튼 활성화 핸들러 
   const isSignUpEnabled =
+    profileImageValid &&
     nickName.length > 0 &&
     introduce.length > 0 &&
     emailValid &&
-    //인증코드 확인되면 그 때 주석 풀기 
-    // isCertifyConfirmed &&
+    isCertifyConfirmed &&
+    isEmailAvailable &&
     passwordValid &&
     secondpasswordValid &&
     password === secondPassword &&
@@ -108,15 +127,24 @@ function SignUp () {
   //인증번호 axios
   const handleCertifyVerification = () => {
     console.log("인증코드 확인시도")
-    axios
-      .post("http://localhost:8080/api/auth/verifycode", {certify})
+    axiosInstance
+      .post("/auth/verifycode", {certify})
       .then((res) => {
-        console.log("인증코드 인증시도",res.data)
-        setIsCertifyConfirmed(true)
+        if (res.status === 200) {
+          console.log("인증에 성공하였습니다.")
+          setIsCertifyConfirmed(true)
+          alert("이메일 인증이 완료되었습니다.")
+        }
       })
       .catch((err) => {
-        console.log("인증코드 확인실패", err)
-        setIsCertifyConfirmed(false)
+        if(err.response?.status === 400){
+          console.log("이메일 인증 실패: 인증코드가 일치하지 않습니다.")
+          setIsCertifyConfirmed(false)
+          alert("인증코드가 올바르지 않습니다. 다시 확인해주세요.")
+        } else {
+          console.log("인증 확인 중 오류 발생:", err)
+          alert("인증 과정에서 오류가 발생했습니다. 다시 시도해주세요.")
+        }
       })
   }
 
@@ -139,35 +167,32 @@ function SignUp () {
     console.log(
       nickName.length > 0 ,
       introduce.length > 0,
-      emailValid ,
-      isCertifyConfirmed ,
+      isEmailAvailable, ("맞음"),
+      isCertifyConfirmed , ("맞음"),
       passwordValid ,
       secondpasswordValid ,
       password === secondPassword ,
       selecetedGenres.length ===3 ,
       selecetedPlaces.length === 3,
+      // selecetedGenres
     )
 
     const formData = new FormData()
     const fileInput = document.querySelector("#profile-upload") as HTMLInputElement
     const file = fileInput?.files?.[0]
-    if(file && file.size > 5 * 1024 * 1024) {
-      formData.append('profileImage', file)
-      alert('파일 크기는 5MB를 초과할 수 없습니다.')
-      return 
-    }
 
     if(file) formData.append('profileImage', file)
     formData.append('nickname', nickName.trim())
     formData.append('introduce', introduce.trim())
     formData.append('email', email)
     formData.append('password', password)
-    selecetedGenres.forEach((genre) => formData.append('likeGenre', genre))
-    selecetedPlaces.forEach((place) => formData.append('likeRegion', place))
+    selecetedGenres.forEach((genre, index) => formData.append(`likeGenre${index + 1}`, genre)) 
+    selecetedPlaces.forEach((place, index) => formData.append(`likeRegion${index +1}`, place))
+    //['electronic', 'garage', 'hip-hop']
     
 
-    axios
-    .post('http://localhost:8080/api/auth/signup', formData, {
+    axiosInstance
+    .post('/auth/signup', formData, {
       headers: {
         'Content-Type': 'multipart/form-data',
       },
@@ -192,6 +217,8 @@ function SignUp () {
   const goToLogin = () => {
     nav('/login', {replace:true})
   }
+
+
   return (
     <div className="SignUp">
 
@@ -220,6 +247,7 @@ function SignUp () {
         <div className="nickNameWrap"> 
           <InputBox 
             type="default" 
+            mode="signup"
             placeholder="닉네임을 입력해주세요."
             onChange={(e) => {
               setNickName(e.target.value)
@@ -232,6 +260,7 @@ function SignUp () {
       <div className="introduceWrap">
         <InputBox 
           type="default"
+          mode="signup"
           placeholder="자기소개를 입력해주세요."
           onChange={(e) => {
             setIntroduce(e.target.value)
@@ -245,6 +274,7 @@ function SignUp () {
         <div className="emailWrap">
           <InputBox 
             type="default" 
+            mode="signup"
             placeholder="이메일을 입력해주세요."
             onChange={(e) => {
               setEmail(e.target.value)
@@ -271,6 +301,7 @@ function SignUp () {
         <div className="certifyWrap">
           <InputBox 
             type="default" 
+            mode="signup"
             placeholder="인증코드를 입력해주세요."
             onChange={handlerCertifyChange}
             value={certify}
@@ -293,6 +324,7 @@ function SignUp () {
         <div className="passwordWrap">
           <InputBox 
             type="password" 
+            mode="signup"
             placeholder="비밀번호를 입력해주세요."
             onChange={handlePassword}
             value={password}
@@ -310,6 +342,7 @@ function SignUp () {
         <div className="secondPasswordWrap">
           <InputBox 
             type="password" 
+            mode="signup"
             placeholder="비밀번호를 다시 입력해주세요."
             onChange={handlerSecondPasswordChange}
             value={secondPassword}
@@ -333,11 +366,13 @@ function SignUp () {
         type="genre"
         placeholder={"선호하는 음악 장르를 선택해주세요."}
         onChange={handleGenreChange}
+        mode="signup"
       />
       <FavoriteInput 
         type="place"
         placeholder={"선호하는 여행지를 선택해주세요."}
         onChange={handlePlaceChange}
+        mode="signup"
       />
 
     </div>
@@ -349,7 +384,6 @@ function SignUp () {
             type="Large"
             onClick={register}
             disabled={!isSignUpEnabled}
-            // disabled={false}
           />
         </div>
 
