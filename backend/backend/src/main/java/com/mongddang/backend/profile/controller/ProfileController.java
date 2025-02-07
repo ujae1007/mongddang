@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.mongddang.backend.profile.dto.ProfileResponseDTO;
+import com.mongddang.backend.profile.dto.ProfileSummaryResponseDTO;
 import com.mongddang.backend.profile.service.ProfileService;
 import com.mongddang.backend.user.dto.UserDTO;
 import com.mongddang.backend.user.service.UserService;
@@ -27,16 +28,31 @@ public class ProfileController {
 	}
 	
 	@GetMapping("/afterlogin")
-	public ResponseEntity<?> getProfile(Principal principal) {
+	public ResponseEntity<?> afterLoginProfile(Principal principal) {
 		try {
 			String currentUserEmail = principal.getName();
 			UserDTO currentUser = userService.getUserByEmail(currentUserEmail);
 			int userId = currentUser.getUserId();
-			List<ProfileResponseDTO> list = profileService.getProfile(userId);
-			if (list == null || list.size()==0) {
-				return new ResponseEntity<Void>(HttpStatus.NO_CONTENT);
-			}
-			return new ResponseEntity<List<ProfileResponseDTO>>(list, HttpStatus.OK);
+			ProfileResponseDTO profileResponseDTO = profileService.afterLoginProfile(userId);
+			if (profileResponseDTO == null || profileResponseDTO.getAlbums() == null || profileResponseDTO.getAlbums().isEmpty()) {
+	            return ResponseEntity.ok("앨범이 없습니다. 앨범을 추가해주세요.");
+	        }
+	        return ResponseEntity.ok(profileResponseDTO);
+		} catch (Exception e) {
+			return ResponseEntity
+                    .badRequest()
+                    .body("Error: " + e.getMessage());
+		}
+	}
+	
+	@GetMapping("/{userId}")
+	public ResponseEntity<?> getProfileByUserId(@PathVariable("userId") int userId, Principal principal) {
+		try {
+			String currentUserEmail = principal.getName();
+			UserDTO currentUser = userService.getUserByEmail(currentUserEmail);
+			int loginUserId = currentUser.getUserId();
+			ProfileSummaryResponseDTO profileSummaryResponseDTO = profileService.getProfileByUserId(userId, loginUserId);
+			return ResponseEntity.ok(profileSummaryResponseDTO);
 		} catch (Exception e) {
 			return ResponseEntity
                     .badRequest()
