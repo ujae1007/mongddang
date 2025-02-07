@@ -1,6 +1,4 @@
-// 서버주소 변경하고, VITE_API_URL 환경변수 만들어서 import 해오기 
-
-import { useEffect, useState } from "react"
+import { useState } from "react"
 import { useNavigate } from "react-router-dom"
 import Button from "../../components/common/Button"
 import InputBox from "../../components/common/input"
@@ -14,32 +12,27 @@ function Login () {
   const [email, setEmail] = useState<string>("")
   const [password, setPassword] = useState<string>("")
 
-  //이메일, 비밀번호, 로그인버튼 유효성 검사 
+  //이메일, 로그인버튼 유효성 검사 
   const [emailValid, setEmailValid] = useState<boolean>(false)
-  const [passwordValid, setPasswordValid] = useState<boolean>(false) 
-  const [notAllow, setNotAllow] = useState<boolean>(true)
 
   //에러메세지 
   const [errorMessage, setErrorMessage] =useState<string>("")
 
-  //이메일 & 비밀번호 핸들러
+  //이메일 핸들러
   const handleEmail = (e: React.ChangeEvent<HTMLInputElement>) =>{
     setEmail(e.target.value)
     // console.log(e.target.value)
     const regex = 
       /^(([^<>()\[\].,;:\s@"]+(\.[^<>()\[\].,;:\s@"]+)*)|(".+"))@(([^<>()[\].,;:\s@"]+\.)+[^<>()[\].,;:\s@"]{2,})$/i;
-      // console.log(e.target)
     setEmailValid(regex.test(e.target.value))
   }
-  const handlePassword = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setPassword(e.target.value)
-    const regex = 
-      /^(?=.*[a-zA-z])(?=.*[0-9])(?=.*[$`~!@$!%*#^?&\\(\\)\-_=+])(?!.*[^a-zA-z0-9$`~!@$!%*#^?&\\(\\)\-_=+]).{8,20}$/;
-    setPasswordValid(regex.test(e.target.value))
 
+  //비밀번호 핸들러
+  const handlePassword = (e: React.ChangeEvent<HTMLInputElement>)=> {
+    setPassword(e.target.value) 
   }
 
-  //로그인 API 요청
+  //로그인 axios 요청
     const handleLogin = async () => {
       setErrorMessage("") //기존 오류 메시지 초기화
       console.log("로그인 버튼 클릭")
@@ -58,11 +51,7 @@ function Login () {
       }
     }
       
-      
-  useEffect(() => {
-    setNotAllow(!(emailValid && passwordValid))
-  }, [emailValid, passwordValid])
-
+    
   //이미 계정이 있을 경우
   const goToSignUp = () => {
     nav("/signup", { replace: true });
@@ -80,6 +69,7 @@ function Login () {
         <div className="inputWrap">
           <InputBox 
             type="default"
+            mode="login"
             placeholder="이메일을 입력해주세요."
             onChange={handleEmail}
             value={email}
@@ -97,17 +87,11 @@ function Login () {
         <div className="inputWrap">
           <InputBox 
             type="password"
+            mode="login"
             placeholder="비밀번호를 입력해주세요."
             onChange={handlePassword}
             value={password}
           />
-        </div>
-        <div className="errorMessageWrap">
-          {
-            !passwordValid && password.length > 0 && (
-              <div>영문, 숫자, 특수문자 포함 8자 이상 입력해주세요.</div>
-            )
-          }
         </div>
 
       </div>
@@ -120,9 +104,9 @@ function Login () {
             text="로그인" 
             type="Large"
             onClick={handleLogin}
-            disabled={notAllow} 
+            disabled={!emailValid || !password} 
           />
-          <p onClick={goToSignUp}>이미 계정이 있으신가요?</p>
+          <p onClick={goToSignUp}>계정이 없으신가요? 회원가입</p>
       </div>
     </div>
   ) 
