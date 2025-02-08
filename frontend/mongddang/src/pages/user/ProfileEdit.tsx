@@ -66,6 +66,11 @@ function ProfileEdit () {
     setSelectedGenres(selectedItems);
   };
 
+  //취소버튼 핸들러
+  const goToBack = () => {
+    return 
+  }
+
 
   // 수정완료 axios 전송
   const handleSubmit = async () => {
@@ -175,8 +180,14 @@ function ProfileEdit () {
       </div>
 
       <Button
+        text="취소하기"
+        type="Small"
+        onClick={goToBack}
+      />
+
+      <Button
         text="수정하기"
-        type="Large"
+        type="Small"
         onClick={handleSubmit}
         disabled={isButtonDisabled}
       />
