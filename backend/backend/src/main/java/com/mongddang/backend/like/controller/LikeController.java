@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.mongddang.backend.like.dto.LikeAlbumResponseDTO;
+import com.mongddang.backend.like.dto.LikeTopTenResponseDTO;
 import com.mongddang.backend.like.service.LikeService;
 import com.mongddang.backend.user.dto.UserDTO;
 import com.mongddang.backend.user.service.UserService;
@@ -101,6 +102,20 @@ public class LikeController {
                     .body("Error: " + e.getMessage());
 		}
 	}
+	
+	// LikeTop 10 앨범 조회
+	@GetMapping("/top-10/albums")
+	public ResponseEntity<?> LikeTopTenList(){
+		try {
+			LikeTopTenResponseDTO list = likeService.getLikeTopTenList();
+			return ResponseEntity.ok(list);
+		} catch (Exception e) {
+			return ResponseEntity
+					.badRequest()
+					.body("Error: " + e.getMessage());
+		}
+	}
+	
 	
 		
 	
