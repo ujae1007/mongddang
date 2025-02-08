@@ -27,7 +27,7 @@ function SignUp () {
   const [emailValid, setEmailValid] = useState<boolean>(false)
   const [isEmailAvailable, setisEmailAvailable] = useState<boolean>(false)
   
-  const [certifyValid, setCertifyValid] = useState<boolean>(false)
+  // const [certifyValid, setCertifyValid] = useState<boolean>(false)
   const [isCertifyConfirmed, setIsCertifyConfirmed] = useState(false);
   
   const [passwordValid, setPasswordValid] = useState<boolean>(false)
@@ -95,26 +95,39 @@ function SignUp () {
   //인증코드, 확인용 비밀번호 핸들러
   const handlerCertifyChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setCertify(e.target.value)
-    setCertifyValid(e.target.value.length > 0)
+    // setCertifyValid(e.target.value.length > 0)
   }
   const handlerSecondPasswordChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setSecondPassword(e.target.value)
-    setSecondPasswordValid(e.target.value.length > 0)
+    const newSecondPassword = e.target.value
+    setSecondPassword(newSecondPassword)
+    // setSecondPasswordValid(secondPassword.length > 0 && password === secondPassword);
+    if (password === newSecondPassword){
+      setPasswordMatchMessage("비밀번호가 일치합니다.")
+      setSecondPasswordValid(true)
+    } else {
+      setPasswordMatchMessage("비밀번호가 일치하지 않습니다.")
+      setSecondPasswordValid(false)
+
+    }
   }
 
   // 모든 작업이 완료될 시 회원가입 버튼 활성화 핸들러 
   const isSignUpEnabled =
-    profileImageValid &&
-    nickName.length > 0 &&
-    introduce.length > 0 &&
-    emailValid &&
-    isCertifyConfirmed &&
-    isEmailAvailable &&
-    passwordValid &&
-    secondpasswordValid &&
-    password === secondPassword &&
-    selecetedGenres.length ===3 &&
-    selecetedPlaces.length === 3;
+    (profileImage || profileImageValid ) && // 기본 프로파일 혹은 유저가 올린 사진
+    nickName && //닉네임을 작성했는지
+    introduce && //자기소개를 작성했는지
+    email &&  //이메일을 작성했는지 
+    emailValid && //이메일의 형식이 맞는지 
+    isEmailAvailable &&//기존 사용자가 아닌지 
+    certify && //인증번호를 입력했는지 
+    isCertifyConfirmed && // 인증번호가 맞는지 
+    password && //첫 번째 비밀번호를 작성했는지 
+    passwordValid && // 첫 번째 비밀번호가 형식이 맞는지 
+    secondPassword && // 두 번째 비밀번호를 작성했는지 
+    secondpasswordValid && // 두 번째 비밀번호가 첫 번째 비밀번호와 일치하는지 
+    password === secondPassword && // 첫 번째 비밀번호와 두 번째 비밀번호가 일치하는지 (빼도 될 듯)
+    selecetedGenres.length ===3 && //노래 장르를 3가지 선택했는지 
+    selecetedPlaces.length === 3; // 선호 장소를 3가지 선택했는지 
   
   //장르, 여행지 선택 핸들러
   const handleGenreChange = (genres: string[]) => {
@@ -128,7 +141,7 @@ function SignUp () {
   const handleCertifyVerification = () => {
     console.log("인증코드 확인시도")
     axiosInstance
-      .post("/auth/verifycode", {certify})
+      .post("/auth/verifycode", {"code":certify, "email":email})
       .then((res) => {
         if (res.status === 200) {
           console.log("인증에 성공하였습니다.")
@@ -149,32 +162,37 @@ function SignUp () {
   }
 
   //비밀번호 일치 검사
-  const checkPassword = () => {
-    setSecondPasswordValid(secondPassword.length > 0 && password === secondPassword);
-    if (password === secondPassword){
-      setPasswordMatchMessage("비밀번호가 일치합니다.")
-      setSecondPasswordValid(true)
-    } else {
-      setPasswordMatchMessage("비밀번호가 일치하지 않습니다.")
-      setSecondPasswordValid(false)
+  // const checkPassword = () => {
+  //   setSecondPasswordValid(secondPassword.length > 0 && password === secondPassword);
+  //   if (password === secondPassword){
+  //     setPasswordMatchMessage("비밀번호가 일치합니다.")
+  //     setSecondPasswordValid(true)
+  //   } else {
+  //     setPasswordMatchMessage("비밀번호가 일치하지 않습니다.")
+  //     setSecondPasswordValid(false)
 
-    }
-  }
+  //   }
+  // }
 
 // 회원정보 axios 최종전송
   const register = () => {
     console.log("회원가입 시도")
     console.log(
-      nickName.length > 0 ,
-      introduce.length > 0,
-      isEmailAvailable, ("맞음"),
-      isCertifyConfirmed , ("맞음"),
-      passwordValid ,
-      secondpasswordValid ,
-      password === secondPassword ,
-      selecetedGenres.length ===3 ,
-      selecetedPlaces.length === 3,
-      // selecetedGenres
+    profileImage || profileImageValid ,// 기본 프로파일 혹은 유저가 올린 사진
+    nickName ,//닉네임을 작성했는지
+    introduce , //자기소개를 작성했는지
+    email ,  //이메일을 작성했는지 
+    emailValid , //이메일의 형식이 맞는지 
+    isEmailAvailable,//기존 사용자가 아닌지 
+    certify , //인증번호를 입력했는지 
+    isCertifyConfirmed, // 인증번호가 맞는지 
+    password , //첫 번째 비밀번호를 작성했는지 
+    passwordValid , // 첫 번째 비밀번호가 형식이 맞는지 
+    secondPassword , // 두 번째 비밀번호를 작성했는지 
+    secondpasswordValid , // 두 번째 비밀번호가 첫 번째 비밀번호와 일치하는지 
+    password === secondPassword , // 첫 번째 비밀번호와 두 번째 비밀번호가 일치하는지 (빼도 될 듯)
+    selecetedGenres.length ===3 , //노래 장르를 3가지 선택했는지 
+    selecetedPlaces.length === 3 // 선호 장소를 3가지 선택했는지 
     )
 
     const formData = new FormData()
@@ -188,7 +206,6 @@ function SignUp () {
     formData.append('password', password)
     selecetedGenres.forEach((genre, index) => formData.append(`likeGenre${index + 1}`, genre)) 
     selecetedPlaces.forEach((place, index) => formData.append(`likeRegion${index +1}`, place))
-    //['electronic', 'garage', 'hip-hop']
     
 
     axiosInstance
@@ -218,7 +235,7 @@ function SignUp () {
     nav('/login', {replace:true})
   }
 
-
+// -----------------------------------------------------------------------------
   return (
     <div className="SignUp">
 
@@ -291,7 +308,7 @@ function SignUp () {
           </div>
           <Button 
             text="인증"
-            type="small"
+            type="Small"
             onClick={handleEmailVerification}
             disabled={!emailValid}
           />
@@ -308,15 +325,15 @@ function SignUp () {
           />
           <Button
             text="확인"
-            type="small"
+            type="Small"
             onClick={handleCertifyVerification}
-            disabled={!certifyValid}
+            disabled={!certify}
           />
           <Button
             text="재전송"
-            type="small"
+            type="Small"
             onClick={handleEmailVerification}
-            disabled={!certifyValid}
+            disabled={!certify}
           />          
         </div>
 
@@ -347,12 +364,12 @@ function SignUp () {
             onChange={handlerSecondPasswordChange}
             value={secondPassword}
           />
-          <Button
+          {/* <Button
             text="확인"
-            type="small"
+            type="Small"
             onClick={checkPassword}
-            disabled={!secondpasswordValid}
-          />
+            disabled={!secondPassword}
+          /> */}
           {passwordMatchMessage && (
           <div className={`passwordMessage ${passwordMatchMessage.includes("일치하지 않습니다") ? "error" : "success"}`}>
             {passwordMatchMessage}
