@@ -11,7 +11,6 @@ const Button = ({text, type, onClick, disabled}:ButtonProps) => {
       className={`Button Button_${type}`}
       onClick={onClick}
       disabled={disabled}
-
     >
       {text}
     </button>
