@@ -1,29 +1,30 @@
 import { useState } from "react";
 import { Album } from "../../types";
-import axiosInstance from "../../api/axiosInstance"
+// import axiosInstance from "../../api/axiosInstance"
 
 interface Step1Props {
+  // 앨범 생성 완료 시 호출되는 콜백 함수
+  // 앨범 생성 시 Step2로 이동하기 위해 앨범 정보를 전달
   onCreateAlbum: (album: Album) => void;
 }
-
-interface CreateAlbumResponse {
-  albumId: number;
-  userId: number;
-  title: string;
-  albumImageUrl: string;
-  status: boolean;
-  createdAt: string;
-  updatedAt: string;
-  playlists: null;
-}
+// interface CreateAlbumResponse {
+//   albumId: number;
+//   userId: number;
+//   title: string;
+//   albumImageUrl: string;
+//   status: boolean;
+//   createdAt: string;
+//   updatedAt: string;
+//   playlists: null;
+// }
 
 function Step1({ onCreateAlbum }: Step1Props) {
-  const [title, setTitle] = useState<string>("");
-  const [isCreating, setIsCreating] = useState(false);
+  const [title, setTitle] = useState<string>(""); // 앨범 제목 저장
+  const [isCreating, setIsCreating] = useState(false); // 앨범 생성 여부 저장
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    setIsCreating(true);
+    setIsCreating(true); // 앨범 생성 true로 변경
 
     try {
       // -------------- 실제 API 호출  --------------
@@ -31,7 +32,7 @@ function Step1({ onCreateAlbum }: Step1Props) {
       //   title: title,
       //   status: false
       // });
-      
+
       // const newAlbum: Album = {
       //   id: data.albumId,
       //   title: data.title,
@@ -42,37 +43,23 @@ function Step1({ onCreateAlbum }: Step1Props) {
       // --------------------------------------------
 
       // ------------ 시뮬레이션 -------------
-      // API 호출을 시뮬레이션하기 위한 지연
-      await new Promise(resolve => setTimeout(resolve, 1000));
 
-      // 가짜 응답 생성
-      const mockResponse: CreateAlbumResponse = {
-        albumId: Math.floor(Math.random() * 1000),
-        userId: 1,
+      const newAlbum: Album = {
+        id: Math.floor(Math.random() * 1000),
         title: title,
         albumImageUrl: "",
         status: false,
+        playlists: [],
         createdAt: new Date().toISOString(),
         updatedAt: new Date().toISOString(),
-        playlists: null
-      };
-
-      // API 응답을 Album 타입에 맞게 변환
-      const newAlbum: Album = {
-        id: mockResponse.albumId,
-        title: mockResponse.title,
-        album_image_URL: mockResponse.albumImageUrl,
-        status: mockResponse.status,
-        playlists: [],
       };
       // --------------------------------------------
 
       onCreateAlbum(newAlbum);
-      console.log('생성된 앨범:', mockResponse);
-      
+      console.log("생성된 앨범:", newAlbum);
     } catch (error) {
-      console.error('앨범 생성 중 오류 발생:', error);
-      alert('앨범 생성 중 오류가 발생했습니다.');
+      console.error("앨범 생성 중 오류 발생:", error);
+      alert("앨범 생성 중 오류가 발생했습니다.");
     } finally {
       setIsCreating(false);
     }
@@ -86,17 +73,15 @@ function Step1({ onCreateAlbum }: Step1Props) {
           <input
             type="text"
             id="title"
+            /*title 값이 변경될 때마다 상태 업데이트*/
             value={title}
             onChange={(e) => setTitle(e.target.value)}
             placeholder="앨범 제목을 입력하세요"
           />
         </div>
 
-        <button 
-          type="submit" 
-          disabled={!title.trim() || isCreating}
-        >
-          {isCreating ? '생성 중...' : '생성하기'}
+        <button type="submit" disabled={!title.trim() || isCreating}>
+          {isCreating ? "생성 중..." : "생성하기"}
         </button>
       </form>
     </div>
