@@ -3,7 +3,7 @@ package com.mongddang.backend.profile.dto;
 import java.util.Date;
 import java.util.List;
 
-import javax.xml.crypto.Data;
+
 
 public class AlbumDTO {
 	private int albumId;
