@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.mongddang.backend.like.repository.LikeRepository"> <!-- 내가 지금 연결하고  싶은 Dao 풀패키지명 -->
+	<!-- 좋아요 상태 확인 -->
+	<select id="isAlreadyLike" parameterType="map" resultType="int">
+		SELECT COUNT(*)
+		FROM `like`
+		WHERE user_id = #{userId}
+		AND album_id = #{albumId};
+	</select>
+	
+	<!-- 좋아요 추가 -->
+	<insert id="insertLike" parameterType="likeDTO">
+		INSERT INTO `like` (user_id, album_id)
+		VALUES (#{userId}, #{albumId})
+	</insert>
+	
+	<!-- 좋아요 삭제 -->
+	<delete id="deleteLike" parameterType="likeDTO">
+		DELETE FROM `like`
+		WHERE user_id = #{userId}
+		AND album_id = #{albumId}
+	</delete>
+	
+	<!-- 좋아요 앨범 목록 조회 -->
+	
+	<!-- ResultMap for Music -->
+	<resultMap type="LikeAlbumMusicDTO" id="LikeAlbumMusicMap">
+		<id property="musicId" column="musicId"/>
+		<result property="trackName" column="trakName"/>
+		<result property="artistName" column="artistName"/>
+	</resultMap>
+	
+	<!-- ResultMap for Photo -->
+	<resultMap type="LikeAlbumPhotoDTO" id="LikeAlbumPhotoMap">
+		<id property="photoId" column="photoId"/>
+		<result property="photoURL" column="photoURL"/>
+	</resultMap> 
+	
+	<!-- ResultMap for Playlist -->
+	<resultMap type="LikeAlbumPlaylistDTO" id="LikeAlbumPlaylistMap">
+		<id property="playlistId" column="playlistId"/>
+		<result property="locationAddress" column="locationAddress"/>
+		<association property="music" javaType="LikeAlbumMusicDTO" resultMap="LikeAlbumMusicMap"/>
+		<collection property="photos"  ofType="LikeAlbumPhototDTO" resultMap="LikeAlbumPhotoMap"/>
+	</resultMap>
+	
+	<!-- ResultMap for LikeAlbum -->
+	<resultMap type="LikeAlbumDTO" id="LikeAlbumMap">
+		<id property="albumId" column="albumId"/>
+		<result property="title" column="title"/>
+		<result property="createdAt" column="createdAt"/>
+		<result property="albumImageURL" column="albumImageURL"/>
+		<result property="authorNickname" column="authorNickname"/>
+		<collection property="playlists" ofType="LikeAlbumPlaylistDTO" resultMap="LikeAlbumPlaylistMap"/>
+	</resultMap>
+	
+	<!-- Main for LikeAlbumList -->
+	<resultMap type="LikeAlbumResponseDTO" id="LikeAlbumResponseResultMap">
+		<id property="id" column="id"/>
+		<collection property="likeAlbums" ofType="LikeAlbumDTO" resultMap="LikeAlbumMap"/>
+	</resultMap>
+	
+	<select id="getLikeAlbumList" parameterType="int" resultMap="LikeAlbumResponseResultMap">
+		SELECT 
+			1 as id,
+			a.album_id as albumId,
+			a.title as title,
+			a.album_image_URL as albumImageURL,
+			a.created_at as createdAt,
+			u.nickname as authorNickname,
+			p.playlist_id as playlistId,
+			
+			m.music_id as musicId,
+			m.track_name as trackName,
+			m.artist_name as artistName,
+			
+			ph.photo_id as photoId,
+			ph.photo_URL as photoURL
+			
+		FROM `like` l
+		INNER JOIN album a ON l.album_id = a.album_id
+		INNER JOIN user u ON a.user_id = u.user_id
+		LEFT JOIN playlist p ON a.album_id = p.album_id
+		LEFT JOIN music m ON p.music_id = m.music_id
+		RIGHT JOIN photo ph ON p.playlist_id = ph.playlist_id
+		where l.user_id = #{userId}
+		ORDER BY a.created_at DESC 
+	
+	</select>
+	
+	
+</mapper>
