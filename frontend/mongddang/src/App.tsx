@@ -5,7 +5,7 @@ import Login from "./pages/auth/Login";
 import SignUp from "./pages/auth/SignUp";
 import ProfileEdit from "./pages/user/ProfileEdit";
 import Create from "./pages/album/Create";
-import Mypage from "./pages/user/Mypage";
+import ProfilePage from "./pages/user/ProfilePage";
 
 function App() {
   return (
@@ -15,7 +15,7 @@ function App() {
         <Route path="/signup" element={<SignUp />} />
         <Route path="/profileEdit" element={<ProfileEdit />} />
         <Route path="/create" element={<Create />} />
-        <Route path="/mypage" element={<Mypage />} />
+        <Route path="/profile/{user_id}" element={<ProfilePage />} />
       </Routes>
     </Router>
   );
