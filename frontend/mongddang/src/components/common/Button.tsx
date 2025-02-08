@@ -1,6 +1,6 @@
 interface ButtonProps {
   text: string
-  type: string
+  type: "Large" | "Middium" | "Small"
   onClick?: () => void
   disabled?: boolean
 }
