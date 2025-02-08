@@ -28,7 +28,7 @@
 	<!-- ResultMap for Music -->
 	<resultMap type="LikeAlbumMusicDTO" id="LikeAlbumMusicMap">
 		<id property="musicId" column="musicId"/>
-		<result property="trackName" column="trakName"/>
+		<result property="trackName" column="trackName"/>
 		<result property="artistName" column="artistName"/>
 	</resultMap>
 	
@@ -71,6 +71,7 @@
 			a.created_at as createdAt,
 			u.nickname as authorNickname,
 			p.playlist_id as playlistId,
+			p.location_address as locationAddress,
 			
 			m.music_id as musicId,
 			m.track_name as trackName,
@@ -90,5 +91,59 @@
 	
 	</select>
 	
+	<!-- 좋아요 상위 10개 조회 -->
 	
+	<!-- ResultMap for LikeTopTenMusic -->
+	<resultMap type="LikeAlbumMusicDTO" id="LikeTopTenMusicMap">
+		<id property="musicId" column="musicId"/>
+		<result property="trackName" column="trackName"/>
+		<result property="artistName" column="artistName"/>
+	</resultMap>
+	
+	<!-- ResultMap for LikeTopTenPlaylist -->
+	<resultMap type="LikeTopTenPlaylistDTO" id="LikeTopTenPlaylistMap">
+		<id property="playlistId" column="playlistId"/>
+		<result property="locationAddress" column="locationAddress"/>
+		<association property="music" javaType="LikeAlbumMusicDTO" resultMap="LikeTopTenMusicMap"/>
+	</resultMap>
+	
+	<!-- ResultMap for LikeTopTenAlbum -->
+	<resultMap type="LikeTopTenDTO" id="LikeTopTenMap">
+		<id property="albumId" column="albumId"/>
+		<result property="title" column="title"/>
+		<result property="albumImageURL" column="albumImageURL"/>
+		<result property="authorNickname" column="authorNickname"/>
+		<collection property="playlists" ofType="LikeTopTenPlaylistDTO" resultMap="LikeTopTenPlaylistMap"/>
+	</resultMap>
+	
+	<!-- ResultMap for LikeTopTenMain  -->
+	<resultMap type="LikeTopTenResponseDTO" id="LikeTopTenResponseResultMap">
+		<id property="id" column="id"/>
+		<collection property="likeTopTenLists" ofType="LikeTopTenDTO" resultMap="LikeTopTenMap"/>
+	</resultMap>
+	
+	
+	<select id="getLikeTopTenList" resultMap="LikeTopTenResponseResultMap">
+		SELECT 
+			1 as id,
+			a.album_id as albumId,
+			a.title as title,
+			a.album_image_URL as albumImageURL,
+			u.nickname as authorNickname,
+			p.playlist_id as playlistId,
+			p.location_address as locationAddress,
+			m.track_id as trackId,
+			m.track_name as trackName,
+			m.artist_name as artistName
+		FROM 
+			(SELECT album_id, COUNT(album_id) as like_cnt
+			FROM `like`
+			GROUP BY album_id
+			ORDER BY COUNT(album_id) DESC
+			LIMIT 10) as l 
+			INNER JOIN album as a ON l.album_id = a.album_id
+			INNER JOIN user as u ON a.user_id = u.user_id
+			LEFT JOIN playlist as p ON a.album_id = p.album_id
+			LEFT JOIN music as m on p.music_id = m.music_id
+	</select>
 </mapper>
