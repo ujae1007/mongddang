@@ -8,8 +8,8 @@ import com.mongddang.backend.profile.dto.ProfileResponseDTO;
 import com.mongddang.backend.profile.dto.ProfileSummaryResponseDTO;
 
 public interface ProfileRepository {
-	ProfileResponseDTO afterLoginProfile(int userId);
+	public ProfileResponseDTO afterLoginProfile(int userId);
 	
-	ProfileSummaryResponseDTO getProfileByUserId(@Param("userId") int userId, @Param("loginUserId") int loginUserId);
+	public ProfileSummaryResponseDTO getProfileByUserId(@Param("userId") int userId, @Param("loginUserId") int loginUserId);
 
 }

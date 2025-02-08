@@ -5,7 +5,6 @@ import com.mongddang.backend.playlist.entity.Playlist;
 import com.mongddang.backend.playlist.service.PlaylistService;
 
 import java.math.BigDecimal;
-import java.security.Principal;
 import java.util.List;
 
 import org.springframework.http.HttpStatus;
@@ -38,20 +37,9 @@ public class PlaylistController {
             @RequestParam("longitude") BigDecimal longitude,
             @RequestParam("locationAddress") String locationAddress,
             @RequestParam("musicId") int musicId,
-            @RequestPart(value = "files", required = false) List<MultipartFile> files, Principal principal) { // ✅ 파일은 @RequestPart 유지
+            @RequestPart(value = "files", required = false) List<MultipartFile> files) { // ✅ 파일은 @RequestPart 유지
 
         try {
-            // ✅ 1. Playlist를 찾고, 해당 앨범의 userId를 확인
-            Playlist playlist = playlistRepository.findById(playlistId)
-                .orElseThrow(() -> new IllegalArgumentException("해당 Playlist를 찾을 수 없습니다: " + playlistId));
-            
-            int albumOwnerId = playlist.getAlbum().getUserId();  // 🔥 앨범 소유자 ID
-            int loggedInUserId = userService.getUserByEmail(principal.getName()).getUserId();  // 🔥 현재 로그인한 사용자 ID
-            
-            // ✅ 2. 현재 로그인한 사용자가 앨범의 소유자인지 확인
-            if (albumOwnerId != loggedInUserId) {
-                return ResponseEntity.status(HttpStatus.FORBIDDEN).body("권한이 없습니다.");  // 🔥 403 Forbidden
-            }
             // ✅ 컨트롤러에서 DTO 객체 생성
             PlaylistDto dto = new PlaylistDto();
             dto.setStartTime(startTime);
