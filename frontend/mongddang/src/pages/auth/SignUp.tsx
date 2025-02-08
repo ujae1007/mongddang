@@ -204,8 +204,8 @@ function SignUp () {
     formData.append('introduce', introduce.trim())
     formData.append('email', email)
     formData.append('password', password)
-    selecetedGenres.forEach((genre, index) => formData.append(`likeGenre${index + 1}`, genre)) 
-    selecetedPlaces.forEach((place, index) => formData.append(`likeRegion${index +1}`, place))
+    selecetedGenres.forEach((genre, index) => formData.append(`like_genre${index + 1}`, genre)) 
+    selecetedPlaces.forEach((place, index) => formData.append(`like_region${index +1}`, place))
     
 
     axiosInstance
