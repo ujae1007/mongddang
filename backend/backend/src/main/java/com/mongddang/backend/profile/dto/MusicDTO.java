@@ -1,8 +1,19 @@
 package com.mongddang.backend.profile.dto;
 
 public class MusicDTO {
+	private int musicId;
 	private String trackName;
 	private String artistName;
+	
+	
+	
+
+	public int getMusicId() {
+		return musicId;
+	}
+	public void setMusicId(int musicId) {
+		this.musicId = musicId;
+	}
 	public String getTrackName() {
 		return trackName;
 	}
