@@ -5,6 +5,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.mongddang.backend.like.dto.LikeAlbumResponseDTO;
 import com.mongddang.backend.like.dto.LikeDTO;
+import com.mongddang.backend.like.dto.LikeTopTenResponseDTO;
 import com.mongddang.backend.like.repository.LikeRepository;
 
 @Service
@@ -48,5 +49,9 @@ public class LikeService {
 		return likeRepository.getLikeAlbumList(userId);
 	}
 	
+	// Like Top-10 Album 조회
+	public LikeTopTenResponseDTO getLikeTopTenList() {
+		return likeRepository.getLikeTopTenList();
+	}
 	
 }

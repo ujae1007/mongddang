@@ -4,6 +4,7 @@ import org.apache.ibatis.annotations.Param;
 
 import com.mongddang.backend.like.dto.LikeAlbumResponseDTO;
 import com.mongddang.backend.like.dto.LikeDTO;
+import com.mongddang.backend.like.dto.LikeTopTenResponseDTO;
 
 public interface LikeRepository {
 	// 좋아요 상태 확인
@@ -17,4 +18,8 @@ public interface LikeRepository {
 	
 	// 좋아요 한 앨범 목록 조회
 	public LikeAlbumResponseDTO getLikeAlbumList(int userId);
+	
+	
+	// 좋아요 상위 10개 앨범 목록 조회
+	public LikeTopTenResponseDTO getLikeTopTenList();
 }
