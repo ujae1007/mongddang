@@ -19,3 +19,4 @@ export interface Album {
   status: boolean;
   playlists: Playlist[];
 }
+
