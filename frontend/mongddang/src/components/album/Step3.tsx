@@ -2,6 +2,7 @@ import { useState, useRef, useEffect } from "react";
 import { Playlist } from "../../types";
 import SearchLocation from "./SearchLocation";
 import SearchMusic from "./SearchMusic";
+// import axiosInstance from "../../api/axiosInstance";
 
 interface Step3Props {
   albumId: number;
