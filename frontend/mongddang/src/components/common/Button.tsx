@@ -1,6 +1,6 @@
 interface ButtonProps {
   text: string
-  type: "Large" | "Middium" | "ProfileEdit" | "PopUp"
+  type: "Large" | "Middium" | "ProfileEdit" | "PopUp" | "confirm"
   onClick?: () => void
   disabled?: boolean
 }

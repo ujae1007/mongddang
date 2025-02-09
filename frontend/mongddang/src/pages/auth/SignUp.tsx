@@ -42,7 +42,7 @@ function SignUp () {
         alert('파일 크기는 5MB를 초과할 수 없습니다. 다른 이미지를 선택해주세요.')
         setProfileImageValid(false)
         e.target.value=''
-        setProfileImage(defaultImage)
+        setProfileImage(profileImage || defaultImage)
         return 
       }
       const reader = new FileReader()
@@ -260,6 +260,57 @@ function SignUp () {
       </div>
 
 
+
+{/* 이메일 */}
+        <div className="emailWrap">
+          <InputBox 
+            type="default" 
+            mode="signup"
+            placeholder="이메일을 입력해주세요."
+            onChange={(e) => {
+              setEmail(e.target.value)
+              handleEmail(e)
+            }}
+            value={email}
+          />
+          <div className="errorMessageWrap">
+            {
+              !emailValid && email.length > 0 && (
+                <div>올바른 이메일을 입력해주세요.</div>
+              )
+            }
+          </div>
+          <Button 
+            text="인증"
+            type="confirm"
+            onClick={handleEmailVerification}
+            disabled={!emailValid}
+          />
+        </div>
+
+{/* 인증코드 */}
+        <div className="certifyWrap">
+          <InputBox 
+            type="default" 
+            mode="signup"
+            placeholder="인증코드를 입력해주세요."
+            onChange={handlerCertifyChange}
+            value={certify}
+          />
+          <Button
+            text="확인"
+            type="confirm"
+            onClick={handleCertifyVerification}
+            disabled={!certify}
+          />
+          <Button
+            text="재전송"
+            type="confirm"
+            onClick={handleEmailVerification}
+            disabled={!certify}
+          />          
+        </div>
+
 {/* 닉네임 */}
         <div className="nickNameWrap"> 
           <InputBox 
@@ -286,56 +337,6 @@ function SignUp () {
         />
 
       </div>
-
-{/* 이메일 */}
-        <div className="emailWrap">
-          <InputBox 
-            type="default" 
-            mode="signup"
-            placeholder="이메일을 입력해주세요."
-            onChange={(e) => {
-              setEmail(e.target.value)
-              handleEmail(e)
-            }}
-            value={email}
-          />
-          <div className="errorMessageWrap">
-            {
-              !emailValid && email.length > 0 && (
-                <div>올바른 이메일을 입력해주세요.</div>
-              )
-            }
-          </div>
-          <Button 
-            text="인증"
-            type="Small"
-            onClick={handleEmailVerification}
-            disabled={!emailValid}
-          />
-        </div>
-
-{/* 인증코드 */}
-        <div className="certifyWrap">
-          <InputBox 
-            type="default" 
-            mode="signup"
-            placeholder="인증코드를 입력해주세요."
-            onChange={handlerCertifyChange}
-            value={certify}
-          />
-          <Button
-            text="확인"
-            type="Small"
-            onClick={handleCertifyVerification}
-            disabled={!certify}
-          />
-          <Button
-            text="재전송"
-            type="Small"
-            onClick={handleEmailVerification}
-            disabled={!certify}
-          />          
-        </div>
 
 {/* 비밀번호 */}
         <div className="passwordWrap">
