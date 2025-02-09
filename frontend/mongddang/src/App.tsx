@@ -7,6 +7,9 @@ import ProfileEdit from "./pages/user/ProfileEdit";
 import Create from "./pages/album/Create";
 import ProfilePage from "./pages/user/ProfilePage";
 
+//이거 유튜브 확인용 나중에 삭제 예정!!!!
+import YoutubePractice from "./pages/youtube/youtubePrac";
+
 function App() {
   return (
     <Router>
@@ -16,6 +19,8 @@ function App() {
         <Route path="/profileEdit" element={<ProfileEdit />} />
         <Route path="/create" element={<Create />} />
         <Route path="/profile/:user_id" element={<ProfilePage />} />
+        <Route path="/youtube" element={<YoutubePractice />} />
+
       </Routes>
     </Router>
   );
