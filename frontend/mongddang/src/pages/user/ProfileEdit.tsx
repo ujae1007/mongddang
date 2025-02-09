@@ -181,13 +181,13 @@ function ProfileEdit () {
 
       <Button
         text="취소하기"
-        type="Small"
+        type="Middium"
         onClick={goToBack}
       />
 
       <Button
         text="수정하기"
-        type="Small"
+        type="Middium"
         onClick={handleSubmit}
         disabled={isButtonDisabled}
       />
