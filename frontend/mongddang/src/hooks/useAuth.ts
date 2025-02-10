@@ -1,15 +1,21 @@
 //로그인한 유저 정보 API 요청 후 전역 상태 업데이트
 import axiosInstance from "../api/axiosInstance"
-import { useRecoilState } from "recoil"
-import { userAtom } from "../recoil/userAtom"
+import { useRecoilState, useRecoilValue } from "recoil"
+import { tokenAtom, userAtom } from "../recoil/userAtom"
 import { useEffect } from "react"
 
 
 const useAuth = () => {
   const [user, setUser] = useRecoilState(userAtom)
+  const token = useRecoilValue(tokenAtom)
 
   useEffect(() => {
     const fetchUSer = async () => {
+
+      if (!token) {
+        setUser(null)
+        return
+      }
       try {
         const res = await axiosInstance.get("/auth/current")
         setUser(res.data)
@@ -19,7 +25,7 @@ const useAuth = () => {
       }
     }
     fetchUSer()
-  }, [setUser])
+  }, [setUser, token])
 
   return user
 }
