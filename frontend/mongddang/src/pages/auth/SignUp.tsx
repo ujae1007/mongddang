@@ -7,7 +7,7 @@ import axiosInstance from "../../api/axiosInstance"
 
 function SignUp () {
 
-  const defaultImage = "/assets/default_profile.jpg"
+  const defaultImage = "REMOVED"
   const nav = useNavigate()
   
   //상태변화 감지
