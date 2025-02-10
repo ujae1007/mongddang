@@ -1,4 +1,7 @@
 import { useState } from "react";
+import { useNavigate } from "react-router-dom";
+import { useRecoilState } from "recoil";
+import { albumListState, currentAlbumState, albumStepState } from "../../recoil/albumState";
 import { Album, Playlist } from "../../types";
 import Step1 from "../../components/album/Step1";
 import Step2 from "../../components/album/Step2";
@@ -7,13 +10,15 @@ import Step4 from "../../components/album/Step4";
 import TempAlbumList from "../../components/album/TempAlbumList";
 
 function Create() {
-  const [step, setStep] = useState<number>(1);
-  const [album, setAlbum] = useState<Album | null>(null);
-  const [createdAlbums, setCreatedAlbums] = useState<Album[]>([]);
+  const navigate = useNavigate();
+
+  const [step, setStep] = useRecoilState(albumStepState);
+  const [album, setAlbum] = useRecoilState(currentAlbumState);
+  const [createdAlbums, setCreatedAlbums] = useRecoilState(albumListState);
   const [showTempAlbums, setShowTempAlbums] = useState(false);
-  const [editingPlaylist, setEditingPlaylist] = useState<
-    Playlist | undefined
-  >();
+  const [editingPlaylist, setEditingPlaylist] = useState<Playlist | undefined>();
+  
+  console.log("전체 앨범",createdAlbums); // 지금까지 생성된 앨범 목록
 
   const tempAlbums = createdAlbums.filter((album) => !album.status);
 
@@ -84,12 +89,10 @@ function Create() {
           // 기존 앨범 업데이트
           const newAlbums = [...prev];
           newAlbums[existingAlbumIndex] = completedAlbum;
-          console.log("전체 앨범 목록:", newAlbums);
           return newAlbums;
         } else {
           // 새 앨범 추가
           const newAlbums = [...prev, completedAlbum];
-          console.log("전체 앨범 목록:", newAlbums);
           return newAlbums;
         }
       });
@@ -97,6 +100,11 @@ function Create() {
       // step1으로 돌아가기
       setAlbum(null);
       setStep(1);
+
+      console.log("앨범 생성 완료:", completedAlbum);
+
+      // 해당 앨범 상세 페이지로 이동
+      navigate(`/albums/${completedAlbum.id}`, {state: completedAlbum});
     }
   };
 
@@ -181,7 +189,6 @@ function Create() {
           albumId={album.id || 0}
           title={album.title}
           onUpdateTitle={handleUpdateTitle}
-          onMoveToStep3={() => setStep(3)}
           onComplete={() => handleCompleteAlbum()}
           onTempSave={handleTempSave}
         />
@@ -202,7 +209,6 @@ function Create() {
         <Step4
           album={album}
           onUpdateTitle={handleUpdateTitle}
-          onMoveToStep3={() => setStep(3)}
           onComplete={() => handleCompleteAlbum()}
           onTempSave={handleTempSave}
           onDeletePlaylist={handleDeletePlaylist}
