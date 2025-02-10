@@ -3,16 +3,17 @@ import {atom} from "recoil"
 
 // 유저 
 export interface User {
-  user_id: number;
+  userId: number;
   email: string;
+  password: string;
   nickname: string;
-  like_rigion1: string;
-  like_rigion2: string;
-  like_rigion3: string;
-  like_genre1: string;
-  like_genre2: string;
-  like_genre3: string;
-  profile_image_URL: string;
+  likeRigion1: string;
+  likeRigion2: string;
+  likeRigion3: string;
+  likeGenre1: string;
+  likeGenre2: string;
+  likeGenre3: string;
+  profileImageURL: string;
   introduce: string;
 }
 
