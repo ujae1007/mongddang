@@ -3,6 +3,8 @@ import { useNavigate } from "react-router-dom"
 import Button from "../../components/common/Button"
 import InputBox from "../../components/common/input"
 import axiosInstance from "../../api/axiosInstance"
+import { useSetRecoilState } from "recoil"
+import { tokenAtom } from "../../recoil/userAtom"
 
 function Login () {
 
@@ -35,6 +37,9 @@ function Login () {
 
 //로그인 axios 요청
 const handleLogin = async () => {
+  
+  const setToken = useSetRecoilState(tokenAtom)
+
   setErrorMessage("") //기존 오류 메시지 초기화
   console.log("로그인 버튼 클릭")
   try {
@@ -47,7 +52,9 @@ const handleLogin = async () => {
   })
   const authorizationHeader = res.headers.authorization;
   console.log("Authorization Header:", authorizationHeader);
-  
+
+  //토큰을 recoil에 저장
+  setToken(authorizationHeader)
   console.log(res.data, "로그인 성공")
   alert("로그인에 성공했습니다.")
   nav("/mainpage", {replace:true})

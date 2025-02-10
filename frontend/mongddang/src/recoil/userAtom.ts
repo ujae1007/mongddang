@@ -21,3 +21,8 @@ export const userAtom = atom<User | null>({
   key: "userAtom", 
   default: null,
 })
+
+export const tokenAtom = atom<string | null>({
+  key:"tokenAtom",
+  default: null,
+})
