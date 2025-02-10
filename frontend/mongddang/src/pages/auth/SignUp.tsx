@@ -204,8 +204,8 @@ function SignUp () {
     formData.append('introduce', introduce.trim())
     formData.append('email', email)
     formData.append('password', password)
-    selecetedGenres.forEach((genre, index) => formData.append(`like_genre${index + 1}`, genre)) 
-    selecetedPlaces.forEach((place, index) => formData.append(`like_region${index +1}`, place))
+    selecetedGenres.forEach((genre, index) => formData.append(`likeGenre${index + 1}`, genre)) 
+    selecetedPlaces.forEach((place, index) => formData.append(`likeRegion${index +1}`, place))
     
 
     axiosInstance
@@ -220,10 +220,8 @@ function SignUp () {
       //여기 아래 어떤 내용인지 확인필요
       console.log(res.data.jwt)
       localStorage.setItem('jwt',res.data.jwt)
-      //이름 확인, 경로 확인
-      const userId = res.data.userId
-      //메인페이지로 이동 주소확인해봐야함 
-      nav(`/home/${userId}`, {replace:true})
+      //로그인 이동 
+      nav('/login', {replace:true})
     })
     .catch((err) => {
       console.log('회원가입 실패', err)
