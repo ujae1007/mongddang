@@ -2,7 +2,9 @@ package com.mongddang.backend.album.controller;
 
 import com.mongddang.backend.album.dto.AlbumResponseDto;
 import com.mongddang.backend.album.dto.AlbumRequestDto;
+import com.mongddang.backend.album.dto.AlbumUpdateDto;
 import com.mongddang.backend.album.service.AlbumService;
+import com.mongddang.backend.playlist.dto.PlaylistDto;
 import com.mongddang.backend.user.dto.UserDTO;
 import com.mongddang.backend.user.service.UserService;
 
@@ -34,10 +36,42 @@ public class AlbumController {
         AlbumResponseDto createdAlbum = albumService.createAlbum(albumRequestDto, userId);
         return ResponseEntity.ok(createdAlbum);
     }
+
+    // 앨범 수정(완료) - 현재 로그인한 사용자가 소유한 앨범인지 확인
+    @PutMapping("/complete/{albumId}")
+    public ResponseEntity<AlbumResponseDto> albumUpdateComplete(
+            Principal principal,
+            @PathVariable("albumId") int albumId,
+            @RequestBody AlbumUpdateDto albumUpdateDto) {
+        
+        String email = principal.getName();
+        int userId = userService.getUserByEmail(email).getUserId();
+        
+        AlbumResponseDto updatedAlbum = albumService.updateAlbumComplete(albumId, albumUpdateDto, userId);
+        return ResponseEntity.ok(updatedAlbum);
+    }
     
+    // 앨범 제목 수정 - 현재 로그인한 사용자가 소유한 앨범인지 확인
+    @PutMapping("/title/{albumId}")
+    public ResponseEntity<AlbumResponseDto> albumUpdateTitle(
+            Principal principal,
+            @PathVariable("albumId") int albumId,
+            @RequestBody AlbumUpdateDto albumUpdateDto) {
+        
+        String email = principal.getName();
+        int userId = userService.getUserByEmail(email).getUserId();
+        
+        AlbumResponseDto updatedAlbum = albumService.updateAlbumTitle(albumId, albumUpdateDto, userId);
+        return ResponseEntity.ok(updatedAlbum);
+    }
+    
+    // 앨범 삭제 - 현재 로그인한 사용자가 소유한 앨범인지 확인
     @DeleteMapping("/{albumId}")
-    public ResponseEntity<String> deleteAlbum(@PathVariable("albumId") int albumId) {
-        albumService.deleteAlbum(albumId);
+    public ResponseEntity<String> deleteAlbum(Principal principal, @PathVariable("albumId") int albumId) {
+        String email = principal.getName();
+        int userId = userService.getUserByEmail(email).getUserId();
+        
+        albumService.deleteAlbum(albumId, userId);
         return ResponseEntity.ok("Album 삭제 완료");
     }
     
@@ -63,10 +97,11 @@ public class AlbumController {
     }
 
     // ✅ 특정 앨범 상세 조회 (Playlist 정보 포함)
-    @GetMapping("/{albumId}")
+    @GetMapping("/detail/{albumId}")
     public ResponseEntity<AlbumResponseDto> getAlbum(@PathVariable("albumId") int albumId) {
         AlbumResponseDto albumResponse = albumService.getAlbumById(albumId);
         return ResponseEntity.ok(albumResponse);
     }
     
 }
+

@@ -19,7 +19,7 @@ import com.mongddang.backend.user.service.UserService;
 
 
 @RestController
-@RequestMapping("/api-comment")
+@RequestMapping("/api/comment")
 public class CommentController {
 	
 	private final CommentService commentService;
