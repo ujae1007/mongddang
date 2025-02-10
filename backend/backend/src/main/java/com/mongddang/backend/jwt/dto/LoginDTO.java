@@ -1,4 +1,4 @@
-package com.mongddang.backend.user.dto;
+package com.mongddang.backend.jwt.dto;
 
 public class LoginDTO {
 	
