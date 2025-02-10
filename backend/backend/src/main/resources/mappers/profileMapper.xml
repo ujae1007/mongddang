@@ -1,0 +1,131 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.mongddang.backend.profile.repository.ProfileRepository">
+
+  <!-- ResultMap for Music -->
+  <resultMap type="MusicDTO" id="MusicResultMap" >
+  	<id property="musicId" column="musicId"/>
+    <result property="trackName" column="trackName"/>
+    <result property="artistName" column="artistName"/>
+  </resultMap>
+  
+  <!-- ResultMap for Photo -->
+  <resultMap type="PhotoDTO" id="PhotoResultMap" >
+    <id property="photoId" column="photoId"/>
+    <result property="photoURL" column="photoURL"/>
+    <result property="createdAt" column="photoCreatedAt"/>
+  </resultMap>
+  
+  <!-- ResultMap for Playlist with nested Music and collection of Photos -->
+  <resultMap type="PlaylistDTO" id="PlaylistResultMap">
+    <id property="playlistId" column="playlistId"/>
+    <result property="latitude" column="latitude"/>
+    <result property="longitude" column="longitude"/>
+    <result property="locationAddress" column="locationAddress"/>
+    <association property="music" javaType="MusicDTO" resultMap="MusicResultMap"/>
+    <!-- Photo collection: 여러 사진이 있을 수 있으므로 -->
+    <collection property="photos" ofType="PhotoDTO" resultMap="PhotoResultMap"/>
+  </resultMap>
+  
+  <!-- ResultMap for Album with collection of Playlists -->
+  <resultMap type="AlbumDTO" id="AlbumResultMap">
+    <id property="albumId" column="albumId"/>
+    <result property="title" column="title"/>
+    <result property="createdAt" column="albumCreatedAt"/>
+    <result property="albumImageURL" column="albumImageURL"/>
+    <collection property="playlists" ofType="PlaylistDTO" resultMap="PlaylistResultMap"/>
+  </resultMap>
+  
+  <!-- Main ResultMap for Profile -->
+  <resultMap id="ProfileResultMap" type="ProfileResponseDTO">
+    <id property="userId" column="userId"/>
+    <result property="nickname" column="nickname"/>
+    <collection property="albums" ofType="AlbumDTO" resultMap="AlbumResultMap"/>
+  </resultMap>
+  
+  <!-- login 이후 프로필 페이지 -->
+	<select id="afterLoginProfile" parameterType="int" resultMap="ProfileResultMap">
+	SELECT 
+		u.user_id as userId,
+		u.nickname as nickname,
+      
+		a.album_id as albumId,
+		a.title as title,
+		a.created_at as albumCreatedAt,
+		a.album_image_URL as albumImageURL,
+      
+		p.playlist_id as playlistId,
+		p.latitude as latitude,
+		p.longitude as longitude,
+		p.location_address as locationAddress,
+      	
+      	m.music_id as musicId,
+		m.track_name as trackName,
+		m.artist_name as artistName,
+		
+		ph.photo_id as photoId,
+		ph.photo_URL as photoURL,
+		ph.created_at as photoCreatedAt
+	FROM user u
+	LEFT JOIN album a ON u.user_id = a.user_id 
+	LEFT JOIN playlist p ON a.album_id = p.album_id
+	LEFT JOIN music m ON p.music_id = m.music_id
+	RIGHT JOIN photo ph ON p.playlist_id = ph.playlist_id
+	WHERE u.user_id = #{userId}
+    AND a.status = true
+    ORDER BY a.created_at
+	</select>
+	
+	<!-- ######################################################## -->
+	
+	<resultMap type="AlbumSummaryDTO" id="AlbumSummaryResultMap">
+		<id property="albumId" column="albumId"/>
+		<result property="title" column= "title"/>
+		<result property="createdAt" column="createdAt"/>
+		<result property="albumImageURL" column="albumImageURL"/>
+	</resultMap>
+	
+	<resultMap id="ProfileSummaryResultMap" type="ProfileSummaryResponseDTO">
+	    <id property="userId" column="userId"/>
+	    <result property="nickname" column="nickname"/>
+	    <result property="introduce" column="introduce"/>
+	    <result property="profileImageURL" column="profileImageURL"/>
+	    <result property="followStatus" column="followStatus"/>
+	    <result property="followingCnt" column="followingCnt"/>
+	    <result property="followedCnt" column="followedCnt"/>
+	    <collection property="albums" ofType="AlbumSummaryDTO" resultMap="AlbumSummaryResultMap"/>
+	</resultMap>
+
+	
+	
+	<!-- profile 페이지 유저 정보 조회 -->
+	<select id="getProfileByUserId" parameterType="Map" resultMap="ProfileSummaryResultMap">	
+	SELECT
+		user.user_id as userId,
+	    user.nickname as nickname,
+	    user.profile_image_URL as profileImageURL,
+	    user.introduce as introduce,
+	    (CASE
+         WHEN #{loginUserId} = user.user_id THEN false
+         WHEN EXISTS (
+           SELECT 1 FROM follow 
+           WHERE following_id = #{loginUserId} AND followed_id = user.user_id
+         ) THEN true
+         ELSE false
+       END) as followsStatus,
+	    (SELECT Count(*) FROM follow WHERE follow.followed_id = user.user_id) as followingCnt,
+	    (SELECT Count(*) FROM follow WHERE follow.following_id = user.user_id) as followedCnt,
+	    album.album_id as albumId,
+	    album.title as title,
+	    album.created_at as createdAt,
+		album.album_image_URL as albumImageURL
+    
+	FROM user
+	LEFT JOIN album ON user.user_id = album.user_id AND album.status = true
+	WHERE user.user_id = #{userId}
+	ORDER BY album.created_at DESC
+	</select>
+
+</mapper>

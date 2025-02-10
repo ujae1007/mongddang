@@ -2,6 +2,8 @@ package com.mongddang.backend.playlist.dto;
 
 import com.mongddang.backend.playlist.entity.Playlist;
 import com.mongddang.backend.photo.entity.Photo;
+import com.mongddang.backend.music.dto.MusicDetailDto;
+
 import java.util.List;
 import java.util.stream.Collectors;
 import java.math.BigDecimal;
@@ -16,10 +18,11 @@ public class PlaylistDto {
     private BigDecimal longitude;
     private String locationAddress;
     private List<String> photoUrls;
+    private MusicDetailDto musicDetails;
 
     public PlaylistDto() {}
 
-    public PlaylistDto(int playlistId, int albumId, Integer musicId, Integer startTime, Integer endTime, BigDecimal latitude, BigDecimal longitude, String locationAddress, List<String> photoUrls) {
+    public PlaylistDto(int playlistId, int albumId, Integer musicId, Integer startTime, Integer endTime, BigDecimal latitude, BigDecimal longitude, String locationAddress, List<String> photoUrls, MusicDetailDto musicDetails) {
         this.playlistId = playlistId;
         this.albumId = albumId;
         this.musicId = musicId;
@@ -29,6 +32,7 @@ public class PlaylistDto {
         this.longitude = longitude;
         this.locationAddress = locationAddress;
         this.photoUrls = photoUrls;
+        this.musicDetails = musicDetails;
     }
     
     public PlaylistDto(Playlist playlist) {
@@ -57,5 +61,46 @@ public class PlaylistDto {
     public BigDecimal getLongitude() { return longitude; }
     public String getLocationAddress() { return locationAddress; }
     public List<String> getPhotoUrls() { return photoUrls; }
-}
+    public MusicDetailDto getMusicDetails() {
+        return musicDetails;
+    }
+    public void setPlaylistId(int playlistId) {
+		this.playlistId = playlistId;
+	}
 
+	public void setAlbumId(int albumId) {
+		this.albumId = albumId;
+	}
+
+	public void setMusicId(Integer musicId) {
+		this.musicId = musicId;
+	}
+
+	public void setStartTime(Integer startTime) {
+		this.startTime = startTime;
+	}
+
+	public void setEndTime(Integer endTime) {
+		this.endTime = endTime;
+	}
+
+	public void setLatitude(BigDecimal latitude) {
+		this.latitude = latitude;
+	}
+
+	public void setLongitude(BigDecimal longitude) {
+		this.longitude = longitude;
+	}
+
+	public void setLocationAddress(String locationAddress) {
+		this.locationAddress = locationAddress;
+	}
+
+	public void setPhotoUrls(List<String> photoUrls) {
+		this.photoUrls = photoUrls;
+	}
+
+	public void setMusicDetails(MusicDetailDto musicDetails) {
+        this.musicDetails = musicDetails;
+    }
+}
