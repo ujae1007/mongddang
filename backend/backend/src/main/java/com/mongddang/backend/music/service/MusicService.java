@@ -25,7 +25,7 @@ public class MusicService {
         }
 
         // 트랙명 또는 아티스트명에서 검색어 포함된 음악 조회
-        List<Music> musicList = musicRepository.findTop10ByTrackNameContainingOrArtistNameContaining(query, query);
+        List<Music> musicList = musicRepository.findByTrackNameContainingOrArtistNameContaining(query, query);
 
         // DTO 변환 후 반환
         return musicList.stream()
