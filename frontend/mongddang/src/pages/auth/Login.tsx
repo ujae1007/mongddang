@@ -32,24 +32,30 @@ function Login () {
     setPassword(e.target.value) 
   }
 
-  //로그인 axios 요청
-    const handleLogin = async () => {
-      setErrorMessage("") //기존 오류 메시지 초기화
-      console.log("로그인 버튼 클릭")
-      try {
-        const res = await axiosInstance.post("/auth/login",{
-          email: email,
-          password: password,
-      })
 
-      console.log(res.data, "로그인 성공")
-      alert("로그인에 성공했습니다.")
-      // nav("/", {replace:true})
-      }catch(err) {
-        console.log(err, "로그인실패")
-        setErrorMessage("이메일 또는 비밀번호가 잘못되었습니다.")
-      }
-    }
+//로그인 axios 요청
+const handleLogin = async () => {
+  setErrorMessage("") //기존 오류 메시지 초기화
+  console.log("로그인 버튼 클릭")
+  try {
+    const res = await axiosInstance.post("/auth/login",{
+      email: email,
+      password: password,
+  },{
+    // 만약 쿠키를 다루는 경우에는 아래와 같이 자격 증명을 포함시켜야 합니다.
+    withCredentials: true, // 수정: 쿠키 포함 옵션 (필요한 경우)
+  })
+  const authorizationHeader = res.headers.authorization;
+  console.log("Authorization Header:", authorizationHeader);
+  
+  console.log(res.data, "로그인 성공")
+  alert("로그인에 성공했습니다.")
+  nav("/mainpage", {replace:true})
+  }catch(err) {
+    console.log(err, "로그인실패")
+    setErrorMessage("이메일 또는 비밀번호가 잘못되었습니다.")
+  }
+}
       
     
   //이미 계정이 있을 경우
