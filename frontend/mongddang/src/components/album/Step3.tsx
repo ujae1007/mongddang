@@ -1,4 +1,6 @@
 import { useState, useRef, useEffect } from "react";
+import { useRecoilState, useRecoilValue } from "recoil";
+import { currentAlbumState, albumStepState } from "../../recoil/albumState";
 import { Playlist } from "../../types";
 import SearchLocation from "./SearchLocation";
 import SearchMusic from "./SearchMusic";
@@ -30,6 +32,9 @@ function Step3({
     editingPlaylist?.photos || []
   );
   const fileInputRef = useRef<HTMLInputElement>(null);
+
+  const currentAlbum = useRecoilValue(currentAlbumState);
+  const [_, setStep] = useRecoilState(albumStepState);
 
   // 장소 정보가 변경될 때 노래 정보 초기화
   useEffect(() => {
@@ -125,11 +130,13 @@ function Step3({
         createdAt: new Date().toISOString(),
         updatedAt: new Date().toISOString(),
 
-        // 프론트엔드에서만 사용하는 필드
+        // 프론트엔드에서만 사용
         music: music,
         placeName: placeName,
         address: address,
       });
+
+      setStep(4)
     } catch (error) {
       console.error("플레이리스트 생성/수정 중 오류 발생:", error);
       alert("플레이리스트 생성/수정 중 오류가 발생했습니다.");

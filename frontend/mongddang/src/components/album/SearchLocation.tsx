@@ -1,8 +1,8 @@
 import { useState } from "react";
 
 interface Place {
-  place_name: string;
-  address_name: string;
+  place_name: string; // 장소명
+  address_name: string; // 주소
   y: string; // 위도
   x: string; // 경도
 }

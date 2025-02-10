@@ -1,10 +1,11 @@
 import { useState } from "react";
+import { useRecoilState, useRecoilValue } from "recoil";
+import { currentAlbumState, albumStepState } from "../../recoil/albumState";
 // import axiosInstance from "../../api/axiosInstance";
 
 interface Step2Props {
   title: string;
   onUpdateTitle: (newTitle: string) => void;
-  onMoveToStep3: () => void;
   onComplete: (albumId: number) => void;
   onTempSave: () => void;
   albumId: number;
@@ -36,12 +37,14 @@ function Step2({
   albumId,
   title,
   onUpdateTitle,
-  onMoveToStep3,
   onComplete,
   onTempSave,
 }: Step2Props) {
   const [currentTitle, setCurrentTitle] = useState(title);
   const [isCreating, setIsCreating] = useState(false);
+
+  const [_, setStep] = useRecoilState(albumStepState);
+  const currentAlbum = useRecoilValue(currentAlbumState);
 
   const handleTitleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const newTitle = e.target.value;
@@ -68,7 +71,7 @@ function Step2({
       // console.log('생성된 플레이리스트', data);
       // -------------------------------------------
 
-      onMoveToStep3();
+      setStep(3);
     } catch (error) {
       console.error("플레이리스트 생성 오류", error);
       alert("플레이리스트 생성 중 오류가 발생했습니다.");

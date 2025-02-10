@@ -1,4 +1,6 @@
 import { useState } from "react";
+import { useSetRecoilState } from "recoil";
+import { currentAlbumState, albumStepState } from "../../recoil/albumState";
 import { Album } from "../../types";
 // import axiosInstance from "../../api/axiosInstance"
 
@@ -7,6 +9,7 @@ interface Step1Props {
   // 앨범 생성 시 Step2로 이동하기 위해 앨범 정보를 전달
   onCreateAlbum: (album: Album) => void;
 }
+
 // interface CreateAlbumResponse {
 //   albumId: number;
 //   userId: number;
@@ -22,6 +25,9 @@ function Step1({ onCreateAlbum }: Step1Props) {
   const [title, setTitle] = useState<string>(""); // 앨범 제목 저장
   const [isCreating, setIsCreating] = useState(false); // 앨범 생성 여부 저장
 
+  const setCurrentAlbum = useSetRecoilState(currentAlbumState);
+  const setStep = useSetRecoilState(albumStepState);
+  
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setIsCreating(true); // 앨범 생성 true로 변경
@@ -45,7 +51,7 @@ function Step1({ onCreateAlbum }: Step1Props) {
       // ------------ 시뮬레이션 -------------
 
       const newAlbum: Album = {
-        id: Math.floor(Math.random() * 1000),
+        id: Math.floor(Math.random() * 1000), // 임시 ID 생성
         title: title,
         albumImageUrl: "",
         status: false,
@@ -55,7 +61,9 @@ function Step1({ onCreateAlbum }: Step1Props) {
       };
       // --------------------------------------------
 
+      setCurrentAlbum(newAlbum);
       onCreateAlbum(newAlbum);
+      setStep(2);
       console.log("생성된 앨범:", newAlbum);
     } catch (error) {
       console.error("앨범 생성 중 오류 발생:", error);
