@@ -1,11 +1,12 @@
 import { useState } from "react";
+import { useRecoilState, useRecoilValue } from "recoil";
+import { currentAlbumState, albumStepState } from "../../recoil/albumState";
 import { Album, Playlist } from "../../types";
 // import axiosInstance from "../../api/axiosInstance";
 
 interface Step4Props {
   album: Album;
   onUpdateTitle: (newTitle: string) => void;
-  onMoveToStep3: () => void;
   onComplete: (albumId: number) => void;
   onTempSave: () => void;
   onDeletePlaylist: (playlistId: number) => void;
@@ -15,7 +16,6 @@ interface Step4Props {
 function Step4({
   album,
   onUpdateTitle,
-  onMoveToStep3,
   onComplete,
   onTempSave,
   onDeletePlaylist,
@@ -23,6 +23,9 @@ function Step4({
 }: Step4Props) {
   const [currentTitle, setCurrentTitle] = useState(album.title);
   const [isDeleting, setIsDeleting] = useState(false);
+
+  const currentAlbum = useRecoilValue(currentAlbumState);
+  const [_, setStep] = useRecoilState(albumStepState);
 
   const handleTitleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const newTitle = e.target.value;
@@ -51,6 +54,10 @@ function Step4({
     } finally {
       setIsDeleting(false);
     }
+  };
+
+  const handleMoveToStep3 = () => {
+    setStep(3);
   };
 
   return (
@@ -92,7 +99,7 @@ function Step4({
       </div>
 
       {album.playlists.length < 5 && (
-        <button onClick={onMoveToStep3}>플레이리스트 추가</button>
+        <button onClick={handleMoveToStep3}>플레이리스트 추가</button>
       )}
 
       <button onClick={onTempSave}>임시저장</button>
