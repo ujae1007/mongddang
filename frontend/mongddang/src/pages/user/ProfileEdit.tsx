@@ -161,9 +161,15 @@ function ProfileEdit () {
     
     //회원탈퇴하기
     const deleteUser = async () => {
+
+      const isConfirmed = window.confirm("정말 탈퇴하시겠습니까? 탈퇴 후 계정 복구는 불가능합니다.")
+      if (!isConfirmed) return
+      
       try {
         const res = await axiosInstance.delete('/auth/signout')
+        alert("회원 탈퇴가 완료되었습니다.");
         console.log("회원탈퇴 완료:", res)
+        nav('/mongddang', {replace:true})
       } catch(err) {
         console.log("회원탈퇴 실패:",err)
       }

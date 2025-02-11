@@ -77,7 +77,7 @@ function ProfilePage () {
         try {
           const res = await axiosInstance.get<ProfileData>(`/profile/${userId}`,)
           setProfileData(res.data)
-          console.log("서버 응답 데이터:", res.data)  
+          console.log("프로필주인 데이터:", res.data)  
         }catch (err) {
           console.log('프로필 정보 확인 실패', err)
         }
