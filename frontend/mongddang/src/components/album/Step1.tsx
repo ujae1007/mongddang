@@ -2,7 +2,11 @@ import { useState } from "react";
 import { useSetRecoilState } from "recoil";
 import { currentAlbumState, albumStepState } from "../../recoil/albumState";
 import { Album } from "../../types";
-// import axiosInstance from "../../api/axiosInstance"
+
+import axiosInstance from "../../api/axiosInstance"
+import { useRecoilValue } from "recoil";
+import {authTokenAtom} from "../../recoil/userAtom"
+
 
 interface Step1Props {
   // 앨범 생성 완료 시 호출되는 콜백 함수
@@ -10,16 +14,16 @@ interface Step1Props {
   onCreateAlbum: (album: Album) => void;
 }
 
-// interface CreateAlbumResponse {
-//   albumId: number;
-//   userId: number;
-//   title: string;
-//   albumImageUrl: string;
-//   status: boolean;
-//   createdAt: string;
-//   updatedAt: string;
-//   playlists: null;
-// }
+interface CreateAlbumResponse {
+  albumId: number;
+  userId: number;
+  title: string;
+  albumImageUrl: string;
+  status: boolean;
+  createdAt: string;
+  updatedAt: string;
+  playlists: null;
+}
 
 function Step1({ onCreateAlbum }: Step1Props) {
   const [title, setTitle] = useState<string>(""); // 앨범 제목 저장
@@ -27,6 +31,8 @@ function Step1({ onCreateAlbum }: Step1Props) {
 
   const setCurrentAlbum = useSetRecoilState(currentAlbumState);
   const setStep = useSetRecoilState(albumStepState);
+
+  const token = useRecoilValue(authTokenAtom);
   
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -34,38 +40,41 @@ function Step1({ onCreateAlbum }: Step1Props) {
 
     try {
       // -------------- 실제 API 호출  --------------
-      // const { data } = await axiosInstance.post<CreateAlbumResponse>('/albums/create', {
-      //   title: title,
-      //   status: false
-      // });
+      const { data } = await axiosInstance.post<CreateAlbumResponse>('/albums/create', {
+        title: title,
+        status: false
+      });
 
-      // const newAlbum: Album = {
-      //   id: data.albumId,
-      //   title: data.title,
-      //   album_image_URL: "",
-      //   status: data.status,
-      //   playlists: [],
-      // };
+      const newAlbum: Album = {
+        id: data.albumId,
+        title: data.title,
+        albumImageUrl: data.albumImageUrl,
+        status: data.status,
+        playlists: [],
+      };
       // --------------------------------------------
 
       // ------------ 시뮬레이션 -------------
 
-      const newAlbum: Album = {
-        id: Math.floor(Math.random() * 1000), // 임시 ID 생성
-        title: title,
-        albumImageUrl: "",
-        status: false,
-        playlists: [],
-        createdAt: new Date().toISOString(),
-        updatedAt: new Date().toISOString(),
-      };
+      // const newAlbum: Album = {
+      //   id: Math.floor(Math.random() * 1000), // 임시 ID 생성
+      //   title: title,
+      //   albumImageUrl: "",
+      //   status: false,
+      //   playlists: [],
+      //   createdAt: new Date().toISOString(),
+      //   updatedAt: new Date().toISOString(),
+      // };
       // --------------------------------------------
+
+      console.log(token);
 
       setCurrentAlbum(newAlbum);
       onCreateAlbum(newAlbum);
       setStep(2);
       console.log("생성된 앨범:", newAlbum);
     } catch (error) {
+      console.log(token);
       console.error("앨범 생성 중 오류 발생:", error);
       alert("앨범 생성 중 오류가 발생했습니다.");
     } finally {
