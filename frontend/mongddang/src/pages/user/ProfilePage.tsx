@@ -108,6 +108,7 @@ function ProfilePage () {
             followStatus: false,
             followedCnt: prev.followedCnt -1 
           }))
+          console.log(profileData.followStatus)
         }
       } catch(err) {
         console.log("팔로우 상태 변경 실패:", err)
