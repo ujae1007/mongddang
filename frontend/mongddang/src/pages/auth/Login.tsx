@@ -54,7 +54,7 @@ function Login () {
 
       console.log("로그인 성공")
       alert("로그인에 성공했습니다.")
-      nav("/", {replace:true})
+      nav("/mainpage", {replace:true})
       }catch(err) {
         console.log(err, "로그인실패")
         setErrorMessage("이메일 또는 비밀번호가 잘못되었습니다.")
