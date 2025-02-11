@@ -1,10 +1,10 @@
 import { useState } from "react"
 import { useNavigate } from "react-router-dom"
+import { setRecoil } from "recoil-nexus"
 import Button from "../../components/common/Button"
 import InputBox from "../../components/common/input"
 import axiosInstance from "../../api/axiosInstance"
-import { useSetRecoilState } from "recoil"
-import { tokenAtom } from "../../recoil/userAtom"
+import { authTokenAtom } from "../../recoil/userAtom"
 
 function Login () {
 
@@ -34,35 +34,32 @@ function Login () {
     setPassword(e.target.value) 
   }
 
+  //로그인 axios 요청
+    const handleLogin = async () => {
+      setErrorMessage("") //기존 오류 메시지 초기화
+      try {
+        const res = await axiosInstance.post("/auth/login",{
+          email: email,
+          password: password,
+      })
 
-//로그인 axios 요청
-const handleLogin = async () => {
-  
-  const setToken = useSetRecoilState(tokenAtom)
+      // 토큰 저장
+      const accessToken = res.headers.authorization
 
-  setErrorMessage("") //기존 오류 메시지 초기화
-  console.log("로그인 버튼 클릭")
-  try {
-    const res = await axiosInstance.post("/auth/login",{
-      email: email,
-      password: password,
-  },{
-    // 만약 쿠키를 다루는 경우에는 아래와 같이 자격 증명을 포함시켜야 합니다.
-    withCredentials: true, // 수정: 쿠키 포함 옵션 (필요한 경우)
-  })
-  const authorizationHeader = res.headers.authorization;
-  console.log("Authorization Header:", authorizationHeader);
+      // recoil에 저장
+      // authTokenAtom : 토큰값을 저장하는 atom
+      // accessToken : 토큰값
+      // 즉 authTokenAtom에 accessToken을 저장하겠다는 의미
+      setRecoil(authTokenAtom, accessToken)
 
-  //토큰을 recoil에 저장
-  setToken(authorizationHeader)
-  console.log(res.data, "로그인 성공")
-  alert("로그인에 성공했습니다.")
-  nav("/mainpage", {replace:true})
-  }catch(err) {
-    console.log(err, "로그인실패")
-    setErrorMessage("이메일 또는 비밀번호가 잘못되었습니다.")
-  }
-}
+      console.log("로그인 성공")
+      alert("로그인에 성공했습니다.")
+      nav("/", {replace:true})
+      }catch(err) {
+        console.log(err, "로그인실패")
+        setErrorMessage("이메일 또는 비밀번호가 잘못되었습니다.")
+      }
+    }
       
     
   //이미 계정이 있을 경우
