@@ -1,13 +1,16 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { useRecoilState } from "recoil";
+import { useRecoilState, useRecoilValue } from "recoil";
 import { albumListState, currentAlbumState, albumStepState } from "../../recoil/albumState";
 import { Album, Playlist } from "../../types";
+import { authTokenAtom } from "../../recoil/userAtom";
+
 import Step1 from "../../components/album/Step1";
 import Step2 from "../../components/album/Step2";
 import Step3 from "../../components/album/Step3";
 import Step4 from "../../components/album/Step4";
 import TempAlbumList from "../../components/album/TempAlbumList";
+
 
 function Create() {
   const navigate = useNavigate();
@@ -18,9 +21,13 @@ function Create() {
   const [showTempAlbums, setShowTempAlbums] = useState(false);
   const [editingPlaylist, setEditingPlaylist] = useState<Playlist | undefined>();
   
-  console.log("전체 앨범",createdAlbums); // 지금까지 생성된 앨범 목록
+  console.log("전체 앨범",createdAlbums); // 지금까지 생성된 앨범 목록 확인용
 
   const tempAlbums = createdAlbums.filter((album) => !album.status);
+  const token = useRecoilValue(authTokenAtom);
+  console.log("=========================");
+  console.log("토큰: ", token);
+
 
   const resetToStep1 = (isSaveTemp: boolean = false) => {
     if (album) {
