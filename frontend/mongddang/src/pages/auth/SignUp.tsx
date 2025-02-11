@@ -297,13 +297,13 @@ function SignUp () {
             text="확인"
             type="confirm"
             onClick={handleCertifyVerification}
-            disabled={!certify}
+            disabled={!isEmailAvailable}
           />
           <Button
             text="재전송"
             type="confirm"
             onClick={handleEmailVerification}
-            disabled={!certify}
+            disabled={!isEmailAvailable}
           />          
         </div>
 
