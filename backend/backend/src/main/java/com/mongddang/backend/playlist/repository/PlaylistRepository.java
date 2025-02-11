@@ -1,5 +1,6 @@
 package com.mongddang.backend.playlist.repository;
 
+import com.mongddang.backend.album.entity.Album;
 import com.mongddang.backend.playlist.entity.Playlist;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
@@ -11,6 +12,8 @@ import java.util.List;
 @Repository
 public interface PlaylistRepository extends JpaRepository<Playlist, Integer> {
     
+	int countByAlbum(Album albumId);
+	
     // Album의 albumId를 기준으로 해당 Playlist 목록을 조회
     List<Playlist> findByAlbum_AlbumId(int albumId);
     
