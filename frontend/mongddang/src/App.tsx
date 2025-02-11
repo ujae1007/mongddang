@@ -11,7 +11,7 @@ import Create from "./pages/album/Create";
 import ProfilePage from "./pages/user/ProfilePage";
 import AlbumDetail from "./pages/albumDetail/AlbumDetail";
 import MainPage from "./pages/user/MainPage";
-
+import IntroPages from "./pages/introduce/Introduce";
 
 //이거 유튜브 확인용 나중에 삭제 예정!!!!
 import YoutubePractice from "./pages/youtube/youtubePrac";
@@ -23,6 +23,7 @@ function App() {
       <RecoilNexus />
       <Router>
         <Routes>
+          <Route path="/MONGDDANG" element={<IntroPages />} />
           <Route path="/login" element={<Login />} />
           <Route path="/signup" element={<SignUp />} />
           <Route path="/mainpage" element={<MainPage />} />
