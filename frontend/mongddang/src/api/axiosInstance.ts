@@ -33,7 +33,7 @@ axiosInstance.interceptors.request.use(
 // 응답 인터셉터에서 토큰을 저장하기
 axiosInstance.interceptors.response.use(
   (response) => {
-    console.log('응답', response)
+    // console.log('응답: ', response)
     return response
   },
   async (error) => {
