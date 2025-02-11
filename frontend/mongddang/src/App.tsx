@@ -29,7 +29,7 @@ function App() {
           <Route path="/mainpage" element={<MainPage />} />
           <Route path="/profileEdit" element={<ProfileEdit />} />
           <Route path="/create" element={<Create />} />
-          <Route path="/profile/:user_id" element={<ProfilePage />} />
+          <Route path="/profile/:userId" element={<ProfilePage />} />
           <Route path="/youtube" element={<YoutubePractice />} />
           <Route path="/albums/:albumId" element={<AlbumDetail />} />
         </Routes>

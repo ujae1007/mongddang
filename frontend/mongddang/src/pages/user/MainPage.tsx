@@ -1,14 +1,16 @@
-import { useRecoilValue } from "recoil"
-import { userAtom } from "../../recoil/userAtom"
+import useAuth from "../../hooks/useAuth"
 
 function MainPage () {
 
-  const loggedInUser = useRecoilValue(userAtom)
+  const loggedInUser = useAuth()
   const loggedInUsernickname = loggedInUser?.nickname
 
 
+
   return (
-    <div>{loggedInUsernickname}메인페이지</div>
+    <div>
+      {loggedInUsernickname}님의 메인페이지
+    </div>
   )
 }
 

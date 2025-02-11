@@ -1,46 +1,49 @@
 import React, { useState, useEffect } from "react"
-import { useRecoilValue } from "recoil"
-import { userAtom } from "../../recoil/userAtom"
 import { useNavigate } from "react-router-dom"
 import axiosInstance from "../../api/axiosInstance"
 import InputBox from "../../components/common/input"
 import FavoriteInput from "../../components/common/favoriteInput"
 import Button from "../../components/common/Button"
+import useAuth from "../../hooks/useAuth"
 
 function ProfileEdit () {
 
-  // 유저 정보 가져오기
-  const loggedInUser = useRecoilValue(userAtom)
+  // 유저 정보 가져오기 비동기적으로 가져옴 
+  const loggedInUser = useAuth()
+  const [loggedInUserId, setLoggedInUserId] = useState<number>()
 
-  //임시 데이터 백이랑 할 때 뒤에 임시데이터만 지우기 
-  const profile_image_URL = loggedInUser?.profile_image_URL || "/assets/default_profile.jpg"
-  const nickname = loggedInUser?.nickname || "김싸피" 
-  const introduce = loggedInUser?.introduce || "안녕하세요. 김싸피입니당~!"
-  const defaultPlaces = 
-    // [
-    //   loggedInUser?.like_rigion1,
-    //   loggedInUser?.like_rigion2,
-    //   loggedInUser?.like_rigion3,
-    // ].filter(Boolean) 
-    // || 
-    ["광주", "대전", "세종"]
-  const defaultGenres = 
-    // [
-    //   loggedInUser?.like_genre1,
-    //   loggedInUser?.like_genre2,
-    //   loggedInUser?.like_genre3,
-    // ].filter(Boolean) 
-    // || 
-    ["folk", "blues", "disco"]
+  const preProfileImg = "REMOVED"
+
+  //기존 데이터 불러오기
+  useEffect (() => {
+    if(loggedInUser) {
+      setProfileImage(loggedInUser.profileImageURL || '')
+      setChangedNickName(loggedInUser.nickname || '')
+      setChangedIntroduce(loggedInUser.introduce || '')
+      setLoggedInUserId(loggedInUser.userId)
+
+      const places = [
+        loggedInUser.likeRegion1,
+        loggedInUser.likeRegion2,
+        loggedInUser.likeRegion3,
+      ].filter(Boolean) as string[]
+      setSelectedPlaces(places)
+
+      const genres = [
+        loggedInUser.likeGenre1,
+        loggedInUser.likeGenre2,
+        loggedInUser.likeGenre3,
+      ].filter(Boolean) as string[]
+      setSelectedGenres(genres)
+    }
+  }, [loggedInUser])
 
   //상태 변화 감지
-  const [profileImage, setProfileImage] = useState<string>(profile_image_URL) //나의 원래 프로필사진
-  const [selectedImage, setSelectedImage] = useState<string>("") // 만약 사진을 수정한다면 
-
-  const [changedNickName, setChangedNickName] = useState(nickname)
-  const [changedIntroduce, setChangedIntroduce] = useState(introduce)
-  const [selectedPlaces, setSelectedPlaces] = useState<string[]>(defaultPlaces)
-  const [selectedGenres, setSelectedGenres] = useState<string[]>(defaultGenres)
+  const [profileImage, setProfileImage] = useState<string>('')
+  const [changedNickName, setChangedNickName] = useState('')
+  const [changedIntroduce, setChangedIntroduce] = useState('')
+  const [selectedPlaces, setSelectedPlaces] = useState<string[]>([])
+  const [selectedGenres, setSelectedGenres] = useState<string[]>([])
 
   const [isButtonDisabled, setIsButtonDisabled] = useState(true)
   
@@ -50,8 +53,9 @@ function ProfileEdit () {
   const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0]
 
+    //만약에 파일이 없다면 우리의 기존사진으로 교체 
     if(!file){
-      setProfileImage(selectedImage || profile_image_URL)
+      setProfileImage(preProfileImg)
       return
     }
 
@@ -60,15 +64,14 @@ function ProfileEdit () {
         alert('파일 크기는 5MB를 초과할 수 없습니다. 다른 이미지를 선택해주세요.')
         e.target.value=''
         // 만약 수정하고 또 수정하는 거면 첫번째 수정 이미지가 나와야함(기본 이미지X)
-        if(selectedImage) {
-          setProfileImage(selectedImage)
+        if(profileImage) {
+          setProfileImage(profileImage)
         }
         return 
       }
       const reader = new FileReader()
       reader.onload = () => {
         setIsUpdated(true)
-        setSelectedImage(reader.result as string) 
         setProfileImage(reader.result as string) 
       }
       reader.readAsDataURL(file)
@@ -96,11 +99,8 @@ function ProfileEdit () {
   };
 
   //취소버튼 핸들러 
-  //템플릿 리터럴에서는 문자열로 처리하기 때문에 문자열로 처리해줘야함. 
-  //지금은 로그인된 유저가 없기 때문에 url에서 undefined가 나옴 백이랑 할 때 주석 교체 
   const nav = useNavigate()
   const goToBack = () => {
-    // nav(`/profile/${loggedInUser?.user_id.toString()}`) 
     nav(-1)
   }
 
@@ -113,28 +113,24 @@ function ProfileEdit () {
       changedIntroduce,
       selectedPlaces,
       selectedGenres,
-    )
+    ) // 변화된 값이 담겨있음 확인 완료 
 
     const formData = new FormData()
-
-    if (selectedImage !== profileImage) {
-      formData.append("profile_image_URL", selectedImage)
-    }
-
-    if (changedNickName !== nickname){
-      formData.append("nickname", changedNickName)
-    }
-
-    if (changedIntroduce !== introduce) {
-      formData.append("introduce", changedIntroduce)
-    }
-
-    if (JSON.stringify(selectedGenres) !== JSON.stringify(defaultGenres)) {
-      selectedGenres.forEach((genre, index) => formData.append(`like_genre${index +1}`, genre))
-    }
-
-    if  (JSON.stringify(selectedPlaces) !== JSON.stringify(defaultPlaces)) {
-      selectedPlaces.forEach((place, index) => formData.append(`like_region${index + 1}`, place))
+    formData.append("nickname", changedNickName)
+    formData.append("introduce", changedIntroduce)
+    formData.append("likeRegion1", selectedPlaces[0] || "")
+    formData.append("likeRegion2", selectedPlaces[1] || "")
+    formData.append("likeRegion3", selectedPlaces[2] || "")
+    formData.append("likeGenre1", selectedGenres[0] || "")
+    formData.append("likeGenre2", selectedGenres[1] || "")
+    formData.append("likeGenre3", selectedGenres[2] || "")
+  
+    // 프로필 이미지 변경이 있을 경우 추가
+    if (profileImage && profileImage !== preProfileImg) {
+      const fileInput = document.querySelector('input[type="file"]') as HTMLInputElement
+      if (fileInput?.files?.[0]) {
+        formData.append("profileImage", fileInput.files[0])
+      }
     }
 
     try { 
@@ -143,8 +139,9 @@ function ProfileEdit () {
           "Content-Type": "multipart/form-data",
         }
       }) 
+      console.log(formData)
       console.log(res, "수정하기 완료")
-      nav(`/profile/${loggedInUser?.user_id.toString()}`)
+      nav(`/profile/${loggedInUserId}`, {replace:true, state: { updated: true }})
     }catch (err) {
         console.error("수정하기 실패", err)
       }

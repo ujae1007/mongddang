@@ -31,9 +31,9 @@ export interface User {
   email: string;
   password: string;
   nickname: string;
-  likeRigion1: string;
-  likeRigion2: string;
-  likeRigion3: string;
+  likeRegion1: string;
+  likeRegion2: string;
+  likeRegion3: string;
   likeGenre1: string;
   likeGenre2: string;
   likeGenre3: string;
@@ -46,7 +46,3 @@ export const userAtom = atom<User | null>({
   default: null,
 })
 
-export const tokenAtom = atom<string | null>({
-  key:"tokenAtom",
-  default: null,
-})
