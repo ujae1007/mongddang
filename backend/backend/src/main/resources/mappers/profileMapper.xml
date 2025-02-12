@@ -87,7 +87,7 @@
 		<result property="albumImageURL" column="albumImageURL"/>
 	</resultMap>
 	
-	<resultMap id="ProfileSummaryResultMap" type="ProfileSummaryResponseDTO">
+	<resultMap type="ProfileSummaryResponseDTO" id="ProfileSummaryResultMap" >
 	    <id property="userId" column="userId"/>
 	    <result property="nickname" column="nickname"/>
 	    <result property="introduce" column="introduce"/>
@@ -108,15 +108,14 @@
 	    user.profile_image_URL as profileImageURL,
 	    user.introduce as introduce,
 	    (CASE
-         WHEN #{loginUserId} = user.user_id THEN false
-         WHEN EXISTS (
-           SELECT 1 FROM follow 
-           WHERE following_id = #{loginUserId} AND followed_id = user.user_id
-         ) THEN true
-         ELSE false
-       END) as followsStatus,
-	    (SELECT Count(*) FROM follow WHERE follow.followed_id = user.user_id) as followingCnt,
-	    (SELECT Count(*) FROM follow WHERE follow.following_id = user.user_id) as followedCnt,
+	         WHEN EXISTS (
+	           SELECT 1 FROM follow 
+	           WHERE following_id = #{loginUserId} AND followed_id = #{userId}
+	         ) THEN true
+         	ELSE false
+       	END) as followStatus,
+	    (SELECT Count(*) FROM follow WHERE follow.following_id = #{userId}) as followingCnt,
+	    (SELECT Count(*) FROM follow WHERE follow.followed_id = #{userId}) as followedCnt,
 	    album.album_id as albumId,
 	    album.title as title,
 	    album.created_at as createdAt,
