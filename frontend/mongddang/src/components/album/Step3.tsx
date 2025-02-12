@@ -109,18 +109,18 @@ function Step3({
       const formData = new FormData();
     
       // 이미지 파일들 추가
-    const imageFiles = imageUrls.map((imageUrl, index) => {
-      const byteString = atob(imageUrl.split(',')[1]);
-      const mimeType = imageUrl.split(',')[0].split(':')[1].split(';')[0];
-      const ab = new ArrayBuffer(byteString.length);
-      const ia = new Uint8Array(ab);
-      
-      for (let i = 0; i < byteString.length; i++) {
-        ia[i] = byteString.charCodeAt(i);
-      }
-      const blob = new Blob([ab], { type: mimeType });
-      return new File([blob], `image${index}.${mimeType.split('/')[1]}`, { type: mimeType });
-    });
+      const imageFiles = imageUrls.map((imageUrl, index) => {
+        const byteString = atob(imageUrl.split(',')[1]);
+        const mimeType = imageUrl.split(',')[0].split(':')[1].split(';')[0];
+        const ab = new ArrayBuffer(byteString.length);
+        const ia = new Uint8Array(ab);
+        
+        for (let i = 0; i < byteString.length; i++) {
+          ia[i] = byteString.charCodeAt(i);
+        }
+        const blob = new Blob([ab], { type: mimeType });
+        return new File([blob], `image${index}.${mimeType.split('/')[1]}`, { type: mimeType });
+      });
 
         imageFiles.forEach(file => {
           formData.append('files', file);
