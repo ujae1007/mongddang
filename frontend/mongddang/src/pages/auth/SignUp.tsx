@@ -7,11 +7,11 @@ import axiosInstance from "../../api/axiosInstance"
 import './SignUp.css'
 function SignUp () {
 
-  const defaultImage = "https://nimoot.s3.us-east-1.amazonaws.com/default-profile.png"
+  // const defaultImage = "https://nimoot.s3.us-east-1.amazonaws.com/default-profile.png"
   const nav = useNavigate()
   
   //상태변화 감지
-  const [profileImage, setProfileImage] = useState<string>(defaultImage)
+  // const [profileImage, setProfileImage] = useState<string>(defaultImage)
   const [nickName, setNickName] = useState("")
   const [introduce, setIntroduce] = useState("")
   const [email, setEmail] = useState("")
@@ -22,7 +22,7 @@ function SignUp () {
   const [selecetedPlaces, setSelecetedPlaces] = useState<string[]>([])
   
   // 사진, 이메일, 인증코드, 비밀번호 유효성 검사
-  const [profileImageValid, setProfileImageValid] = useState<boolean>(true)
+  // const [profileImageValid, setProfileImageValid] = useState<boolean>(true)
 
   const [emailValid, setEmailValid] = useState<boolean>(false)
   const [isEmailAvailable, setisEmailAvailable] = useState<boolean>(false)
@@ -35,24 +35,24 @@ function SignUp () {
   const [passwordMatchMessage, setPasswordMatchMessage] = useState<string | null>(null)
 
   // 프로파일 이미지 핸들러
-  const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const file = e.target.files?.[0]
-    if(file) {
-      if(file.size > 5 * 1024 * 1024) {
-        alert('파일 크기는 5MB를 초과할 수 없습니다. 다른 이미지를 선택해주세요.')
-        setProfileImageValid(false)
-        e.target.value=''
-        setProfileImage(profileImage || defaultImage)
-        return 
-      }
-      const reader = new FileReader()
-      reader.onload = () => {
-        setProfileImage(reader.result as string)
-        setProfileImageValid(true)
-      }
-      reader.readAsDataURL(file)
-    }
-  }
+  // const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  //   const file = e.target.files?.[0]
+  //   if(file) {
+  //     if(file.size > 5 * 1024 * 1024) {
+  //       alert('파일 크기는 5MB를 초과할 수 없습니다. 다른 이미지를 선택해주세요.')
+  //       setProfileImageValid(false)
+  //       e.target.value=''
+  //       setProfileImage(profileImage || defaultImage)
+  //       return 
+  //     }
+  //     const reader = new FileReader()
+  //     reader.onload = () => {
+  //       setProfileImage(reader.result as string)
+  //       setProfileImageValid(true)
+  //     }
+  //     reader.readAsDataURL(file)
+  //   }
+  // }
 
   // 이메일 인증 axios
   const handleEmailVerification = () => {
@@ -113,7 +113,7 @@ function SignUp () {
 
   // 모든 작업이 완료될 시 회원가입 버튼 활성화 핸들러 
   const isSignUpEnabled =
-    (profileImage || profileImageValid ) && // 기본 프로파일 혹은 유저가 올린 사진
+    // (profileImage || profileImageValid ) && // 기본 프로파일 혹은 유저가 올린 사진
     nickName && //닉네임을 작성했는지
     introduce && //자기소개를 작성했는지
     email &&  //이메일을 작성했는지 
@@ -178,7 +178,7 @@ function SignUp () {
   const register = () => {
     console.log("회원가입 시도")
     console.log(
-    profileImage || profileImageValid ,// 기본 프로파일 혹은 유저가 올린 사진
+    // profileImage || profileImageValid ,// 기본 프로파일 혹은 유저가 올린 사진
     nickName ,//닉네임을 작성했는지
     introduce , //자기소개를 작성했는지
     email ,  //이메일을 작성했는지 
@@ -217,6 +217,7 @@ function SignUp () {
     // 위에있는게 끝나지 않으면 실행X
     .then((res) => {
       console.log('회원가입 성공')
+      console.log(res)
       //로그인 이동 
       nav('/login', {replace:true})
     })
@@ -233,11 +234,17 @@ function SignUp () {
 // -----------------------------------------------------------------------------
   return (
     <div className="SignUp">
+    
 
-      <div className="TitleWrap">Sign Up</div>
+      <div className="TitleWrap">
+        <div className="title">Sign Up</div>
+        <div className="icornImageWrap">
+          <img src="../../public/assets/회원가입.png" alt="" width="188px" />
+        </div>
+      </div>
 
 {/*이미지 */}
-      <div className="imageWrap">
+      {/* <div className="profileImageWrap">
 
         <label htmlFor="profile-upload">
           <img 
@@ -252,7 +259,7 @@ function SignUp () {
           accept="image/*"
           onChange={handleImageChange}
         />
-      </div>
+      </div> */}
 
 
 
@@ -400,8 +407,8 @@ function SignUp () {
           />
         </div>
 
-        <div className="test" onClick={goToLogin}>
-          <p>이미 계정이 있으신가요?</p>
+        <div className="test">
+          <p>이미 계정이 있으신가요? <span onClick={goToLogin} style={{ color: '#9747FF' }}>로그인</span></p>
         </div>
         
           
