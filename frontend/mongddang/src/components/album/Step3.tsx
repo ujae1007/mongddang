@@ -1,40 +1,41 @@
 import { useState, useRef, useEffect } from "react";
-import { useRecoilState, useRecoilValue } from "recoil";
-import { currentAlbumState, albumStepState } from "../../recoil/albumState";
+import { useSetRecoilState } from "recoil";
+import { albumStepState } from "../../recoil/albumState";
 import { Playlist } from "../../types";
 import SearchLocation from "./SearchLocation";
 import SearchMusic from "./SearchMusic";
-// import axiosInstance from "../../api/axiosInstance";
+import axiosInstance from "../../api/axiosInstance";
 
 interface Step3Props {
   albumId: number;
+  playlistId: number;
   title: string;
-  onUpdateTitle: (newTitle: string) => void;
+  onUpdateTitle: (title: string) => void;
   onAddPlaylist: (playlistData: Playlist) => void;
   onCancel: () => void;
   editingPlaylist?: Playlist;
 }
 
 function Step3({
+  albumId,
+  playlistId, 
   title,
   onUpdateTitle,
   onAddPlaylist,
   onCancel,
   editingPlaylist,
 }: Step3Props) {
-  const [currentTitle, setCurrentTitle] = useState(title);
   const [music, setMusic] = useState(editingPlaylist?.music || "");
   const [placeName, setPlaceName] = useState(editingPlaylist?.placeName || "");
   const [address, setAddress] = useState(editingPlaylist?.address || "");
   const [latitude, setLatitude] = useState(editingPlaylist?.latitude || 0);
   const [longitude, setLongitude] = useState(editingPlaylist?.longitude || 0);
-  const [imageUrls, setImageUrls] = useState<string[]>(
-    editingPlaylist?.photos || []
-  );
+  const [imageUrls, setImageUrls] = useState<string[]>(editingPlaylist?.photos || []);
+  const [isSaving, setIsSaving] = useState(false);
+  const [currentTitle, setCurrentTitle] = useState(title);
+  
   const fileInputRef = useRef<HTMLInputElement>(null);
-
-  const currentAlbum = useRecoilValue(currentAlbumState);
-  const [_, setStep] = useRecoilState(albumStepState);
+  const setStep = useSetRecoilState(albumStepState);
 
   // 장소 정보가 변경될 때 노래 정보 초기화
   useEffect(() => {
@@ -43,10 +44,19 @@ function Step3({
     }
   }, [placeName]);
 
-  const handleTitleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleTitleChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const newTitle = e.target.value;
     setCurrentTitle(newTitle);
-    onUpdateTitle(newTitle);
+    
+    try {
+      await axiosInstance.put(`/albums/title/${albumId}`, {
+        title: newTitle
+      });
+      onUpdateTitle(newTitle);
+    } catch (error) {
+      console.error("앨범 제목 수정 중 오류 발생:", error);
+      alert("제목 수정 중 오류가 발생했습니다.");
+    }
   };
 
   const handleImageSelect = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -55,9 +65,8 @@ function Step3({
       const reader = new FileReader();
       reader.onloadend = () => {
         const imageUrl = reader.result as string;
-        // 최대 5장까지만 허용
         if (imageUrls.length < 5) {
-          setImageUrls((prev) => [...prev, imageUrl]);
+          setImageUrls(prev => [...prev, imageUrl]);
         } else {
           alert("최대 5장의 이미지만 업로드 가능합니다.");
         }
@@ -91,40 +100,63 @@ function Step3({
   };
 
   const handleSubmit = async () => {
-    try {
-      // -------------- 실제 API 호출 --------------
-      // const playlistData = {
-      //   photos: imageUrls,
-      //   latitude: latitude,
-      //   longitude: longitude,
-      //   locationAddress: placeName,
-      //   musicId: music,
-      // };
 
-      // // 수정인 경우 (editingPlaylist가 존재하는 경우)
-      // if (editingPlaylist) {
-      //   const response = await axiosInstance.put(
-      //     `/api/playlists/${editingPlaylist.playlistId}`,
-      //     playlistData
-      //   );
-      //   console.log('플레이리스트 수정 응답:', response.data);
-      // }
-      // // 새로 추가하는 경우
-      // else {
-      //   const response = await axiosInstance.put(
-      //     `/api/playlists/${album.id}`,
-      //     playlistData
-      //   );
-      //   console.log('플레이리스트 추가 응답:', response.data);
-      // }
+    if (!isFormValid) return;
+    setIsSaving(true);
+
+    try {
+      // Form Data 생성
+      const formData = new FormData();
+    
+      // 이미지 파일들 추가
+    const imageFiles = imageUrls.map((imageUrl, index) => {
+      const byteString = atob(imageUrl.split(',')[1]);
+      const mimeType = imageUrl.split(',')[0].split(':')[1].split(';')[0];
+      const ab = new ArrayBuffer(byteString.length);
+      const ia = new Uint8Array(ab);
+      
+      for (let i = 0; i < byteString.length; i++) {
+        ia[i] = byteString.charCodeAt(i);
+      }
+      const blob = new Blob([ab], { type: mimeType });
+      return new File([blob], `image${index}.${mimeType.split('/')[1]}`, { type: mimeType });
+    });
+
+        imageFiles.forEach(file => {
+          formData.append('files', file);
+        });
+
+      // 다른 데이터들 추가
+      formData.append('musicId', 1); // 일단 임시로 DB에 넣어둔 1로 설정
+      formData.append('startTime', 0); 
+      formData.append('endTime', 0); 
+      formData.append('latitude', latitude.toString());
+      formData.append('longitude', longitude.toString());
+      formData.append('locationAddress', placeName);
+
+      // 플레이리스트 ID 결정
+      const targetPlaylistId = editingPlaylist?.playlistId || playlistId;
+            
+      // API 호출
+      const response = await axiosInstance.put(
+        `/playlists/${targetPlaylistId}`,
+        formData,
+        {
+          headers: {
+            'Content-Type': 'multipart/form-data',
+          },
+        }
+      );
+
 
       // 프론트엔드 상태 업데이트
       onAddPlaylist({
+        playlistId: targetPlaylistId,
         musicId: music,
         startTime: null,
         endTime: null,
-        latitude: latitude,
-        longitude: longitude,
+        latitude,
+        longitude,
         locationAddress: placeName,
         photos: imageUrls,
         createdAt: new Date().toISOString(),
@@ -208,7 +240,7 @@ function Step3({
           />
           {placeName && (
             <div>
-              <p>선택된 장소: {placeName}</p>
+              <p> {placeName}</p>
               <button onClick={handleClearPlace}>장소 삭제</button>
             </div>
           )}
@@ -221,7 +253,7 @@ function Step3({
           <SearchMusic onSelectMusic={setMusic} defaultKeyword={music} />
           {music && (
             <div>
-              <p>선택된 노래: {music}</p>
+              <p>{music}</p>
             </div>
           )}
         </div>
@@ -229,8 +261,8 @@ function Step3({
 
       <button onClick={onCancel}>취소하기</button>
 
-      <button onClick={handleSubmit} disabled={!isFormValid}>
-        {editingPlaylist ? "수정하기" : "추가하기"}
+      <button onClick={handleSubmit} disabled={!isFormValid|| isSaving}>
+        {isSaving ? "저장 중..." : (editingPlaylist ? "수정하기" : "추가하기")}
       </button>
     </div>
   );

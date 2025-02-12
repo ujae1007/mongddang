@@ -2,7 +2,7 @@ import { useState } from "react";
 import { useRecoilState, useRecoilValue } from "recoil";
 import { currentAlbumState, albumStepState } from "../../recoil/albumState";
 import { Album, Playlist } from "../../types";
-// import axiosInstance from "../../api/axiosInstance";
+import axiosInstance from "../../api/axiosInstance";
 
 interface Step4Props {
   album: Album;
@@ -27,10 +27,22 @@ function Step4({
   const currentAlbum = useRecoilValue(currentAlbumState);
   const [_, setStep] = useRecoilState(albumStepState);
 
-  const handleTitleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleTitleChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const newTitle = e.target.value;
     setCurrentTitle(newTitle);
-    onUpdateTitle(newTitle);
+    
+    try {
+      // 앨범 제목 변경 API 호출
+      await axiosInstance.put(`/albums/title/${album.id}`, {
+        title: newTitle
+      });
+      
+      // 부모 컴포넌트의 타이틀 업데이트 함수 호출
+      onUpdateTitle(newTitle);
+    } catch (error) {
+      console.error("앨범 제목 수정 중 오류 발생:", error);
+      alert("제목 수정 중 오류가 발생했습니다.");
+    }
   };
 
   const handleDeletePlaylist = async (playlistId: number) => {
@@ -38,13 +50,7 @@ function Step4({
     setIsDeleting(true);
 
     try {
-      // -------------- 실제 API 호출 --------------
-      // await axiosInstance.delete(`/playlists/${playlistId}`);
-      // -------------------------------------------
-
-      // -------------- 시뮬레이션 --------------
-      await new Promise((resolve) => setTimeout(resolve, 500));
-      // ------------------------------------------
+      await axiosInstance.delete(`/playlists/${playlistId}`);
 
       // API 호출 성공 후 UI 업데이트
       onDeletePlaylist(playlistId);

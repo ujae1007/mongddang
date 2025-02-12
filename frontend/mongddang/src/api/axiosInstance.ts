@@ -33,7 +33,6 @@ axiosInstance.interceptors.request.use(
 // 응답 인터셉터에서 토큰을 저장하기
 axiosInstance.interceptors.response.use(
   (response) => {
-    console.log('응답', response)
     return response
   },
   async (error) => {
@@ -43,8 +42,6 @@ axiosInstance.interceptors.response.use(
 
       originalRequest._retry = true; // 재시도 플래그
 
-      console.log('토큰 만료 -> 새 토큰 요청');
-      
       try {
         // 토큰 재발급 요청
         const res = await axios.post (
@@ -57,12 +54,8 @@ axiosInstance.interceptors.response.use(
         const newToken = res.headers.authorization; // 새 토큰
 
         if (newToken) {
-          console.log('기존 토큰', getRecoil(authTokenAtom))
-
           // recoil 상태 업데이트
           setRecoil(authTokenAtom, newToken);
-
-          console.log('새 토큰',getRecoil(authTokenAtom))
 
           // 원래 요청 헤더에 새 토큰 설정
           originalRequest.headers.Authorization = newToken;
