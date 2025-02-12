@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react"
-
+import './favoriteInput.css'
 interface FavoriteProps{
   type: "genre" | "place"
   placeholder: string
@@ -59,10 +59,13 @@ const FavoriteInput = ({type, placeholder, onChange, defaultValues =[], mode}: F
       setSelectedItems(newSelectedItems)
       onChange(newSelectedItems)
     }
-
+    // 장르일 때와 장소일 때, 클래스명을 다르게 부여
+    const wrapClassName = type === "genre"
+    ? "SelectOptionWrap genreWrap"
+    : "SelectOptionWrap placeWrap";
 
   return(
-    <div className="SelectOptionWrap">
+    <div className={wrapClassName}>
       <select onChange={handleSelect} value="">
         <option value=""> {placeholder}</option>
         {options.map(option =>(

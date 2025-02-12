@@ -1,3 +1,4 @@
+import './input.css'
 interface InputBoxProps {
   type: "password" | "default";
   mode: "login" |"signup" | "edit" 
@@ -14,7 +15,7 @@ const InputBox = ({type, mode, placeholder, onChange, defaultValue, value}: Inpu
     <input 
       className={`input input_${type}`} 
       type={type === "password" ? "password" : "text"} 
-      placeholder={mode === "signup" ? placeholder : undefined} 
+      placeholder={mode === "signup" || mode === "login"? placeholder : undefined} 
       onChange={onChange} 
       value={value !== undefined ? value : defaultValue}
     />
