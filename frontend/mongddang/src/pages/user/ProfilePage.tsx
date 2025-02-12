@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react"
-import {useLocation, useParams } from "react-router-dom"
+import {useParams } from "react-router-dom"
 import useAuth from "../../hooks/useAuth"
 import { useNavigate } from "react-router-dom"
 import axiosInstance from "../../api/axiosInstance"
@@ -26,10 +26,6 @@ export interface ProfileData {
 }
 
 function ProfilePage () {
-  
-  const location = useLocation()
-  //변경 감지용 state
-  const [updateTrigger, setUpdateTrigger] = useState(0)
 
   // 보려는 프로파일 페이지 사람의 정보
   const {userId} = useParams<{userId: string}>()
@@ -74,18 +70,17 @@ function ProfilePage () {
 
       const fetchProfileData = async () => {
         console.log('프로필 조회 시도')
+
         try {
           const res = await axiosInstance.get<ProfileData>(`/profile/${userId}`,)
           setProfileData(res.data)
-          console.log("프로필주인 데이터:", res.data)  
-        }catch (err) {
-          console.log('프로필 정보 확인 실패', err)
+          console.log('프로필 주인 데이터:', res.data);  
+        } catch (err) {
+          console.log('프로필 정보 확인 실패', err);
         }
-      }
-      fetchProfileData()
-    }, [userId, location.state?.updated, updateTrigger])
-
-
+      };  
+      fetchProfileData();
+    }, [userId]);
 
 
     //팔로우 버튼 눌렀을 때 FollowStatus값 바꿔주기
@@ -93,27 +88,29 @@ function ProfilePage () {
       if(!userId) return
       
       // 만약 팔로우가 되어있지 않는다면
+      if(!profileData.followStatus){
+        const res =  await axiosInstance.post(`/follow/${userId}`)
+        console.log("팔로우 성공", res)
+      } else {
+        const res = await axiosInstance.delete(`/follow/${userId}`)
+        console.log("언팔로우 성공", res)
+      }
       try {
-        if(!profileData.followStatus){
-          const response = await axiosInstance.post(`/follow/${userId}`)
-          setProfileData(prev => ({
+        setProfileData((prev) => {
+          const newFollowStatus = !prev.followStatus // 현재 팔로우 값을 바꿔 만약 팔로우 안했는데 팔로잉을 한다? 
+          // 만약 팔로우를 안했다가 해서 값이  트루로 바뀌면 followedCnt 를 1올려. 
+          const newFollowedCnt = newFollowStatus ? prev.followedCnt + 1 : prev.followedCnt -1
+          // 그리고 갱신을 해. 
+          return {
             ...prev,
-            followStatus: true,
-            followedCnt: prev.followedCnt + 1
-          }))
-        } else {
-          const response =await axiosInstance.delete(`/follow/${userId}`)
-          setProfileData(prev => ({
-            ...prev,
-            followStatus: false,
-            followedCnt: prev.followedCnt -1 
-          }))
-          console.log(profileData.followStatus)
-        }
+            followStatus: newFollowStatus,
+            followedCnt: newFollowedCnt 
+          }
+        })
       } catch(err) {
         console.log("팔로우 상태 변경 실패:", err)
-      
       }
+        
     }
 
     // 프로필 페이지로 이동 
@@ -131,7 +128,7 @@ function ProfilePage () {
       {/*앨범 커버 & 프로필 이미지 */}
       <div className="imageWrap">
         <img
-          src={profileData.albums.length > 0 ? profileData.albums[0].albumImageURL : defaultImage} width="200"
+          src={profileData.albums && profileData.albums.length > 0 && profileData.albums[0].albumImageURL ? profileData.albums[0].albumImageURL : defaultImage} width="200"
          />
          <br/>
         <img src={profileData.profileImageURL} width="150"/>
@@ -143,7 +140,7 @@ function ProfilePage () {
         <h5>{profileData.introduce}</h5>
 
         <div className="followWrap">
-          <span>팔로우 {profileData.followedCnt}</span>
+          <span>팔로워 {profileData.followedCnt}</span>
           <span>팔로잉 {profileData.followingCnt}</span>
         </div>
       </div>
@@ -158,7 +155,7 @@ function ProfilePage () {
             text="프로필 수정"
           />) :(
           <FollowButton
-            text={profileData.followStatus ? "팔로잉" : "팔로우"}
+            text={profileData.followStatus ? "팔로잉" : "팔로우"}   //false로 일단 주니까 flase라면 팔로우버튼이 나오고 true면 팔로잉 버튼이 나오도록 
             onClick={changeFollowStatus}
           />
           )
