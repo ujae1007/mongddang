@@ -51,7 +51,6 @@ function Login () {
       // accessToken : 토큰값
       // 즉 authTokenAtom에 accessToken을 저장하겠다는 의미
       setRecoil(authTokenAtom, accessToken)
-
       console.log("로그인 성공")
       alert("로그인에 성공했습니다.")
       nav("/mainpage", {replace:true})
