@@ -26,7 +26,7 @@ export interface ProfileData {
 }
 
 function ProfilePage () {
-
+  
   // 보려는 프로파일 페이지 사람의 정보
   const {userId} = useParams<{userId: string}>()
   const numberUserId = userId ? parseInt(userId, 10):null
