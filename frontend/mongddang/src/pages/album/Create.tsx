@@ -1,8 +1,9 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { useRecoilState, useRecoilValue } from "recoil";
 import { albumListState, currentAlbumState, albumStepState } from "../../recoil/albumState";
 import { Album, Playlist } from "../../types";
+
 import { authTokenAtom } from "../../recoil/userAtom";
 
 import Step1 from "../../components/album/Step1";
@@ -11,23 +12,51 @@ import Step3 from "../../components/album/Step3";
 import Step4 from "../../components/album/Step4";
 import TempAlbumList from "../../components/album/TempAlbumList";
 
+interface CreatePlaylistResponse {
+  playlistId: number;
+  album: {
+    albumId: number;
+    userId: number;
+    title: string;
+    albumImageUrl: string;
+    status: boolean;
+    createdAt: string;
+    updatedAt: string;
+  };
+  musicId: null;
+  startTime: null;
+  endTime: null;
+  latitude: null;
+  longitude: null;
+  locationAddress: null;
+  photos: null;
+  createdAt: string;
+  updatedAt: string;
+}
 
 function Create() {
   const navigate = useNavigate();
+  const authToken = useRecoilValue(authTokenAtom);
 
   const [step, setStep] = useRecoilState(albumStepState);
   const [album, setAlbum] = useRecoilState(currentAlbumState);
   const [createdAlbums, setCreatedAlbums] = useRecoilState(albumListState);
   const [showTempAlbums, setShowTempAlbums] = useState(false);
   const [editingPlaylist, setEditingPlaylist] = useState<Playlist | undefined>();
-  
-  console.log("전체 앨범",createdAlbums); // 지금까지 생성된 앨범 목록 확인용
+  const [playlistId, setPlaylistId] = useState<number | null>(null);
 
   const tempAlbums = createdAlbums.filter((album) => !album.status);
-  const token = useRecoilValue(authTokenAtom);
-  console.log("=========================");
-  console.log("토큰: ", token);
 
+  // 로그인되지 않은 사용자가 접근할 경우 로그인 페이지로 이동
+  useEffect(() => { 
+    if (!authToken) {
+      alert("로그인 후 이용하세요.");
+      navigate("/login", {
+        replace: true, // 뒤로가기 방지
+        state: { from: "/create" }, // 로그인 후 다시 돌아올 경로로
+      });
+    }
+  }, [authToken, navigate]);
 
   const resetToStep1 = (isSaveTemp: boolean = false) => {
     if (album) {
@@ -57,8 +86,14 @@ function Create() {
     setShowTempAlbums(false);
   };
 
-  const handleCreateAlbum = (newAlbum: Album) => {
-    setAlbum(newAlbum);
+  const handleCreateAlbum = (albumId: number, title: string) => {
+    setAlbum({
+      id: albumId,
+      title: title,
+      albumImageUrl: "",
+      status: false,
+      playlists: [],
+    });
     setStep(2);
   };
 
@@ -104,19 +139,24 @@ function Create() {
         }
       });
 
-      // step1으로 돌아가기
+      // step1으로 상태 변경 및 앨범 정보 초기화
       setAlbum(null);
       setStep(1);
 
       console.log("앨범 생성 완료:", completedAlbum);
 
       // 해당 앨범 상세 페이지로 이동
-      navigate(`/albums/${completedAlbum.id}`, {state: completedAlbum});
+      navigate(`/albums/${completedAlbum.id}`);
     }
   };
 
   const handleTempSave = () => {
     resetToStep1(true);
+  };
+
+  const handleCreatePlaylist = (playlistData: CreatePlaylistResponse) => {
+    setPlaylistId(playlistData.playlistId);
+    setStep(3);
   };
 
   const handleAddPlaylist = (playlistData: Playlist) => {
@@ -138,6 +178,7 @@ function Create() {
           playlists: [...album.playlists, playlistData],
         });
       }
+      setPlaylistId(null);
       setStep(4);
     }
   };
@@ -165,12 +206,12 @@ function Create() {
 
   const handleCancelPlaylist = () => {
     setEditingPlaylist(undefined);
+    setPlaylistId(null);
     setStep(2);
   };
 
   return (
     <div>
-      <h1>앨범 생성</h1>
 
       {step === 1 && !showTempAlbums && (
         <>
@@ -198,12 +239,14 @@ function Create() {
           onUpdateTitle={handleUpdateTitle}
           onComplete={() => handleCompleteAlbum()}
           onTempSave={handleTempSave}
+          onCreatePlaylist={handleCreatePlaylist}
         />
       )}
 
       {step === 3 && album && (
         <Step3
           albumId={album.id!}
+          playlistId={playlistId!}
           title={album.title}
           onUpdateTitle={handleUpdateTitle}
           onAddPlaylist={handleAddPlaylist}
