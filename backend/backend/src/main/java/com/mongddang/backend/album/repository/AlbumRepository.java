@@ -17,4 +17,7 @@ public interface AlbumRepository extends JpaRepository<Album, Integer> {
 
     // ✅ 특정 사용자의 공개된 앨범 조회 (status = true)
     List<Album> findByUserIdAndStatus(int userId, boolean status);
+    
+    // ✅ 특정 사용자의 `status = false`인 앨범 조회
+    List<Album> findByUserIdAndStatusFalse(int userId);
 }
