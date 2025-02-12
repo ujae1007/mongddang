@@ -17,23 +17,23 @@ interface Youtube {
 
 // 플레이어  타입 지정 
 interface MusicPlayerProps {
-  track_name: string;
-  artist_name: string;
+  trackName: string;
+  artistName: string;
 }
 
 //API 검색하기 
-const searchVideos = async (track_name: string, artist_name:string,): Promise<Youtube[]> => {
+const searchVideos = async (trackName: string, artistName:string,): Promise<Youtube[]> => {
   try{
     const res = await axios.get(`${BASE_URL}/search`, {
       params: {
         key: API_KEY,
-        q:`${artist_name} ${track_name}`,
+        q:`${artistName} ${trackName}`,
         part: "snippet",
         maxResults: 1,
         type: "video"
       }
     })
-    console.log(res.data)
+    console.log("유투브 정보", res.data)
     return res.data.items
   }catch(err){
     console.log("youtube 오류", err)
@@ -41,20 +41,20 @@ const searchVideos = async (track_name: string, artist_name:string,): Promise<Yo
   }
 }
 
-const MusicPlayer: React.FC<MusicPlayerProps> = ({track_name, artist_name}) => {
+const MusicPlayer: React.FC<MusicPlayerProps> = ({trackName, artistName}) => {
   const [videoId, setVideoId] = useState<string | null>(null)
 
   useEffect(() =>{
     const fetchVideo = async () => {
-      const videos = await searchVideos(track_name, artist_name)
+      const videos = await searchVideos(trackName, artistName)
       if (videos.length > 0) {
         setVideoId(videos[0].id.videoId)
       }
     }
-    if (track_name && artist_name) {
+    if (trackName && artistName) {
       fetchVideo()
     }
-  }, [track_name, artist_name])
+  }, [trackName, artistName])
 
   if (!videoId) 
     return null
@@ -62,8 +62,8 @@ const MusicPlayer: React.FC<MusicPlayerProps> = ({track_name, artist_name}) => {
   return (
     <div>
     <iframe
-      width="150"
-      height="150"
+      width="200"
+      height="200"
       src={`https://www.youtube.com/embed/${videoId}`}
       title="YouTube video player"
       allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
