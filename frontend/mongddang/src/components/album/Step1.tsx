@@ -1,17 +1,11 @@
 import { useState } from "react";
 import { useSetRecoilState } from "recoil";
-import { currentAlbumState, albumStepState } from "../../recoil/albumState";
-import { Album } from "../../types";
-
+import { albumStepState } from "../../recoil/albumState";
 import axiosInstance from "../../api/axiosInstance"
-import { useRecoilValue } from "recoil";
-import {authTokenAtom} from "../../recoil/userAtom"
-
 
 interface Step1Props {
-  // 앨범 생성 완료 시 호출되는 콜백 함수
   // 앨범 생성 시 Step2로 이동하기 위해 앨범 정보를 전달
-  onCreateAlbum: (album: Album) => void;
+  onCreateAlbum: (albumId: number, title: string) => void;
 }
 
 interface CreateAlbumResponse {
@@ -28,53 +22,24 @@ interface CreateAlbumResponse {
 function Step1({ onCreateAlbum }: Step1Props) {
   const [title, setTitle] = useState<string>(""); // 앨범 제목 저장
   const [isCreating, setIsCreating] = useState(false); // 앨범 생성 여부 저장
+  const setStep = useSetRecoilState(albumStepState); // 앨범 생성 단계 저장
 
-  const setCurrentAlbum = useSetRecoilState(currentAlbumState);
-  const setStep = useSetRecoilState(albumStepState);
-
-  const token = useRecoilValue(authTokenAtom);
-  
+  // 앨범 생성 폼 제출 핸들러
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setIsCreating(true); // 앨범 생성 true로 변경
 
     try {
-      // -------------- 실제 API 호출  --------------
+      // 앨범 생성 API 호출
       const { data } = await axiosInstance.post<CreateAlbumResponse>('/albums/create', {
         title: title,
         status: false
       });
 
-      const newAlbum: Album = {
-        id: data.albumId,
-        title: data.title,
-        albumImageUrl: data.albumImageUrl,
-        status: data.status,
-        playlists: [],
-      };
-      // --------------------------------------------
-
-      // ------------ 시뮬레이션 -------------
-
-      // const newAlbum: Album = {
-      //   id: Math.floor(Math.random() * 1000), // 임시 ID 생성
-      //   title: title,
-      //   albumImageUrl: "",
-      //   status: false,
-      //   playlists: [],
-      //   createdAt: new Date().toISOString(),
-      //   updatedAt: new Date().toISOString(),
-      // };
-      // --------------------------------------------
-
-      console.log(token);
-
-      setCurrentAlbum(newAlbum);
-      onCreateAlbum(newAlbum);
+      onCreateAlbum(data.albumId, data.title); // 앨범 생성 후 response로 받은 데이터를 Step2로 전달
       setStep(2);
-      console.log("생성된 앨범:", newAlbum);
+      console.log("생성된 앨범:", data);
     } catch (error) {
-      console.log(token);
       console.error("앨범 생성 중 오류 발생:", error);
       alert("앨범 생성 중 오류가 발생했습니다.");
     } finally {
@@ -90,7 +55,6 @@ function Step1({ onCreateAlbum }: Step1Props) {
           <input
             type="text"
             id="title"
-            /*title 값이 변경될 때마다 상태 업데이트*/
             value={title}
             onChange={(e) => setTitle(e.target.value)}
             placeholder="앨범 제목을 입력하세요"

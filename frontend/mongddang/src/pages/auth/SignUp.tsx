@@ -217,7 +217,6 @@ function SignUp () {
     // 위에있는게 끝나지 않으면 실행X
     .then((res) => {
       console.log('회원가입 성공')
-      localStorage.setItem('jwt',res.data.jwt)
       //로그인 이동 
       nav('/login', {replace:true})
     })
