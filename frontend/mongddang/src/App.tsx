@@ -23,7 +23,7 @@ function App() {
       <RecoilNexus />
       <Router>
         <Routes>
-          <Route path="/MONGDDANG" element={<IntroPages />} />
+          <Route path="/" element={<IntroPages />} />
           <Route path="/login" element={<Login />} />
           <Route path="/signup" element={<SignUp />} />
           <Route path="/mainpage" element={<MainPage />} />
