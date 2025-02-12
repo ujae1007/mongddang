@@ -81,7 +81,7 @@ public class FollowController {
 	        // 팔로우 상태 => 팔로우 취소
             boolean result = followService.deleteFollow(followingId, followedId);
             if(result) {
-            	return ResponseEntity.status(HttpStatus.CREATED).body("팔로우 취소 완료");
+            	return ResponseEntity.status(HttpStatus.NO_CONTENT).body("팔로우 취소 완료");
             } else {
             	return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("팔로우 취소 실패");
             }
