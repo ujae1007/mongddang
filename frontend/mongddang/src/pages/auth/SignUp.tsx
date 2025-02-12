@@ -4,7 +4,7 @@ import Button from "../../components/common/Button"
 import InputBox from "../../components/common/input"
 import FavoriteInput from "../../components/common/favoriteInput"
 import axiosInstance from "../../api/axiosInstance"
-
+import './SignUp.css'
 function SignUp () {
 
   const defaultImage = "REMOVED"
@@ -235,7 +235,7 @@ function SignUp () {
   return (
     <div className="SignUp">
 
-      <div className="TitleWrap">SignUp</div>
+      <div className="TitleWrap">Sign Up</div>
 
 {/*이미지 */}
       <div className="imageWrap">
@@ -269,13 +269,6 @@ function SignUp () {
             }}
             value={email}
           />
-          <div className="errorMessageWrap">
-            {
-              !emailValid && email.length > 0 && (
-                <div>올바른 이메일을 입력해주세요.</div>
-              )
-            }
-          </div>
           <Button 
             text="인증"
             type="confirm"
@@ -283,6 +276,13 @@ function SignUp () {
             disabled={!emailValid}
           />
         </div>
+          <div className="errorMessageWrap">
+            {
+              !emailValid && email.length > 0 && (
+                <div>올바른 이메일을 입력해주세요.</div>
+              )
+            }
+          </div>
 
 {/* 인증코드 */}
         <div className="certifyWrap">
@@ -343,13 +343,13 @@ function SignUp () {
             onChange={handlePassword}
             value={password}
           />
+        </div>
         <div className="errorMessageWrap">
           {
             !passwordValid && password.length > 0 && (
               <div>영문, 숫자, 특수문자 포함 8자 이상 입력해주세요.</div>
             )
           }
-        </div>
         </div>
 
 {/* 비밀번호 확인 */}
@@ -367,12 +367,12 @@ function SignUp () {
             onClick={checkPassword}
             disabled={!secondPassword}
           /> */}
+        </div>
           {passwordMatchMessage && (
           <div className={`passwordMessage ${passwordMatchMessage.includes("일치하지 않습니다") ? "error" : "success"}`}>
             {passwordMatchMessage}
           </div>
         )}
-        </div>
 
 {/* 선호장르 받기 */}
     <div>
@@ -401,7 +401,9 @@ function SignUp () {
           />
         </div>
 
-        <p onClick={goToLogin}>이미 계정이 있으신가요?</p>
+        <div className="test" onClick={goToLogin}>
+          <p>이미 계정이 있으신가요?</p>
+        </div>
         
           
       </div>

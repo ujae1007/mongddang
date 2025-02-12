@@ -5,7 +5,7 @@ import Button from "../../components/common/Button"
 import InputBox from "../../components/common/input"
 import axiosInstance from "../../api/axiosInstance"
 import { authTokenAtom } from "../../recoil/userAtom"
-
+import './Login.css'
 function Login () {
 
   const nav = useNavigate()
@@ -71,12 +71,12 @@ function Login () {
 
     <div className="Login">
 
-      <div className="TitleWrap">LogIn</div>
+      <div className="TitleWrap">Log In</div>
 
       <div className="contentwrap">
 
-        <div className="inputTitle">이메일 주소</div>
-        <div className="inputWrap">
+ 
+        <div className="emailInputWrap">
           <InputBox 
             type="default"
             mode="login"
@@ -93,8 +93,7 @@ function Login () {
           }
         </div>
 
-        <div className="inputTitle">비밀번호</div>
-        <div className="inputWrap">
+        <div className="passwordInputWrap">
           <InputBox 
             type="password"
             mode="login"
@@ -116,7 +115,11 @@ function Login () {
             onClick={handleLogin}
             disabled={!emailValid || !password} 
           />
-          <p onClick={goToSignUp}>계정이 없으신가요? 회원가입</p>
+      </div>
+      <div className="test">
+        <p>
+          계정이 없으신가요? <span style={{ color: '#9747FF' }}>가입하기</span>
+        </p>
       </div>
     </div>
   ) 

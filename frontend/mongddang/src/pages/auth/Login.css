@@ -1,0 +1,30 @@
+.TitleWrap {
+  width: 100%;
+  font-size: 28px;
+  font-weight: 600;
+  color: #252525;
+  text-align: left;
+  display: inline-block;
+
+
+}
+
+.contentwrap {
+  margin-top: 5px;
+}
+
+.emailInputWrap {
+  margin-bottom: 10px;
+  font-size: 12px;
+}
+
+.passwordInputWrap{
+  margin-bottom: 40px;
+  font-size: 12px;
+}
+
+.test{
+  display: flex;
+  justify-content: center;
+  cursor: pointer;
+}
