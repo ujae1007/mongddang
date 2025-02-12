@@ -2,6 +2,7 @@ import { useState } from "react";
 import { useSetRecoilState } from "recoil";
 import { albumStepState } from "../../recoil/albumState";
 import axiosInstance from "../../api/axiosInstance";
+import { useNavigate } from "react-router-dom";
 
 interface Step2Props {
   albumId: number;
@@ -44,6 +45,8 @@ function Step2({
   const [isSaving, setIsSaving] = useState(false);
   const setStep = useSetRecoilState(albumStepState);
 
+  const navigate = useNavigate();
+
   // 앨범 제목 변경
   const handleTitleChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const newTitle = e.target.value;
@@ -70,7 +73,6 @@ function Step2({
       const { data } = await axiosInstance.post<CreatePlaylistResponse>(
         `/playlists/${albumId}`,
       );
-      console.log('생성된 플레이리스트', data);
       onCreatePlaylist(data);
       setStep(3);
     } catch (error) {
@@ -100,11 +102,18 @@ function Step2({
   // 앨범 생성 완료
   const handleCompleteAlbum = async () => {
     try {
+      // 앨범 완료 처리
       await axiosInstance.put(`/albums/complete/${albumId}`, {
-        title: currentTitle
+        title: title
       });
+      
+      // 앨범 상세 정보 조회
+      const response = await axiosInstance.get(`/albums/detail/${albumId}`);
+      
       // 완료 후 앨범 상세 페이지로 이동
-      window.location.href = '/albums/:albumId';
+      navigate(`/albums/${albumId}`, {
+        state: { albumDetail: response.data }
+      });
     } catch (error) {
       console.error("앨범 완료 처리 중 오류 발생:", error);
       alert("앨범 완료 처리 중 오류가 발생했습니다.");
@@ -125,11 +134,14 @@ function Step2({
       </div>
 
       <div>
+
         <button 
           onClick={handleCreatePlaylist} 
           disabled={isCreating || isSaving}>
           {isCreating ? "플레이리스트 생성 중..." : "플레이리스트 만들기"}
         </button>
+        
+        <div>
         <button 
           onClick={handleTempSave}
           disabled={isCreating || isSaving}
@@ -142,7 +154,10 @@ function Step2({
         >
           완료
         </button>
+        
+        </div>
       </div>
+
     </div>
   );
 }
