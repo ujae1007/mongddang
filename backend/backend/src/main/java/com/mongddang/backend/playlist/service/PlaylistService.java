@@ -44,6 +44,14 @@ public class PlaylistService {
         if (album.getUserId() != currentUserId) {
             throw new AccessDeniedException("권한이 없습니다.");
         }
+        
+        // ✅ 현재 앨범의 플레이리스트 개수 조회
+        int playlistCount = playlistRepository.countByAlbum(album);
+
+        // ✅ 최대 7개 제한
+        if (playlistCount >= 7) {
+            throw new IllegalStateException("이 앨범에는 더 이상 플레이리스트를 추가할 수 없습니다. (최대 7개)");
+        }
         Playlist playlist = new Playlist(album);
         return playlistRepository.save(playlist);
     }
