@@ -128,7 +128,7 @@ function ProfilePage () {
       {/*앨범 커버 & 프로필 이미지 */}
       <div className="imageWrap">
         <img
-          src={profileData.albums.length > 0 ? profileData.albums[0].albumImageURL : defaultImage} width="200"
+          src={profileData.albums && profileData.albums.length > 0 && profileData.albums[0].albumImageURL ? profileData.albums[0].albumImageURL : defaultImage} width="200"
          />
          <br/>
         <img src={profileData.profileImageURL} width="150"/>
