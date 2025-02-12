@@ -17,7 +17,7 @@ function ProfileEdit () {
   //기존 데이터 불러오기
   useEffect (() => {
     if(loggedInUser) {
-      setProfileImage(loggedInUser.profileImageURL || '')
+      setProfileImage(loggedInUser.profileImageURL || '') // 기존 프로필이나 디폴드 값
       setChangedNickName(loggedInUser.nickname || '')
       setChangedIntroduce(loggedInUser.introduce || '')
       setLoggedInUserId(loggedInUser.userId)
@@ -39,7 +39,7 @@ function ProfileEdit () {
   }, [loggedInUser])
 
   //상태 변화 감지
-  const [profileImage, setProfileImage] = useState<string>('')
+  const [profileImage, setProfileImage] = useState<string | null>(""); 
   const [changedNickName, setChangedNickName] = useState('')
   const [changedIntroduce, setChangedIntroduce] = useState('')
   const [selectedPlaces, setSelectedPlaces] = useState<string[]>([])
@@ -49,16 +49,17 @@ function ProfileEdit () {
   
   const [isUpdated, setIsUpdated] = useState(false)
 
+  
   //이미지 수정 핸들러
   const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0]
-
-    //만약에 파일이 없다면 우리의 기존사진으로 교체 
+    
+    //만약 취소를 눌렀다면 마지막으로 했던거 나오기 
     if(!file){
-      setProfileImage(preProfileImg)
+      setProfileImage(profileImage)
       return
     }
-
+    
     if(file) {
       if(file.size > 5 * 1024 * 1024) {
         alert('파일 크기는 5MB를 초과할 수 없습니다. 다른 이미지를 선택해주세요.')
@@ -77,6 +78,13 @@ function ProfileEdit () {
       reader.readAsDataURL(file)
     }
   }
+  
+  //이미지 삭제 버튼 핸들러 
+  const handleImageDelete = () => {
+    setProfileImage(null)
+    setIsUpdated(true)
+  }
+
   //닉네임 수정 핸들러
   const handleNickNameChange = (e:React.ChangeEvent<HTMLInputElement>) => {
     setChangedNickName(e.target.value)
@@ -104,11 +112,12 @@ function ProfileEdit () {
     nav(-1)
   }
 
-  // 수정하기 axios 전송
-  const handleSubmit = async () => {
+   // 수정하기 axios 전송
+   const handleSubmit = async () => {
     console.log("프로필 수정 시도")
     console.log(
       "업데이트 된 데이터:",
+      profileImage,
       changedNickName,
       changedIntroduce,
       selectedPlaces,
@@ -126,7 +135,7 @@ function ProfileEdit () {
     formData.append("likeGenre3", selectedGenres[2] || "")
   
     // 프로필 이미지 변경이 있을 경우 추가
-    if (profileImage && profileImage !== preProfileImg) {
+    if (profileImage && profileImage !== "") {
       const fileInput = document.querySelector('input[type="file"]') as HTMLInputElement
       if (fileInput?.files?.[0]) {
         formData.append("profileImage", fileInput.files[0])
@@ -139,13 +148,14 @@ function ProfileEdit () {
           "Content-Type": "multipart/form-data",
         }
       }) 
-      console.log(formData)
       console.log(res, "수정하기 완료")
       nav(`/profile/${loggedInUserId}`, {replace:true, state: { updated: true }})
     }catch (err) {
         console.error("수정하기 실패", err)
       }
     }
+    
+
     
     // 입력값들이 다 유효하고, 수정을 할 경우 버튼 활성화하기 
     useEffect(() => {
@@ -178,9 +188,10 @@ function ProfileEdit () {
   return (
     <div>
       <div className="imageWrap">
-        <img src={profileImage} alt="profile" className="profileImage" width="100"/>
+        <img src={profileImage || preProfileImg} alt="profile" className="profileImage" width="100"/>
         <input type="file" accept="image/*" onChange={handleImageChange} />
       </div>
+      <button onClick={handleImageDelete}>삭제</button>
 
       <div className="inputWrap">
 
