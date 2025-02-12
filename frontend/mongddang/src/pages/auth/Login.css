@@ -1,3 +1,39 @@
+.Login {
+  position: relative;
+  z-index: 3;
+}
+
+.Mp3Image{
+  position: absolute;
+  top: 40px;
+  left: 270px;
+  width: 145.5px;
+  height: 170px;
+  transform: rotate(13deg);
+  opacity: 60%;
+}
+
+.HeadPhoneImage {
+  position: absolute;
+  width: 322px;
+  height: 380px;
+  top: 24px;
+  left: -50px;
+  transform: scaleX(-1);
+  z-index: 1;
+  opacity: 20%;
+}
+
+.MusicNote {
+  position: absolute;
+  width:327px;
+  height: 300px;
+  top:620px;
+  left: 70px;
+  opacity: 50%;
+  z-index: 1;
+}
+
 .TitleWrap {
   width: 100%;
   font-size: 28px;
@@ -5,11 +41,11 @@
   color: #252525;
   text-align: left;
   display: inline-block;
-
-
+  margin-bottom: 38px;
 }
 
 .contentwrap {
+  z-index: 3;
   margin-top: 5px;
 }
 
