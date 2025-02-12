@@ -1,0 +1,54 @@
+.SignUp {
+  width: 333px;
+  margin: 0 auto;
+}
+.TitleWrap {
+  width: 333px;
+  color: #252525;
+  font-size: 28px;
+  font-weight: 600;
+  word-wrap: break-word;
+  margin-bottom: 33px;
+}
+
+.emailWrap {
+  width: 333px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 10px;
+
+}
+
+.certifyWrap {
+  width: 333px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 10px;
+}
+
+.nickNameWrap,
+.secondPasswordWrap,
+.introduceWrap {
+  width: 333px;
+  display: flex;
+  margin-bottom: 10px;
+}
+
+.passwordWrap, 
+.secondPasswordWrap
+{
+  width: 333px;
+  display: flex;
+  margin-bottom: 10px;
+  
+  
+}
+
+
+.test {
+  display: flex;
+  justify-content: center;
+  cursor:pointer;
+}

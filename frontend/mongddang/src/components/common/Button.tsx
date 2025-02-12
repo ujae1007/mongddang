@@ -1,0 +1,22 @@
+import "./Button.css"
+
+interface ButtonProps {
+  text: string
+  type: "Large" | "Middium" | "ProfileEdit" | "PopUp" | "confirm"
+  onClick?: () => void
+  disabled?: boolean
+}
+
+const Button = ({text, type, onClick, disabled}:ButtonProps) => {
+  return (
+    <button 
+      className={`Button Button_${type}`}
+      onClick={onClick}
+      disabled={disabled}
+    >
+      {text}
+    </button>
+  )
+}
+
+export default Button
