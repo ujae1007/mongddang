@@ -33,7 +33,7 @@ html, body {
   body {
     max-width: 420px; 
     margin: 0 auto;
-    background-color: rgb(247, 247, 247);
+    background-color:white;
     overflow: hidden;
   }
 }

@@ -33,10 +33,6 @@ axiosInstance.interceptors.request.use(
 // 응답 인터셉터에서 토큰을 저장하기
 axiosInstance.interceptors.response.use(
   (response) => {
-<<<<<<< HEAD
-    // console.log('응답: ', response)
-=======
->>>>>>> feature/frontend-앨범생성수정
     return response
   },
   async (error) => {
