@@ -1,15 +1,30 @@
 import { useState } from 'react';
+import axiosInstance from "../../api/axiosInstance";
 
 interface SearchMusicProps {
   onSelectMusic: (music: string) => void;
   defaultKeyword?: string;
 }
 
+const mockMusicDatabase = [
+  "신호등 - 이무진",
+  "사건의 지평선 - 윤하",
+  "Ditto - NewJeans",
+  "LOVE DIVE - IVE",
+  "Hype Boy - NewJeans",
+  "After LIKE - IVE",
+  "새삥 - ZICO",
+  "Cookie - NewJeans",
+  "자격지심 - BE'O",
+  "FEARLESS - LE SSERAFIM", 
+  "아마겟돈 - 에스파"
+];
 
 function SearchMusic({ onSelectMusic, defaultKeyword = '' }: SearchMusicProps) {
   const [keyword, setKeyword] = useState(defaultKeyword);
   const [musicList, setMusicList] = useState<string[]>([]);
   const [isSearching, setIsSearching] = useState(false);
+  const [showResults, setShowResults] = useState(false);
 
   const searchMusic = async () => {
     if (!keyword.trim()) {
@@ -19,79 +34,61 @@ function SearchMusic({ onSelectMusic, defaultKeyword = '' }: SearchMusicProps) {
     }
 
     setIsSearching(true); // 검색 중 상태로 변경
-
-  // 실제 서버 API 호출 코드
-  //   try {
-  //     const response = await fetch(`api/music/autocomplete?query=${encodeURIComponent(keyword)}`);
-  //     if (!response.ok) {
-  //       throw new Error('검색에 실패했습니다.');
-  //     }
-
-  //     const data = await response.json();
-  //     setMusicList(data);
-  //     if (data.length === 0) { 
-  //     // DB에 존재하지 않는 키워드를 입력한 경우 
-  //       alert('검색 결과가 없습니다.');}
-
-
-  //   } catch (error) {
-  //     console.error('Error searching music:', error);
-  //     alert('음악 검색 중 오류가 발생했습니다.');
-  //     setMusicList([]);
-  //   } finally {
-  //     setIsSearching(false);
-  //   }
-  // };
-
-  // 확인용
-  // 테스트용 mock 데이터
-  const mockMusicDatabase = [
-    "신호등 - 이무진",
-    "사건의 지평선 - 윤하",
-    "Ditto - NewJeans",
-    "LOVE DIVE - IVE",
-    "Hype Boy - NewJeans",
-    "After LIKE - IVE",
-    "새삥 - ZICO",
-    "Cookie - NewJeans",
-    "자격지심 - BE'O",
-    "FEARLESS - LE SSERAFIM"
-  ];
-
-   // API 호출을 시뮬레이션
-   try {
-    // 실제 API 호출 대신 mock 데이터 필터링
-    const filteredMusic = mockMusicDatabase.filter(music => 
-      music.toLowerCase().includes(keyword.toLowerCase())
-    );
-
-    // API 호출 시뮬레이션을 위한 지연
-    await new Promise(resolve => setTimeout(resolve, 500));
     
-    setMusicList(filteredMusic);
-    
-    if (filteredMusic.length === 0) {
-      // DB에 존재하지 않는 키워드를 입력한 경우
-      // 존재하지 않는 음악을 검색한 경우
-      alert('검색 결과가 없습니다.');
+    // ======================================================================
+    // 실제 서버 API 호출
+    // try {
+    //   const { data } = await axiosInstance.get(`/music/autocomplete?query=${keyword}`);
+      
+    //   setMusicList(data);
+      
+    //   if (data.length === 0) {
+    //     // DB에 존재하지 않는 키워드를 입력한 경우
+    //     alert('검색 결과가 없습니다.');
+    //   }
+    // } catch (error) {
+    //   console.error('Error searching music:', error);
+    //   alert('음악 검색 중 오류가 발생했습니다.');
+    //   setMusicList([]);
+    // } finally {
+    //   setIsSearching(false);
+    // }
+    //======================================================================
+
+    //======================================================================
+    // 목업 데이터를 사용해서 진행 
+    try {
+      const filteredMusic = mockMusicDatabase.filter(music => 
+        music.toLowerCase().includes(keyword.toLowerCase())
+      );
+      
+      setMusicList(filteredMusic);
+      
+      if (filteredMusic.length === 0) {
+        // DB에 존재하지 않는 키워드를 입력한 경우
+        // 존재하지 않는 음악을 검색한 경우
+        alert('검색 결과가 없습니다.');
+      }
+    } catch (error) {
+      console.error('Error searching music:', error);
+      alert('음악 검색 중 오류가 발생했습니다.');
+      setMusicList([]);
+    } finally {
+      setIsSearching(false);
     }
-  } catch (error) {
-    console.error('Error searching music:', error);
-    alert('음악 검색 중 오류가 발생했습니다.');
-    setMusicList([]);
-  } finally {
-    setIsSearching(false);
-  }
+    //======================================================================
 };
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     searchMusic();
+    setShowResults(true);
   };
 
   const handleSelectMusic = (music: string) => {
     onSelectMusic(music);
     setMusicList([]); // 선택 후 검색 결과 초기화
+    setShowResults(false);
   };
 
   return (
@@ -108,19 +105,70 @@ function SearchMusic({ onSelectMusic, defaultKeyword = '' }: SearchMusicProps) {
         </button>
       </form>
 
-      {musicList.length > 0 && (
-        <ul>
-          {musicList.map((music, index) => (
-            <li
-              key={index}
-              onClick={() => handleSelectMusic(music)}
-              style={{ cursor: 'pointer' }}
-            >
-              {music}
-            </li>
-          ))}
-        </ul>
-      )}
+      {showResults && musicList.length > 0 && (
+  <div style={{
+    position: 'fixed',
+    top: 0,
+    left: 0,
+    width: '100%',
+    height: '100%',
+    backgroundColor: 'rgba(0, 0, 0, 0.5)',
+    display: 'flex',
+    justifyContent: 'center',
+    alignItems: 'center',
+    zIndex: 1000
+  }}>
+    {/* 모달 컨텐츠 */}
+    <div style={{
+      width: '80%',
+      maxHeight: '80%',
+      backgroundColor: 'white',
+      borderRadius: '8px',
+      padding: '20px',
+      overflow: 'auto'
+    }}>
+      <div style={{
+        display: 'flex',
+        justifyContent: 'space-between',
+        alignItems: 'center',
+        marginBottom: '20px'
+      }}>
+        <h3 style={{ margin: 0 }}>음악 검색 결과</h3>
+        <button 
+          onClick={() => setShowResults(false)}
+          style={{
+            border: 'none',
+            background: 'none',
+            fontSize: '20px',
+            cursor: 'pointer'
+          }}
+        >
+          ✕
+        </button>
+      </div>
+      
+      <ul style={{ 
+        listStyle: 'none', 
+        padding: 0,
+        margin: 0
+      }}>
+        {musicList.map((music, index) => (
+          <li
+            key={index}
+            onClick={() => handleSelectMusic(music)}
+            style={{
+              padding: '15px',
+              borderBottom: '1px solid #eee',
+              cursor: 'pointer'
+            }}
+          >
+            {music}
+          </li>
+        ))}
+      </ul>
+    </div>
+  </div>
+)}
     </div>
   );
 }
