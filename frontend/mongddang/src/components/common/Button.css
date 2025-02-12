@@ -1,0 +1,77 @@
+/* 공통 스타일 */
+.Button {
+  cursor: pointer;
+}
+
+/* Large */
+.Button_Large {
+  width: 333px;
+  height: 40px;
+  font-size: 16px;
+  font-weight: 400; 
+  border-radius: 5px;
+  word-wrap: break-word;
+  text-align: center;
+  font-style: normal;
+  line-height: normal;
+}
+/* 1) 아직 값이 다 안 들어왔을 때(회색) */
+.Button_Large:disabled {
+  background:#F4F4F6;
+  border: 1px #E6E6E8 solid;
+  color:  #9999A1;
+  
+}
+/* 2) 값 입력 완료(활성화) but 아직 클릭 전(흰색) */
+.Button_Large:enabled {
+  background: #fff;
+  border: 1px #9747FF solid;
+  color:#9747FF;
+}
+
+
+/* 3) 클릭 완료(보라색) */
+.Button_Large:enabled:active  {
+  background: #9747FF;
+  border: 1px #9747FF solid;
+  color: #F4F4F6;
+
+}
+
+.Button_confirm {
+  width: 55px;
+  height: 40px;
+  border-radius: 5px;
+  text-align: center;
+  font-size: 12px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: normal;
+}
+
+/* 1) disabled 상태 
+   (React에서 disabled={true} 일 때) */
+.Button_confirm:disabled {
+border: 1px solid #E6E6E8;
+background: #F4F4F6;
+cursor: not-allowed;
+color:  #9999A1;
+
+}
+
+  /* 2) enabled 상태 (이메일이 유효 → disabled=false)
+   => 아직 클릭 안 한 일반 상태 */
+.Button_confirm:enabled {
+  border: 1px solid #9747FF;
+  background: #fff;
+  color:#9747FF;
+}
+
+
+/* 3) 클릭(active) 상태 
+(마우스를 누르고 있는 동안/짧은 순간) */
+.Button_confirm:enabled:active {
+border: 1px solid #9747FF;
+background: #9747FF;
+color: #F4F4F6;
+}
