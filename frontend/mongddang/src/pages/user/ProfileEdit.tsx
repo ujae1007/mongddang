@@ -141,7 +141,9 @@ function ProfileEdit () {
         formData.append("profileImage", fileInput.files[0])
       }
     }
-
+    if (profileImage === null) {
+      formData.append("profileImage", "");
+    }
     try { 
       const res = await axiosInstance.put("/auth/update", formData, {
         headers: {
