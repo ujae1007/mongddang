@@ -6,6 +6,7 @@ import com.mongddang.backend.album.dto.AlbumUpdateDto;
 import com.mongddang.backend.album.entity.Album;
 import com.mongddang.backend.album.repository.AlbumRepository;
 import com.mongddang.backend.playlist.repository.PlaylistRepository;
+import com.mongddang.backend.photo.entity.Photo;
 import com.mongddang.backend.photo.repository.PhotoRepository;
 import com.mongddang.backend.playlist.dto.PlaylistDto;
 import com.mongddang.backend.user.service.UserService;
@@ -19,6 +20,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.security.Principal;
 import java.util.List;
 import java.util.stream.Collectors;
+import java.util.Objects;
 
 @Service
 public class AlbumService {
@@ -72,8 +74,42 @@ public class AlbumService {
         if (albumUpdateDto.getTitle() != null) {
             album.setTitle(albumUpdateDto.getTitle());
         }
-        // status는 무조건 true로 설정
-        album.setStatus(true);
+
+        // 1️⃣ FastAPI 호출을 위한 노래 장르 정보 가져오기
+        List<Integer> musicIds = playlistRepository.findByAlbum_AlbumId(albumId).stream()
+                .map(Playlist::getMusicId)
+                .filter(id -> id != null)
+                .collect(Collectors.toList());
+
+        List<String> genres = musicRepository.findAllById(musicIds).stream()
+                .map(Music::getGenre)
+                .distinct()
+                .collect(Collectors.toList());
+        
+        // 1️⃣ FastAPI 호출을 위한 노래 장르 정보 가져오기
+        List<Playlist> playlists = playlistRepository.findByAlbum_AlbumId(albumId);
+        
+        List<String> imageUrls = playlists.stream()
+                .map(photoRepository::findByPlaylist)  // `findByPlaylist()`로 리스트 가져오기
+                .filter(Objects::nonNull)  // `null` 값 제거
+                .flatMap(List::stream)  // 리스트를 스트림으로 변환
+                .map(Photo::getPhotoUrl)  // `Photo` 객체에서 `imageUrl` 추출
+                .filter(url -> url != null && !url.isEmpty())  // `null`과 빈 값 제거
+                .collect(Collectors.toList());
+
+
+        System.out.println("보내지는 플레이리스트 urls: " + imageUrls);
+        // 2️⃣ FastAPI 호출하여 앨범 표지 이미지 생성
+
+        String imageUrl = fastAPIService.callFastAPI(genres, imageUrls);
+        
+     // FastAPI 응답을 확인하는 로그 추가
+        System.out.println("FastAPI 응답 데이터: " + imageUrl);
+
+
+        // 3️⃣ 생성된 이미지 URL을 album_image_URL 컬럼에 저장
+        album.setAlbumImageUrl(imageUrl);
+        album.setStatus(true); // status는 true로 설정
 
         Album updatedAlbum = albumRepository.save(album);
 
