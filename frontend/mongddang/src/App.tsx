@@ -12,8 +12,8 @@ import ProfilePage from "./pages/user/ProfilePage";
 import AlbumDetail from "./pages/albumDetail/AlbumDetail";
 import MainPage from "./pages/user/MainPage";
 import IntroPages from "./pages/introduce/Introduce";
+import FollowPage from "./pages/user/FollowPage";
 
-//이거 유튜브 확인용 나중에 삭제 예정!!!!
 import YoutubePractice from "./pages/youtube/youtubePrac";
 
 function App() {
@@ -30,6 +30,7 @@ function App() {
           <Route path="/profileEdit" element={<ProfileEdit />} />
           <Route path="/create" element={<Create />} />
           <Route path="/profile/:userId" element={<ProfilePage />} />
+          <Route path="/follow" element={<FollowPage />} />
           <Route path="/youtube" element={<YoutubePractice />} />
           <Route path="/albums/:albumId" element={<AlbumDetail />} />
         </Routes>
