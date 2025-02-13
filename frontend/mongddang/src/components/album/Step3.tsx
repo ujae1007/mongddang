@@ -6,6 +6,9 @@ import SearchLocation from "./SearchLocation";
 import SearchMusic from "./SearchMusic";
 import axiosInstance from "../../api/axiosInstance";
 
+import Button from "../common/Button";
+import TitleInput from "./TitleInput";
+
 interface Step3Props {
   albumId: number;
   playlistId: number;
@@ -44,8 +47,7 @@ function Step3({
     }
   }, [placeName]);
 
-  const handleTitleChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
-    const newTitle = e.target.value;
+  const handleTitleChange = async (newTitle : string) => {
     setCurrentTitle(newTitle);
     
     try {
@@ -109,18 +111,18 @@ function Step3({
       const formData = new FormData();
     
       // 이미지 파일들 추가
-    const imageFiles = imageUrls.map((imageUrl, index) => {
-      const byteString = atob(imageUrl.split(',')[1]);
-      const mimeType = imageUrl.split(',')[0].split(':')[1].split(';')[0];
-      const ab = new ArrayBuffer(byteString.length);
-      const ia = new Uint8Array(ab);
-      
-      for (let i = 0; i < byteString.length; i++) {
-        ia[i] = byteString.charCodeAt(i);
-      }
-      const blob = new Blob([ab], { type: mimeType });
-      return new File([blob], `image${index}.${mimeType.split('/')[1]}`, { type: mimeType });
-    });
+      const imageFiles = imageUrls.map((imageUrl, index) => {
+        const byteString = atob(imageUrl.split(',')[1]);
+        const mimeType = imageUrl.split(',')[0].split(':')[1].split(';')[0];
+        const ab = new ArrayBuffer(byteString.length);
+        const ia = new Uint8Array(ab);
+        
+        for (let i = 0; i < byteString.length; i++) {
+          ia[i] = byteString.charCodeAt(i);
+        }
+        const blob = new Blob([ab], { type: mimeType });
+        return new File([blob], `image${index}.${mimeType.split('/')[1]}`, { type: mimeType });
+      });
 
         imageFiles.forEach(file => {
           formData.append('files', file);
@@ -179,16 +181,10 @@ function Step3({
 
   return (
     <div>
-      <div>
-        <label htmlFor="title">앨범 제목</label>
-        <input
-          type="text"
-          id="title"
-          value={currentTitle}
-          onChange={handleTitleChange}
-        />
-      </div>
-
+      <TitleInput
+      title={currentTitle}
+      onChange={handleTitleChange}
+       />
       <div>
         <label>사진 업로드</label>
         <input
@@ -259,11 +255,19 @@ function Step3({
         </div>
       )}
 
-      <button onClick={onCancel}>취소하기</button>
 
-      <button onClick={handleSubmit} disabled={!isFormValid|| isSaving}>
-        {isSaving ? "저장 중..." : (editingPlaylist ? "수정하기" : "추가하기")}
-      </button>
+      <Button
+        type="Large"
+        text="취소하기"
+        onClick={onCancel}
+        />
+
+      <Button
+        type="Large"
+        text={isSaving ? "저장 중..." : (editingPlaylist ? "수정하기" : "추가하기")}
+        onClick={handleSubmit}
+        disabled={!isFormValid|| isSaving}
+        />
     </div>
   );
 }
