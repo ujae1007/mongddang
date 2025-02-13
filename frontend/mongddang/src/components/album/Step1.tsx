@@ -4,6 +4,7 @@ import { albumStepState } from "../../recoil/albumState";
 import Button from "../common/Button";
 import TitleInput from "./TitleInput";
 import axiosInstance from "../../api/axiosInstance"
+import './Step1.css'
 
 interface Step1Props {
   // 앨범 생성 시 Step2로 이동하기 위해 앨범 정보를 전달
@@ -51,8 +52,8 @@ function Step1({ onCreateAlbum }: Step1Props) {
   };
 
   return (
-    <div>
-      <form onSubmit={handleSubmit}>
+    <>
+      <form className="StepOnePage" onSubmit={handleSubmit}>
         <div className="step-container">
           <TitleInput 
             title={title} 
@@ -60,17 +61,17 @@ function Step1({ onCreateAlbum }: Step1Props) {
           />
         </div>
 
-        <div>
+        <div style={{marginBottom:60}}>
           <img src={image} alt="앨범커버 생성 전 기본 이미지지" />
         </div>
 
         <Button
-          type="Large"
+          using="Album"
           text ={isCreating ? "생성 중..." : "생성하기"}
           disabled={!title.trim() || isCreating}
         />
       </form>
-    </div>
+    </>
   );
 }
 
