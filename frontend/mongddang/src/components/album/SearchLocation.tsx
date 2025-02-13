@@ -65,6 +65,11 @@ function SearchLocation({
       return;
     }
 
+    if (!isKakaoMapLoaded) {
+      alert("아직 지도가 로드되지 않았습니다. 잠시 후 다시 시도해주세요.");
+      return;
+    }
+
     setIsSearching(true);
 
     const ps = new window.kakao.maps.services.Places();
