@@ -1,0 +1,58 @@
+.playlist-item {
+  display: grid;
+  grid-template-columns: 80px 1fr 30px; /* 이미지 너비, 남은 공간, 삭제 버튼 너비 */
+  gap: 15px;
+  align-items: center;
+  padding: 10px;
+}
+
+.photo-section img {
+  width: 80px;
+  height: 80px;
+  object-fit: cover;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.info-section {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.place-info {
+  font-size: 14px;
+  font-weight: bold;
+}
+
+.music-info {
+  font-size: 12px;
+  color: #666;
+}
+
+.delete-section {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.delete-button {
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  border: 1px solid rgba(0, 0, 0, 0.3);
+  background-color: white;
+  color: rgba(0, 0, 0, 0.3);
+  font-size: 16px;
+  line-height: 1;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0;
+}
+
+.delete-button:disabled {
+  background-color: rgba(0, 0, 0, 0.2);
+  cursor: not-allowed;
+}

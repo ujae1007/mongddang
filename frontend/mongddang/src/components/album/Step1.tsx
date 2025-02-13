@@ -1,6 +1,8 @@
 import { useState } from "react";
 import { useSetRecoilState } from "recoil";
 import { albumStepState } from "../../recoil/albumState";
+import Button from "../common/Button";
+import TitleInput from "./TitleInput";
 import axiosInstance from "../../api/axiosInstance"
 
 interface Step1Props {
@@ -24,6 +26,8 @@ function Step1({ onCreateAlbum }: Step1Props) {
   const [isCreating, setIsCreating] = useState(false); // 앨범 생성 여부 저장
   const setStep = useSetRecoilState(albumStepState); // 앨범 생성 단계 저장
 
+  const image = "/assets/앨범커버생성전.png";
+
   // 앨범 생성 폼 제출 핸들러
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -38,7 +42,6 @@ function Step1({ onCreateAlbum }: Step1Props) {
 
       onCreateAlbum(data.albumId, data.title); // 앨범 생성 후 response로 받은 데이터를 Step2로 전달
       setStep(2);
-      console.log("생성된 앨범:", data);
     } catch (error) {
       console.error("앨범 생성 중 오류 발생:", error);
       alert("앨범 생성 중 오류가 발생했습니다.");
@@ -50,20 +53,22 @@ function Step1({ onCreateAlbum }: Step1Props) {
   return (
     <div>
       <form onSubmit={handleSubmit}>
-        <div>
-          <label htmlFor="title">앨범 제목</label>
-          <input
-            type="text"
-            id="title"
-            value={title}
-            onChange={(e) => setTitle(e.target.value)}
-            placeholder="앨범 제목을 입력하세요"
+        <div className="step-container">
+          <TitleInput 
+            title={title} 
+            onChange={setTitle} 
           />
         </div>
 
-        <button type="submit" disabled={!title.trim() || isCreating}>
-          {isCreating ? "생성 중..." : "생성하기"}
-        </button>
+        <div>
+          <img src={image} alt="앨범커버 생성 전 기본 이미지지" />
+        </div>
+
+        <Button
+          type="Large"
+          text ={isCreating ? "생성 중..." : "생성하기"}
+          disabled={!title.trim() || isCreating}
+        />
       </form>
     </div>
   );
