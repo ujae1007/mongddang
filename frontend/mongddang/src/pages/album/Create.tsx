@@ -47,10 +47,12 @@ function Create() {
 
   const [showTempAlbums, setShowTempAlbums] = useState(false);
   const [tempAlbums, setTempAlbums] = useState<Album[]>([]);
+  const [tempAlbumCount, setTempAlbumCount] = useState<number>(0);
   const [isLoading, setIsLoading] = useState(false);
 
 
   // 로그인되지 않은 사용자가 접근할 경우 로그인 페이지로 이동
+  // 로그인된 사용자의 경우 임시저장 앨범 수 조회
   useEffect(() => { 
     if (!authToken) {
       alert("로그인 후 이용하세요.");
@@ -58,6 +60,8 @@ function Create() {
         replace: true, // 뒤로가기 방지
         state: { from: "/create" }, // 로그인 후 다시 돌아올 경로
       });
+    } else {
+      fetchTempAlbumCount()
     }
   }, [authToken, navigate]);
 
@@ -170,7 +174,7 @@ function Create() {
     }
   };
 
-  // 플레이리스트 작업 취소소
+  // 플레이리스트 작업 취소
   const handleCancelPlaylist = () => {
     setEditingPlaylist(undefined);
     setPlaylistId(null);
@@ -181,10 +185,13 @@ function Create() {
   const fetchTempAlbums = async () => {
     setIsLoading(true);
     try {
+      console.log("Current auth token:", authToken);
+      console.log("Current axios headers:", axiosInstance.defaults.headers);
+
       const response = await axiosInstance.get('/albums/my/uncompleted');
       setTempAlbums(response.data);
     } catch (error) {
-      console.error("임시저장 앨범 조회 중 오류:", error);
+      console.error("임시저장 앨범 조회 오류:", error.response);
     } finally {
       setIsLoading(false);
     }
@@ -196,14 +203,34 @@ function Create() {
     await fetchTempAlbums();
   };
 
+  // 임시저장 앨범 선택
+  const handleSelectTempAlbum = (album: Album) => {
+    setAlbum(album);
+    setStep(2);
+    setShowTempAlbums(false);
+  };
+
+  // 임시저장 앨범 수 조회
+  const fetchTempAlbumCount = async () => {
+    try {
+      console.log("Fetching with token:", authToken);
+      const response = await axiosInstance.get('/albums/my/uncompleted');
+      console.log("Server response:", response);
+      setTempAlbumCount(response.data.length);
+    } catch (error) {
+      console.error("임시저장 앨범 수 조회 중 오류:", error);
+    }
+  };
+
   return (
-    <div>
+    <>
       {step === 1 && !showTempAlbums && (
         <>
-          <Step1 onCreateAlbum={handleCreateAlbum} />
-          <a onClick={handleShowTempAlbums}>
-            임시저장 앨범 보기
+          <a
+            onClick={handleShowTempAlbums}>
+            임시저장({tempAlbumCount})
           </a>
+          <Step1 onCreateAlbum={handleCreateAlbum} />
         </>
       )}
 
@@ -249,7 +276,7 @@ function Create() {
           onCreatePlaylist={handleCreatePlaylist}
         />
       )}
-    </div>
+    </>
   );
 }
 
