@@ -1,0 +1,91 @@
+/* 바깥 레이아웃 컨테이너 */
+.profileEditContainer {
+  max-width: 338px;        /* 원하는 최대 너비 */
+
+  margin: 0 auto;          /* 화면 가운데 정렬 */
+  display: flex;
+  flex-direction: column;
+  align-items: center;     /* 수직 중앙 정렬 */
+  padding-top: 10px;
+}
+
+/* 프로필 이미지 부분 */
+.profileImageContainer {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.profileImage {
+  width: 120px;
+  height: 120px;
+  object-fit: cover;
+  border-radius: 50%;
+  border: 1px solid #ddd;
+}
+
+/* 이미지 업로드/삭제 버튼 그룹 */
+.imageButtonGroup {
+  margin-top: 10px;
+  display: flex;
+  gap: 8px; /* 버튼 간 간격 */
+}
+
+/* 실제 파일 인풋은 숨기고, label 로 트리거 */
+#fileInput {
+  display: none;
+}
+
+.fileInputLabel {
+  cursor: pointer;
+  background-color: #eee;
+  padding: 6px 12px;
+  border-radius: 4px;
+  font-size: 0.9rem;
+}
+
+.deleteButton {
+  background-color: red;
+  color: white;
+  border: none;
+  padding: 6px 12px;
+  border-radius: 4px;
+  font-size: 0.9rem;
+  cursor: pointer;
+}
+
+/* 폼 전체 컨테이너 */
+.formContainer {
+  width: 100%;
+  margin-top: 20px;
+}
+
+/* 각 필드 그룹 */
+.formGroup {
+  margin-bottom: 16px;
+  display: flex;
+  flex-direction: column;
+}
+
+.formGroup label {
+  margin-bottom: 4px;
+  font-weight: bold;
+  font-size: 0.95rem;
+}
+
+/* 버튼 묶음 */
+.buttonContainer {
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  margin-top: 16px;
+}
+
+/* 계정 삭제 텍스트 */
+.deleteUserText {
+  margin-top: 20px;
+  font-size: 0.9rem;
+  color: #d9534f;
+  cursor: pointer;
+  text-align: center;
+}

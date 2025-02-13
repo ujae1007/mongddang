@@ -67,12 +67,12 @@ function Login () {
   };
 
   return (      
-    
-    <>
+  
+
+    <div className="Login">
       <img className="HeadPhoneImage" src="../../public/assets/헤드셋.png" alt="" />
       <img className= "Mp3Image" src="../../public/assets/mp3.png" alt="" />
     
-    <div className="Login">
 
         <div className="TitleWrap">Log In</div>
 
@@ -126,12 +126,9 @@ function Login () {
         </div>
 
 
+      <img className="MusicNote" src="../public/assets/음표.png" alt="" />
     </div>
-    <img className="MusicNote" src="../public/assets/음표.png" alt="" />
 
-
-
-    </>
   );
 }
 
