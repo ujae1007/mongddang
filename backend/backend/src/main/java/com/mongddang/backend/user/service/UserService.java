@@ -110,15 +110,13 @@ public class UserService {
 			currentUser.setIntroduce(updateUserDTO.getIntroduce());
 		}
 		
-		// 프로필 이미지 업로드 처리 
+		// 프로필 이미지 업로드 처리 (선택적)
 		MultipartFile profileImage = updateUserDTO.getProfileImage();
 		if(profileImage != null && !profileImage.isEmpty()) {
 			String imageUrl = s3StorageService.uploadFile(profileImage, "profile");
-			System.out.println(imageUrl);
 			currentUser.setProfileImageURL(imageUrl);
-		} else{
-			currentUser.setProfileImageURL(defaultProfileImageUrl);
-		}
+		} // 업로드하지 않을 경우 기존 이미지 유지
+		currentUser.setProfileImageURL(defaultProfileImageUrl);
 		// 사용자 정보 업데이트
 		int result = userRepository.updateUser(currentUser);
 		return result == 1;

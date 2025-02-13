@@ -4,6 +4,7 @@ public class FollowListDTO {
 	private int userId;
 	private String nickname;
 	private String profileImageURL;
+	private String introduce;
 	public int getUserId() {
 		return userId;
 	}
@@ -22,6 +23,14 @@ public class FollowListDTO {
 	public void setProfileImageURL(String profileImageURL) {
 		this.profileImageURL = profileImageURL;
 	}
+	public String getIntroduce() {
+		return introduce;
+	}
+	public void setIntroduce(String introduce) {
+		this.introduce = introduce;
+	}
+	
+	
 	
 	
 	
