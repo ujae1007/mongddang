@@ -1,0 +1,11 @@
+.StepOnePage {
+  display: flex;
+  flex-wrap: wrap;
+  flex-direction: column;
+  align-items: center;
+}
+
+.step-container{
+  padding: 0%;
+  margin-bottom: 20px;  
+}

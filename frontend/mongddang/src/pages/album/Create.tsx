@@ -13,7 +13,7 @@ import Step4 from "../../components/album/Step4";
 
 import TempAlbumList from "../../components/album/TempAlbumList";
 import axiosInstance from "../../api/axiosInstance";
-
+import './Create.css'
 interface CreatePlaylistResponse {
   playlistId: number;
   album: {
@@ -226,10 +226,13 @@ function Create() {
     <>
       {step === 1 && !showTempAlbums && (
         <>
-          <a
-            onClick={handleShowTempAlbums}>
-            임시저장({tempAlbumCount})
-          </a>
+          <div className="TempCount">
+            <a
+              onClick={handleShowTempAlbums}
+              style={{fontSize:"12px",color:"#9999A1"}}>
+              임시저장({tempAlbumCount})
+            </a>
+          </div>
           <Step1 onCreateAlbum={handleCreateAlbum} />
         </>
       )}

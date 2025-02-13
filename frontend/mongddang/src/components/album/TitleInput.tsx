@@ -9,6 +9,7 @@ const TitleInput = ({ title, onChange }: TitleInputProps) => {
   return (
     <div className='title-input'>
       <input
+        className={"input"}
         type="text"
         id="title"
         value={title}
