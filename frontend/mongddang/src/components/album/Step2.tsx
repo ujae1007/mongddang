@@ -6,7 +6,7 @@ import { useNavigate } from "react-router-dom";
 
 import TitleInput from "./TitleInput";
 import Button from "../common/Button";
-
+import './Step2.css'
 interface Step2Props {
   albumId: number;
   title: string;
@@ -124,6 +124,9 @@ function Step2({
   return (
     <>
       <div className="step-container">
+        <div style={{fontSize:18, width:100, display:"flex", alignItems:"center", paddingRight:20}}>
+          <p>앨범 제목</p>
+        </div>
         <TitleInput
             title={title}
             onChange={handleTitleChange}
@@ -131,22 +134,26 @@ function Step2({
       </div>
 
       <div>
-
-        <Button
-          type="Large"
-          text="플레이리스트 만들기"
-          disabled={isCreating || isSaving}
-          onClick={handleCreatePlaylist} 
-        />
-        <div>
+        <div className="PlayListButton">
           <Button
             type="Large"
+            text="플레이리스트 만들기"
+            using="Album"
+            disabled={isCreating || isSaving}
+            onClick={handleCreatePlaylist} 
+            />
+        </div>
+        <div className="BottomButton">
+          <Button
+            type="Middium"
+            using="Album"
             text="임시저장"
             disabled={isCreating || isSaving}
             onClick={handleTempSave}
           />
           <Button
-            type="Large"
+            type="Middium"
+            using="Album2"
             text="완료"
             disabled={isCreating || isSaving}
             onClick={handleCompleteAlbum}
