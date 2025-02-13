@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { GetfollowInfo } from "../../types";
 import { getFollowingList, getFollowerList } from "../../api/follow";
+import { useNavigate } from "react-router-dom";
 
 interface FollowListProps {
   userId: string ;
@@ -11,6 +12,7 @@ const FollowList = ({userId, type}: FollowListProps) => {
 
   const [lists, setLists] = useState<GetfollowInfo[]>([])
   const [isLoading, setIsLoading] = useState(true)
+  const nav = useNavigate()
 
   useEffect(() => {
     const fetchUsers = async () => {
@@ -46,7 +48,7 @@ const FollowList = ({userId, type}: FollowListProps) => {
     <div>
       {lists.length > 0 ? (
         lists.map((user) => (
-          <div key={user.userId}>
+          <div key={user.userId} onClick={() => nav(`/profile/${String(user.userId)}`)}>
             <img src={user.profileImageURL} alt="" width="100" />
             <div>{user.nickname}</div>
             <div>{user.introduce}</div>
