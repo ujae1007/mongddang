@@ -1,0 +1,18 @@
+.step-container {
+  width: 85%;
+  display: inline-flex;
+}
+
+
+.PlayListButton {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 100px;
+}
+
+
+.BottomButton {
+  display: flex;
+  justify-content: space-between;
+  
+}
