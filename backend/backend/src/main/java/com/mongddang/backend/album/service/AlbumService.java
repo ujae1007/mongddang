@@ -33,7 +33,9 @@ public class AlbumService {
     private final MusicRepository musicRepository;
     private final FastAPIService fastAPIService;
 
-    public AlbumService(AlbumRepository albumRepository, PlaylistRepository playlistRepository, PhotoRepository photoRepository, UserService userService, MusicRepository musicRepository, FastAPIService fastAPIService) {
+    public AlbumService(AlbumRepository albumRepository, PlaylistRepository playlistRepository,
+            PhotoRepository photoRepository, UserService userService, MusicRepository musicRepository,
+            FastAPIService fastAPIService) {
         this.albumRepository = albumRepository;
         this.playlistRepository = playlistRepository;
         this.photoRepository = photoRepository;
@@ -43,25 +45,23 @@ public class AlbumService {
     }
 
     @Transactional
-    public AlbumResponseDto createAlbum(AlbumRequestDto albumRequestDto, int userId) {  
+    public AlbumResponseDto createAlbum(AlbumRequestDto albumRequestDto, int userId) {
         Album album = new Album(
-            userId,
-            albumRequestDto.getTitle(),
-            albumRequestDto.getAlbumImageUrl(),
-            albumRequestDto.isStatus()
-        );
+                userId,
+                albumRequestDto.getTitle(),
+                albumRequestDto.getAlbumImageUrl(),
+                albumRequestDto.isStatus());
 
         Album savedAlbum = albumRepository.save(album);
 
         return new AlbumResponseDto(
-            savedAlbum.getAlbumId(),
-            savedAlbum.getUserId(),
-            savedAlbum.getTitle(),
-            savedAlbum.getAlbumImageUrl(),
-            savedAlbum.isStatus(),
-            savedAlbum.getCreatedAt(),
-            savedAlbum.getUpdatedAt()
-        );
+                savedAlbum.getAlbumId(),
+                savedAlbum.getUserId(),
+                savedAlbum.getTitle(),
+                savedAlbum.getAlbumImageUrl(),
+                savedAlbum.isStatus(),
+                savedAlbum.getCreatedAt(),
+                savedAlbum.getUpdatedAt());
     }
 
     @Transactional
@@ -89,27 +89,24 @@ public class AlbumService {
                 .map(Music::getGenre)
                 .distinct()
                 .collect(Collectors.toList());
-        
         // 1️⃣ FastAPI 호출을 위한 노래 장르 정보 가져오기
         List<Playlist> playlists = playlistRepository.findByAlbum_AlbumId(albumId);
-        
-        List<String> imageUrls = playlists.stream()
-                .map(photoRepository::findByPlaylist)  // `findByPlaylist()`로 리스트 가져오기
-                .filter(Objects::nonNull)  // `null` 값 제거
-                .flatMap(List::stream)  // 리스트를 스트림으로 변환
-                .map(Photo::getPhotoUrl)  // `Photo` 객체에서 `imageUrl` 추출
-                .filter(url -> url != null && !url.isEmpty())  // `null`과 빈 값 제거
-                .collect(Collectors.toList());
 
+        List<String> imageUrls = playlists.stream()
+                .map(photoRepository::findByPlaylist) // `findByPlaylist()`로 리스트 가져오기
+                .filter(Objects::nonNull) // `null` 값 제거
+                .flatMap(List::stream) // 리스트를 스트림으로 변환
+                .map(Photo::getPhotoUrl) // `Photo` 객체에서 `imageUrl` 추출
+                .filter(url -> url != null && !url.isEmpty()) // `null`과 빈 값 제거
+                .collect(Collectors.toList());
 
         System.out.println("보내지는 플레이리스트 urls: " + imageUrls);
         // 2️⃣ FastAPI 호출하여 앨범 표지 이미지 생성
 
         String imageUrl = fastAPIService.callFastAPI(genres, imageUrls);
-        
-     // FastAPI 응답을 확인하는 로그 추가
-        System.out.println("FastAPI 응답 데이터: " + imageUrl);
 
+        // FastAPI 응답을 확인하는 로그 추가
+        System.out.println("FastAPI 응답 데이터: " + imageUrl);
 
         // 3️⃣ 생성된 이미지 URL을 album_image_URL 컬럼에 저장
         album.setAlbumImageUrl(imageUrl);
@@ -118,46 +115,47 @@ public class AlbumService {
         Album updatedAlbum = albumRepository.save(album);
 
         return new AlbumResponseDto(
-            updatedAlbum.getAlbumId(),
-            updatedAlbum.getUserId(),
-            updatedAlbum.getTitle(),
-            updatedAlbum.getAlbumImageUrl(), // 수정된 album_image_URL 포함
-            updatedAlbum.isStatus(),
-            updatedAlbum.getCreatedAt(),
-            updatedAlbum.getUpdatedAt()
-        );
+                updatedAlbum.getAlbumId(),
+                updatedAlbum.getUserId(),
+                updatedAlbum.getTitle(),
+                updatedAlbum.getAlbumImageUrl(), // 수정된 album_image_URL 포함
+                updatedAlbum.isStatus(),
+                updatedAlbum.getCreatedAt(),
+                updatedAlbum.getUpdatedAt());
     }
 
-//    @Transactional
-//    public AlbumResponseDto updateAlbumComplete(int albumId, AlbumUpdateDto albumUpdateDto, int currentUserId) {
-//        Album album = albumRepository.findById(albumId)
-//                .orElseThrow(() -> new IllegalArgumentException("해당 앨범을 찾을 수 없습니다: " + albumId));
-//
-//        // 소유자가 아닌 경우 예외 발생
-//        if (album.getUserId() != currentUserId) {
-//            throw new AccessDeniedException("권한이 없습니다.");
-//        }
-//
-//        // 제목 수정 (존재하는 경우)
-//        if (albumUpdateDto.getTitle() != null) {
-//            album.setTitle(albumUpdateDto.getTitle());
-//        }
-//        // status는 무조건 true로 설정
-//        album.setStatus(true);
-//
-//        Album updatedAlbum = albumRepository.save(album);
-//
-//        return new AlbumResponseDto(
-//            updatedAlbum.getAlbumId(),
-//            updatedAlbum.getUserId(),
-//            updatedAlbum.getTitle(),
-//            updatedAlbum.getAlbumImageUrl(),
-//            updatedAlbum.isStatus(),
-//            updatedAlbum.getCreatedAt(),
-//            updatedAlbum.getUpdatedAt()
-//        );
-//    }
-    
+    // @Transactional
+    // public AlbumResponseDto updateAlbumComplete(int albumId, AlbumUpdateDto
+    // albumUpdateDto, int currentUserId) {
+    // Album album = albumRepository.findById(albumId)
+    // .orElseThrow(() -> new IllegalArgumentException("해당 앨범을 찾을 수 없습니다: " +
+    // albumId));
+    //
+    // // 소유자가 아닌 경우 예외 발생
+    // if (album.getUserId() != currentUserId) {
+    // throw new AccessDeniedException("권한이 없습니다.");
+    // }
+    //
+    // // 제목 수정 (존재하는 경우)
+    // if (albumUpdateDto.getTitle() != null) {
+    // album.setTitle(albumUpdateDto.getTitle());
+    // }
+    // // status는 무조건 true로 설정
+    // album.setStatus(true);
+    //
+    // Album updatedAlbum = albumRepository.save(album);
+    //
+    // return new AlbumResponseDto(
+    // updatedAlbum.getAlbumId(),
+    // updatedAlbum.getUserId(),
+    // updatedAlbum.getTitle(),
+    // updatedAlbum.getAlbumImageUrl(),
+    // updatedAlbum.isStatus(),
+    // updatedAlbum.getCreatedAt(),
+    // updatedAlbum.getUpdatedAt()
+    // );
+    // }
+
     // 앨범 제목 수정 - 사용자 소유권 체크 추가
     @Transactional
     public AlbumResponseDto updateAlbumTitle(int albumId, AlbumUpdateDto albumUpdateDto, int currentUserId) {
@@ -177,22 +175,21 @@ public class AlbumService {
         Album updatedAlbum = albumRepository.save(album);
 
         return new AlbumResponseDto(
-            updatedAlbum.getAlbumId(),
-            updatedAlbum.getUserId(),
-            updatedAlbum.getTitle(),
-            updatedAlbum.getAlbumImageUrl(),
-            updatedAlbum.isStatus(),
-            updatedAlbum.getCreatedAt(),
-            updatedAlbum.getUpdatedAt()
-        );
+                updatedAlbum.getAlbumId(),
+                updatedAlbum.getUserId(),
+                updatedAlbum.getTitle(),
+                updatedAlbum.getAlbumImageUrl(),
+                updatedAlbum.isStatus(),
+                updatedAlbum.getCreatedAt(),
+                updatedAlbum.getUpdatedAt());
     }
-    
+
     // 앨범 삭제 - 사용자 소유권 체크 추가
     @Transactional
     public void deleteAlbum(int albumId, int currentUserId) {
         Album album = albumRepository.findById(albumId)
                 .orElseThrow(() -> new IllegalArgumentException("존재하지 않는 Album입니다."));
-        
+
         if (album.getUserId() != currentUserId) {
             throw new AccessDeniedException("권한이 없습니다.");
         }
@@ -212,7 +209,7 @@ public class AlbumService {
     @Transactional(readOnly = true)
     public List<AlbumResponseDto> getAllPublicAlbums() {
         List<Album> albums = albumRepository.findByStatus(true);
-//        List<Album> albums = albumRepository.findByStatus(false);
+        // List<Album> albums = albumRepository.findByStatus(false);
         return albums.stream().map(this::toSimpleAlbumResponseDto).collect(Collectors.toList());
     }
 
@@ -220,7 +217,7 @@ public class AlbumService {
     @Transactional(readOnly = true)
     public List<AlbumResponseDto> getMyAlbums(Principal principal) {
         String email = principal.getName();
-        int userId = userService.getUserByEmail(email).getUserId();  
+        int userId = userService.getUserByEmail(email).getUserId();
         List<Album> albums = albumRepository.findByUserId(userId);
         return albums.stream().map(this::toSimpleAlbumResponseDto).collect(Collectors.toList());
     }
@@ -231,12 +228,12 @@ public class AlbumService {
         List<Album> albums = albumRepository.findByUserIdAndStatus(userId, true);
         return albums.stream().map(this::toSimpleAlbumResponseDto).collect(Collectors.toList());
     }
-    
+
     // ✅ 특정 사용자의 공개되지 않은 앨범 조회 (Playlist 정보 제외)
     @Transactional(readOnly = true)
     public List<AlbumResponseDto> getMyUncompletedAlbums(Principal principal) {
         String email = principal.getName();
-        int userId = userService.getUserByEmail(email).getUserId();  
+        int userId = userService.getUserByEmail(email).getUserId();
 
         // ✅ 현재 로그인한 사용자의 `status = false`인 앨범만 조회
         List<Album> albums = albumRepository.findByUserIdAndStatusFalse(userId);
@@ -257,7 +254,8 @@ public class AlbumService {
                     // 음악 정보 조회
                     if (playlist.getMusicId() != null) {
                         Music music = musicRepository.findById(playlist.getMusicId())
-                                .orElseThrow(() -> new IllegalArgumentException("해당 음악을 찾을 수 없습니다: " + playlist.getMusicId()));
+                                .orElseThrow(() -> new IllegalArgumentException(
+                                        "해당 음악을 찾을 수 없습니다: " + playlist.getMusicId()));
                         MusicDetailDto musicDetailDto = new MusicDetailDto();
                         musicDetailDto.setMusicId(music.getMusicId());
                         musicDetailDto.setTrackName(music.getTrackName());
@@ -278,10 +276,8 @@ public class AlbumService {
                 album.isStatus(),
                 album.getCreatedAt(),
                 album.getUpdatedAt(),
-                playlists
-        );
+                playlists);
     }
-
 
     // ✅ Playlist 정보 제외한 AlbumResponseDto 생성
     private AlbumResponseDto toSimpleAlbumResponseDto(Album album) {
@@ -292,9 +288,6 @@ public class AlbumService {
                 album.getAlbumImageUrl(),
                 album.isStatus(),
                 album.getCreatedAt(),
-                album.getUpdatedAt()
-        );
+                album.getUpdatedAt());
     }
 }
-
-

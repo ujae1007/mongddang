@@ -17,5 +17,4 @@ public interface PhotoRepository extends JpaRepository<Photo, Integer> {
     @Modifying
     @Query("delete from Photo p where p.playlist.playlistId = :playlistId")
     void deleteByPlaylist_PlaylistId(@Param("playlistId") int playlistId);
-    
 }
