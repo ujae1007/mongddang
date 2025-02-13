@@ -191,7 +191,7 @@ function Create() {
       const response = await axiosInstance.get('/albums/my/uncompleted');
       setTempAlbums(response.data);
     } catch (error) {
-      console.error("임시저장 앨범 조회 오류:", error.response);
+      console.error("임시저장 앨범 조회 오류:", error);
     } finally {
       setIsLoading(false);
     }
