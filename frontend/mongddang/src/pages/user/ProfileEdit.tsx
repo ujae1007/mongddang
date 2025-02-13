@@ -5,6 +5,7 @@ import InputBox from "../../components/common/input"
 import FavoriteInput from "../../components/common/favoriteInput"
 import Button from "../../components/common/Button"
 import useAuth from "../../hooks/useAuth"
+import './ProfileEdit.css'
 
 function ProfileEdit () {
 
@@ -188,70 +189,90 @@ function ProfileEdit () {
     }
 
   return (
-    <div>
-      <div className="imageWrap">
-        <img src={profileImage || preProfileImg} alt="profile" className="profileImage" width="100"/>
-        <input type="file" accept="image/*" onChange={handleImageChange} />
+    <div className="profileEditContainer">
+    <div className="profileImageContainer">
+      <img
+        src={profileImage || preProfileImg}
+        alt="profile"
+        className="profileImage"
+      />
+      <div className="imageButtonGroup">
+        <label htmlFor="fileInput" className="fileInputLabel">이미지 수정</label>
+        <input
+          id="fileInput"
+          type="file"
+          accept="image/*"
+          onChange={handleImageChange}
+        />
+        <button onClick={handleImageDelete} className="deleteButton">삭제</button>
       </div>
-      <button onClick={handleImageDelete}>삭제</button>
+    </div>
 
-      <div className="inputWrap">
-
-        <div className="nickname">
-          <h6 className="subtitle" >닉네임</h6>
-            <InputBox 
-              type="default"   
-              mode="edit"
-              onChange={handleNickNameChange}     
-              value={changedNickName}
-          />
-        </div>
-
-
-        <div className="introduce">
-          <h6 className="subtitle" >자기소개</h6>
-            <InputBox 
-              type="default"  
-              mode="edit" 
-              onChange={handleIntroduceChange}     
-              value={changedIntroduce}
-          />
-        </div>
-
-        <div className="favorite">
-          <FavoriteInput
-            type="place"
-            placeholder={"선호하는 지역을 선택해주세요."}
-            onChange={handlePlaceChange}
-            defaultValues={selectedPlaces}
-            mode="edit"
-          />
-          <FavoriteInput
-            type="genre"
-            placeholder={"선호하는 음악 장르를 선택해주세요."}
-            onChange={handleGenreChange}
-            defaultValues={selectedGenres}
-            mode="edit"
-          />
-        </div>
-
+    <div className="formContainer">
+      <div className="formGroup">
+        <label htmlFor="nickname">닉네임</label>
+        <InputBox
+          type="default"
+          mode="edit"
+          onChange={handleNickNameChange}
+          value={changedNickName}
+        
+        />
       </div>
 
+      <div className="formGroup">
+        <label htmlFor="introduce">자기소개</label>
+        <InputBox
+          type="default"
+          mode="edit"
+          onChange={handleIntroduceChange}
+          value={changedIntroduce}
+     
+        />
+      </div>
+
+      <div className="formGroup">
+        <label>선호하는 지역</label>
+        <FavoriteInput
+          type="place"
+          placeholder="선호 지역을 3개까지 선택해주세요."
+          onChange={handlePlaceChange}
+          defaultValues={selectedPlaces}
+          mode="edit"
+        />
+      </div>
+
+      <div className="formGroup">
+        <label>선호하는 음악 장르</label>
+        <FavoriteInput
+          type="genre"
+          placeholder="선호 장르를 3개까지 선택해주세요."
+          onChange={handleGenreChange}
+          defaultValues={selectedGenres}
+          mode="edit"
+        />
+      </div>
+    </div>
+
+    <div className="buttonContainer">
       <Button
         text="취소하기"
         type="Middium"
         onClick={goToBack}
       />
-
       <Button
         text="수정하기"
         type="Middium"
         onClick={handleSubmit}
         disabled={isButtonDisabled}
       />
+    </div>
 
-      <p onClick={deleteUser}>계정을 삭제하시겠습니까?</p>
-    </div> 
+    <p className="deleteUserText" onClick={deleteUser}>
+      계정을 삭제하시겠습니까?
+    </p>
+    
+  </div>
   )
 }
 
