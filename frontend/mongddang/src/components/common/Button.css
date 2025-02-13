@@ -75,3 +75,38 @@ border: 1px solid #9747FF;
 background: #9747FF;
 color: #F4F4F6;
 }
+
+/* 기본 버튼튼 */
+.Button_Middium {
+  border-radius: 5px;
+  background-color: #fff;
+  border: 1px solid #9747ff;
+  box-sizing: border-box;
+  width: 150px;
+  height: 40px;
+  font-size: 12px;
+  font-weight: '400';
+  word-wrap: 'break-word';
+  color: '#66656C';
+}
+
+/* 비활성화 상태*/
+.Button_Middium:disabled{
+  background:#F4F4F6;
+  border: 1px #E6E6E8 solid;
+  color:  #9999A1;
+}
+
+/* 활성화 상태*/
+.Button_Middium:enabled {
+  border: 1px solid #9747FF;
+  background: #fff;
+  color:#9747FF;
+}
+
+/* 활성화 && 클릭 */
+.Button_Middium:enabled:active {
+  border: 1px solid #9747FF;
+  background: #9747FF;
+  color: #F4F4F6;
+}
