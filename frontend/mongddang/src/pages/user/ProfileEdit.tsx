@@ -119,7 +119,7 @@ function ProfileEdit () {
     console.log("프로필 수정 시도")
     console.log(
       "업데이트 된 데이터:",
-      profileImage,
+      // profileImage,  
       changedNickName,
       changedIntroduce,
       selectedPlaces,
