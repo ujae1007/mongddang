@@ -2,6 +2,7 @@ import { useState } from "react";
 import { useSetRecoilState } from "recoil";
 import { albumStepState } from "../../recoil/albumState";
 import Button from "../common/Button";
+import TitleInput from "./TitleInput";
 import axiosInstance from "../../api/axiosInstance"
 
 interface Step1Props {
@@ -52,14 +53,10 @@ function Step1({ onCreateAlbum }: Step1Props) {
   return (
     <div>
       <form onSubmit={handleSubmit}>
-        <div>
-          <label htmlFor="title">앨범 제목</label>
-          <input
-            type="text"
-            id="title"
-            value={title}
-            onChange={(e) => setTitle(e.target.value)}
-            placeholder="앨범 제목을 입력하세요"
+        <div className="step-container">
+          <TitleInput 
+            title={title} 
+            onChange={setTitle} 
           />
         </div>
 

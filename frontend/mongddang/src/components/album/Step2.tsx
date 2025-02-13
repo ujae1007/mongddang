@@ -4,6 +4,9 @@ import { albumStepState } from "../../recoil/albumState";
 import axiosInstance from "../../api/axiosInstance";
 import { useNavigate } from "react-router-dom";
 
+import TitleInput from "./TitleInput";
+import Button from "../common/Button";
+
 interface Step2Props {
   albumId: number;
   title: string;
@@ -48,9 +51,7 @@ function Step2({
   const navigate = useNavigate();
 
   // 앨범 제목 변경
-  const handleTitleChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
-    const newTitle = e.target.value;
-    
+  const handleTitleChange = async (newTitle: string) => {
     try {
       setIsSaving(true);
       await axiosInstance.put(`/albums/title/${albumId}`, {
@@ -121,44 +122,39 @@ function Step2({
   };
 
   return (
-    <div>
-      <div>
-        <label htmlFor="title">앨범 제목</label>
-        <input
-          type="text"
-          id="title"
-          value={title}
-          onChange={handleTitleChange}
-          disabled={isSaving}
+    <>
+      <div className="step-container">
+        <TitleInput
+            title={title}
+            onChange={handleTitleChange}
         />
       </div>
 
       <div>
 
-        <button 
+        <Button
+          type="Large"
+          text="플레이리스트 만들기"
+          disabled={isCreating || isSaving}
           onClick={handleCreatePlaylist} 
-          disabled={isCreating || isSaving}>
-          {isCreating ? "플레이리스트 생성 중..." : "플레이리스트 만들기"}
-        </button>
-        
+        />
         <div>
-        <button 
-          onClick={handleTempSave}
-          disabled={isCreating || isSaving}
-        >
-          임시저장
-        </button>
-        <button 
-          onClick={handleCompleteAlbum} 
-          disabled={isCreating || isSaving}
-        >
-          완료
-        </button>
-        
+          <Button
+            type="Large"
+            text="임시저장"
+            disabled={isCreating || isSaving}
+            onClick={handleTempSave}
+          />
+          <Button
+            type="Large"
+            text="완료"
+            disabled={isCreating || isSaving}
+            onClick={handleCompleteAlbum}
+          />
         </div>
       </div>
 
-    </div>
+    </>
   );
 }
 
