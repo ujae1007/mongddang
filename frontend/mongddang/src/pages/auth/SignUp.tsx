@@ -7,7 +7,7 @@ import axiosInstance from "../../api/axiosInstance"
 import './SignUp.css'
 function SignUp () {
 
-  // const defaultImage = "https://nimoot.s3.us-east-1.amazonaws.com/default-profile.png"
+  // const defaultImage = "REMOVED"
   const nav = useNavigate()
   
   //상태변화 감지
