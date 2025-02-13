@@ -29,3 +29,12 @@ export interface Album {
   createdAt?: string;
   updatedAt?: string;
 }
+
+
+// 팔로워, 팔로잉 정보
+export interface GetfollowInfo {
+  userId: number;
+  nickname: string;
+  profileImageURL:string 
+  introduce: string;
+}
