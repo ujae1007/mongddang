@@ -14,6 +14,8 @@ html, body {
   height: 100%;
   background-color: rgb(249, 249, 249);
   color: #333;
+  -webkit-overflow-scrolling: touch; /* iOS에서 부드러운 스크롤 */
+  overscroll-behavior: none; /* 스크롤 끝에서 바운스 효과 제거 */
 }  
 
 #root {
@@ -23,9 +25,11 @@ html, body {
   flex-direction: column;
   /* 가로 중앙 정렬 */
   align-items: center; 
-  /* 세로 중앙 정렬 */
-  justify-content: center;
-  overflow: hidden;
+  /* 상단부터 컨텐츠가 보이도록 */
+  justify-content: flex-start;
+  /* 컨텐츠가 요소의 크기를 넘어갈 때 숨기도록 만듦 */
+  /* overflow: hidden;  */
+  overflow: auto;
 }
 
 /* 모바일 화면 중심 */
@@ -34,6 +38,6 @@ html, body {
     max-width: 420px; 
     margin: 0 auto;
     background-color:white;
-    overflow: hidden;
+    overflow: auto;
   }
 }
