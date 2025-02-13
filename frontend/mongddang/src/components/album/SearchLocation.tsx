@@ -56,7 +56,7 @@ function SearchLocation({
   
   const searchPlaces = async () => {
     if (!keyword.trim()) {
-      alert("키워드를 입력해주세요!");
+      alert("장소명을 입력해주세요");
       return;
     }
 
@@ -94,8 +94,8 @@ function SearchLocation({
     onSelectPlace({
       placeName: place.place_name,
       address: place.address_name,
-      latitude: parseFloat(place.y),
-      longitude: parseFloat(place.x),
+      latitude: place.y,
+      longitude: place.x,
     });
     setPlaces([]); // 선택 후 검색 결과 초기화
     setShowResults(false); // 선택 후 팝업 닫기 

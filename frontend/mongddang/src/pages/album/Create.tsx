@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { useRecoilState, useRecoilValue } from "recoil";
-import { albumListState, currentAlbumState, albumStepState } from "../../recoil/albumState";
+import { currentAlbumState, albumStepState } from "../../recoil/albumState";
 import { Album, Playlist } from "../../types";
 
 import { authTokenAtom } from "../../recoil/userAtom";
@@ -10,7 +10,9 @@ import Step1 from "../../components/album/Step1";
 import Step2 from "../../components/album/Step2";
 import Step3 from "../../components/album/Step3";
 import Step4 from "../../components/album/Step4";
+
 import TempAlbumList from "../../components/album/TempAlbumList";
+import axiosInstance from "../../api/axiosInstance";
 
 interface CreatePlaylistResponse {
   playlistId: number;
@@ -40,52 +42,31 @@ function Create() {
 
   const [step, setStep] = useRecoilState(albumStepState);
   const [album, setAlbum] = useRecoilState(currentAlbumState);
-  const [createdAlbums, setCreatedAlbums] = useRecoilState(albumListState);
-  const [showTempAlbums, setShowTempAlbums] = useState(false);
   const [editingPlaylist, setEditingPlaylist] = useState<Playlist | undefined>();
   const [playlistId, setPlaylistId] = useState<number | null>(null);
 
-  const tempAlbums = createdAlbums.filter((album) => !album.status);
+  const [showTempAlbums, setShowTempAlbums] = useState(false);
+  const [tempAlbums, setTempAlbums] = useState<Album[]>([]);
+  const [tempAlbumCount, setTempAlbumCount] = useState<number>(0);
+  const [isLoading, setIsLoading] = useState(false);
+
 
   // 로그인되지 않은 사용자가 접근할 경우 로그인 페이지로 이동
+  // 로그인된 사용자의 경우 임시저장 앨범 수 조회
   useEffect(() => { 
     if (!authToken) {
       alert("로그인 후 이용하세요.");
       navigate("/login", {
         replace: true, // 뒤로가기 방지
-        state: { from: "/create" }, // 로그인 후 다시 돌아올 경로로
+        state: { from: "/create" }, // 로그인 후 다시 돌아올 경로
       });
+    } else {
+      fetchTempAlbumCount()
     }
   }, [authToken, navigate]);
 
-  const resetToStep1 = (isSaveTemp: boolean = false) => {
-    if (album) {
-      const savedAlbum = {
-        ...album,
-        status: !isSaveTemp,
-      };
 
-      setCreatedAlbums((prev) => {
-        const existingAlbumIndex = prev.findIndex(
-          (a) => a.title === savedAlbum.title
-        );
-
-        if (existingAlbumIndex !== -1) {
-          const newAlbums = [...prev];
-          newAlbums[existingAlbumIndex] = savedAlbum;
-          return newAlbums;
-        } else {
-          return [...prev, savedAlbum];
-        }
-      });
-    }
-
-    setAlbum(null);
-    setEditingPlaylist(undefined);
-    setStep(1);
-    setShowTempAlbums(false);
-  };
-
+  // 앨범 생성
   const handleCreateAlbum = (albumId: number, title: string) => {
     setAlbum({
       id: albumId,
@@ -97,12 +78,7 @@ function Create() {
     setStep(2);
   };
 
-  const handleSelectTempAlbum = (selectedAlbum: Album) => {
-    setAlbum(selectedAlbum);
-    setShowTempAlbums(false);
-    setStep(4);
-  };
-
+  // 앨범 제목 업데이트
   const handleUpdateTitle = (newTitle: string) => {
     if (album) {
       setAlbum({
@@ -112,53 +88,45 @@ function Create() {
     }
   };
 
-  const handleCompleteAlbum = () => {
-    if (album) {
-      // 현재 앨범의 상태를 완료로 변경
-      const completedAlbum = {
-        ...album,
-        status: true,
-        updatedAt: new Date().toISOString(),
-      };
-
-      // createdAlbums 배열 업데이트
-      setCreatedAlbums((prev) => {
-        const existingAlbumIndex = prev.findIndex(
-          (a) => a.id === completedAlbum.id
-        );
-
-        if (existingAlbumIndex !== -1) {
-          // 기존 앨범 업데이트
-          const newAlbums = [...prev];
-          newAlbums[existingAlbumIndex] = completedAlbum;
-          return newAlbums;
-        } else {
-          // 새 앨범 추가
-          const newAlbums = [...prev, completedAlbum];
-          return newAlbums;
-        }
+  // 앨범 생성 완료
+  const handleCompleteAlbum = async (albumId: number) => {
+    try {
+      // 앨범 완료 처리
+      await axiosInstance.put(`/albums/complete/${albumId}`, {
+        title: album?.title,
       });
+      
+      // 앨범 상세 정보 조회
+      const response = await axiosInstance.get(`/albums/detail/${albumId}`);
+      const albumDetail = response.data;
 
-      // step1으로 상태 변경 및 앨범 정보 초기화
+      // state 초기화
       setAlbum(null);
-      setStep(1);
+      setStep(1)
 
-      console.log("앨범 생성 완료:", completedAlbum);
-
-      // 해당 앨범 상세 페이지로 이동
-      navigate(`/albums/${completedAlbum.id}`);
+      // 상세 페이지로 이동
+      navigate(`/albums/${albumId}`, { 
+        state: { albumDetail } 
+      });
+    } catch (error) {
+      console.error("앨범 완료 처리 중 오류:", error);
     }
   };
 
+  // 임시저장
   const handleTempSave = () => {
-    resetToStep1(true);
+    setAlbum(null);
+    setEditingPlaylist(undefined);
+    setStep(1);
   };
 
+  // 플레이리스트 생성 
   const handleCreatePlaylist = (playlistData: CreatePlaylistResponse) => {
     setPlaylistId(playlistData.playlistId);
     setStep(3);
   };
 
+  // 플레이리스트 추가
   const handleAddPlaylist = (playlistData: Playlist) => {
     if (album) {
       if (editingPlaylist) {
@@ -183,11 +151,13 @@ function Create() {
     }
   };
 
+  // 플레이리스트 편집 
   const handleEditPlaylist = (playlist: Playlist) => {
     setEditingPlaylist(playlist);
     setStep(3);
   };
 
+  // 플레이리스트 삭제 
   const handleDeletePlaylist = (playlistId: number) => {
     if (album) {
       const updatedPlaylists = album.playlists
@@ -204,23 +174,63 @@ function Create() {
     }
   };
 
+  // 플레이리스트 작업 취소
   const handleCancelPlaylist = () => {
     setEditingPlaylist(undefined);
     setPlaylistId(null);
     setStep(2);
   };
 
-  return (
-    <div>
+  // 임시저장 앨범 목록 조회
+  const fetchTempAlbums = async () => {
+    setIsLoading(true);
+    try {
+      console.log("Current auth token:", authToken);
+      console.log("Current axios headers:", axiosInstance.defaults.headers);
 
+      const response = await axiosInstance.get('/albums/my/uncompleted');
+      setTempAlbums(response.data);
+    } catch (error) {
+      console.error("임시저장 앨범 조회 오류:", error.response);
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  // 임시저장 목록 버튼 클릭 시 데이터 조회
+  const handleShowTempAlbums = async () => {
+    setShowTempAlbums(true);
+    await fetchTempAlbums();
+  };
+
+  // 임시저장 앨범 선택
+  const handleSelectTempAlbum = (album: Album) => {
+    setAlbum(album);
+    setStep(2);
+    setShowTempAlbums(false);
+  };
+
+  // 임시저장 앨범 수 조회
+  const fetchTempAlbumCount = async () => {
+    try {
+      console.log("Fetching with token:", authToken);
+      const response = await axiosInstance.get('/albums/my/uncompleted');
+      console.log("Server response:", response);
+      setTempAlbumCount(response.data.length);
+    } catch (error) {
+      console.error("임시저장 앨범 수 조회 중 오류:", error);
+    }
+  };
+
+  return (
+    <>
       {step === 1 && !showTempAlbums && (
         <>
+          <a
+            onClick={handleShowTempAlbums}>
+            임시저장({tempAlbumCount})
+          </a>
           <Step1 onCreateAlbum={handleCreateAlbum} />
-          {tempAlbums.length > 0 && (
-            <a onClick={() => setShowTempAlbums(true)}>
-              임시저장({tempAlbums.length})
-            </a>
-          )}
         </>
       )}
 
@@ -229,6 +239,7 @@ function Create() {
           albums={tempAlbums}
           onSelectAlbum={handleSelectTempAlbum}
           onBack={() => setShowTempAlbums(false)}
+          isLoading={isLoading}
         />
       )}
 
@@ -237,7 +248,6 @@ function Create() {
           albumId={album.id || 0}
           title={album.title}
           onUpdateTitle={handleUpdateTitle}
-          onComplete={() => handleCompleteAlbum()}
           onTempSave={handleTempSave}
           onCreatePlaylist={handleCreatePlaylist}
         />
@@ -259,13 +269,14 @@ function Create() {
         <Step4
           album={album}
           onUpdateTitle={handleUpdateTitle}
-          onComplete={() => handleCompleteAlbum()}
+          onComplete={handleCompleteAlbum}
           onTempSave={handleTempSave}
           onDeletePlaylist={handleDeletePlaylist}
           onEditPlaylist={handleEditPlaylist}
+          onCreatePlaylist={handleCreatePlaylist}
         />
       )}
-    </div>
+    </>
   );
 }
 
