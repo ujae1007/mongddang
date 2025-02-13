@@ -5,6 +5,10 @@ import { Album, Playlist } from "../../types";
 import axiosInstance from "../../api/axiosInstance";
 import { useNavigate } from "react-router-dom";
 
+import TitleInput from "./TitleInput";
+import Button from "../common/Button";
+import PlaylistItem from "./PlayListItem";
+
 interface Step4Props {
   album: Album;
   onUpdateTitle: (newTitle: string) => void;
@@ -33,8 +37,7 @@ function Step4({
 
   const navigate = useNavigate();
 
-  const handleTitleChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
-    const newTitle = e.target.value;
+  const handleTitleChange = async (newTitle:string) => {
     setCurrentTitle(newTitle);
     
     try {
@@ -90,55 +93,43 @@ function Step4({
 
   return (
     <div>
-      <div>
-        <label htmlFor="title">앨범 제목</label>
-        <input
-          type="text"
-          id="title"
-          value={currentTitle}
-          onChange={handleTitleChange}
-        />
-      </div>
+      <TitleInput
+      title={currentTitle}
+      onChange={handleTitleChange}
+      />
 
-      <div>
+      <div className="playlist-container">
         {album.playlists.map((playlist, index) => (
-          <div key={playlist.playlistId || index}>
-            {playlist.photos &&
-              playlist.photos.map((photo, photoIndex) => (
-                <img
-                  key={`${playlist.playlistId}-photo-${photoIndex}`}
-                  src={photo}
-                  alt={`Track ${index + 1} Photo ${photoIndex + 1}`}
-                  style={{ width: "100px", height: "100px", cursor: "pointer" }}
-                  onClick={() => onEditPlaylist(playlist)}
-                />
-              ))}
-            <span>트랙 {index + 1} / </span>
-            <span>{playlist.placeName} / </span>
-            <span>{playlist.music}</span>
-            <button
-              onClick={() => handleDeletePlaylist(playlist.playlistId || 0)}
-              disabled={isDeleting}
-            >
-              {isDeleting ? "삭제 중..." : "삭제"}
-            </button>
-          </div>
+          <PlaylistItem
+            key={playlist.playlistId || index}
+            playlist={playlist}
+            index={index}
+            onEdit={onEditPlaylist}
+            onDelete={handleDeletePlaylist}
+            isDeleting={isDeleting}
+          />
         ))}
       </div>
 
+      <div>
       {album.playlists.length < 5 && (
-        <button 
-          onClick={handleMoveToStep3}
-          disabled={isCreatingPlaylist} // 플레이리스트 생성 중일 때 비활성화
-        >
-            {isCreatingPlaylist ? "플레이리스트 생성 중..." : "플레이리스트 추가"}
-          
-        </button>
+          <Button
+            type="Large"
+            onClick={handleMoveToStep3}
+            disabled={isCreatingPlaylist}
+            text={isCreatingPlaylist ? "플레이리스트 생성 중..." : "플레이리스트 추가"}
+          />
       )}
-
-      <button onClick={onTempSave}>임시저장</button>
-
-      <button onClick={async () => {
+      </div>
+      <>
+      <Button
+        type="Large"
+        onClick={onTempSave}
+        text="임시저장"
+      />
+      <Button
+        type="Large"
+        onClick={async () => {
           try {
             // 앨범 완료 처리
             await axiosInstance.put(`/albums/complete/${album.id}`, {
@@ -157,7 +148,12 @@ function Step4({
           } catch (error) {
             console.error("앨범 완료 처리 중 오류:", error);
           }
-        }}>완료</button>
+        }}
+        text="완료"
+      
+      />
+      </>
+
     </div>
   );
 }

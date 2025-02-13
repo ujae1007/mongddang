@@ -4,6 +4,7 @@ interface TempAlbumListProps {
   albums: Album[];
   onSelectAlbum: (album: Album) => void;
   onBack: () => void;
+  isLoading: boolean;
 }
 
 function TempAlbumList({ albums, onSelectAlbum, onBack }: TempAlbumListProps) {

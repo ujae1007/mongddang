@@ -1,4 +1,4 @@
-import { useParams, useNavigate, useLocation } from 'react-router-dom';
+import { useParams, useLocation } from 'react-router-dom';
 import { useEffect, useState } from 'react';
 
 import axiosInstance from '../../api/axiosInstance';
@@ -25,10 +25,16 @@ interface AlbumDetail {
 function AlbumDetail() {
   const { albumId } = useParams();
   const location = useLocation();
-  const navigate = useNavigate();
 
   const [albumData, setAlbumData] = useState<AlbumDetail | null>(location.state?.albumDetail || null);
   const [isLoading, setIsLoading] = useState(true);
+
+  // MapBox에 전달할 데이터 형식 변환
+  const mapBoxPlaylists = albumData.playlists.map(playlist => ({
+   ...playlist,
+   placeName: playlist.locationAddress,  // MapBox가 기대하는 필드명으로 변환
+   music: `${playlist.musicDetails.artist} - ${playlist.musicDetails.title}`  // music 필드 추가
+ }));
 
   useEffect(() => {
     const fetchAlbumDetail = async () => {
@@ -45,15 +51,15 @@ function AlbumDetail() {
     };
 
     fetchAlbumDetail();
-  }, [albumId]);
+  }, [albumId]); // albumId가 변경될 때만 호출
+
 
   return (
     <div style={{ width: "300px" }}>
-      {}
       <h1>{albumData.title}</h1>
       <div>
         <h3> 지도 </h3>
-        {/* <MapBox playlists={albumData.playlists} /> */}
+        <MapBox playlists={mapBoxPlaylists} />
       </div>
 
       <hr />
@@ -73,7 +79,8 @@ function AlbumDetail() {
             ))}
           </div>
           <p>장소: {playlist.locationAddress}</p>
-          <p>노래: {playlist.musicDetails.trackName}</p>
+          <p>노래: {playlist.musicDetails.artistName
+          } - {playlist.musicDetails.trackName}</p>
           <hr />
         </div>
       ))}
