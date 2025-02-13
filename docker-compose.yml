@@ -19,6 +19,8 @@ services:
       interval: 10s
       timeout: 5s
       retries: 5
+    networks:
+      - app-network
 
   backend:
     image: nimoot/mongddang-backend:2.0
@@ -39,14 +41,19 @@ services:
         condition: service_healthy
     volumes:
       - db_data:/var/lib/mysql
-    #   - ~/.aws:root/.aws:ro
+    networks:
+      - app-network
 
-  # frontend:
-  #   build: ./frontend
-  #   ports:
-  #     - "3000:3000"
-  #   depends_on:
-  #     - backend
+  frontend:
+    build:
+      context: .
+      dockerfile: frontend/mongddang/Dockerfile
+    ports:
+      - "3000:3000"
+    depends_on:
+      - backend
+    networks:
+      - app-network
 
 
 volumes:
