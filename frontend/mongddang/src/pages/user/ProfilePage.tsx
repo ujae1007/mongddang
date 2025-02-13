@@ -121,6 +121,15 @@ function ProfilePage () {
       )
     }
 
+    // 팔로잉 페이지로 이동
+    const goToFollowingList = () => {
+      nav('/follow', {replace:true , state: {tab: "followings"}})
+    }
+
+    //팔로워 페이지로 이동
+    const goToFollowerList = () => {
+      nav('/follow', {replace:true , state: {tab: "followers"}})
+    }
 // --------------------------------------------------------------------//
   return(
     <div className="profileWrap">
@@ -139,9 +148,25 @@ function ProfilePage () {
         <h4>{profileData.nickname}</h4>
         <h5>{profileData.introduce}</h5>
 
+      {/* 나의 프로필일때는 팔로워 팔로잉 버튼 클릭할 수 있도록 */}
         <div className="followWrap">
-          <span>팔로워 {profileData.followedCnt}</span>
-          <span>팔로잉 {profileData.followingCnt}</span>
+          {
+          isMyProfile? 
+            (
+              <>
+                <span onClick={goToFollowerList}>팔로워 {profileData.followedCnt}</span>
+                <span onClick={goToFollowingList}>팔로잉 {profileData.followingCnt}</span>
+              </>
+            ) 
+          : 
+            (
+              <>
+                <span>팔로잉 {profileData.followingCnt}</span>
+                <span>팔로워 {profileData.followedCnt}</span>
+              </>
+            )
+          }
+
         </div>
       </div>
 
@@ -153,12 +178,15 @@ function ProfilePage () {
             type="ProfileEdit"
             onClick={goToProfileEdit}
             text="프로필 수정"
-          />) :(
+          />
+        ) 
+        :
+        (
           <FollowButton
             text={profileData.followStatus ? "팔로잉" : "팔로우"}   //false로 일단 주니까 flase라면 팔로우버튼이 나오고 true면 팔로잉 버튼이 나오도록 
             onClick={changeFollowStatus}
           />
-          )
+        )
         }
 
 
