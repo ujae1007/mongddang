@@ -26,10 +26,9 @@ html, body {
   flex-direction: column;
   /* 가로 중앙 정렬 */
   align-items: center; 
-  /* 상단부터 컨텐츠가 보이도록 */
+  /* 세로 중앙 정렬 */
   justify-content: flex-start;
-  /* 컨텐츠가 요소의 크기를 넘어갈 때 숨기도록 만듦 */
-  /* overflow: hidden;  */
+  /* overflow: hidden; */
   overflow: auto;
 }
 

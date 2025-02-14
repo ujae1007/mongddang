@@ -1,0 +1,6 @@
+.CardList {
+  width: 100%;
+  display: grid;
+  grid-template-columns: repeat(2, 1fr); /* 2열 레이아웃 예시 */
+  grid-gap: 16px;
+}
