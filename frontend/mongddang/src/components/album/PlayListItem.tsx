@@ -19,14 +19,13 @@ function PlaylistItem({ playlist, index, onEdit, onDelete, isDeleting }: Playlis
     <div className="playlist-item">
 
       <div className="photo-section">
-        {playlist.photos && playlist.photos.map((photo, photoIndex) => (
-          <img
-            key={`${playlist.playlistId}-photo-${photoIndex}`}
-            src={photo}
-            alt={`Track ${index + 1} Photo ${photoIndex + 1}`}
-            onClick={() => onEdit(playlist)}
-          />
-        ))}
+        {playlist.photos && playlist.photos.length > 0 && (
+            <img
+              src={playlist.photos[0]}  // 첫 번째 사진만 표시
+              alt={`Track ${index + 1} Photo`}
+              onClick={() => onEdit(playlist)}
+            />
+          )}
       </div>
 
       <div className="info-section">

@@ -168,3 +168,29 @@ color: #F4F4F6;
   background: #9747FF;
   color: #F4F4F6;
 }
+
+/* 삭제용 버튼 */
+.Button_delete {
+  border-radius: 5px;
+  background-color:  #66656C;
+  border: none;
+  width: 50px;
+  height: 30px;
+  font-size: 12px;
+  font-weight: '400';
+  color: white;
+}
+
+/* 수정용 버튼 */
+.Button_edit {
+  border-radius: 5px;
+  background-color:  #9747ff;
+  border: 1px solid #9747ff;
+  box-sizing: border-box;
+  width: 50px;
+  height: 30px;
+  font-size: 12px;
+  font-weight: '400';
+  word-wrap: 'break-word';
+  color: white;
+}
