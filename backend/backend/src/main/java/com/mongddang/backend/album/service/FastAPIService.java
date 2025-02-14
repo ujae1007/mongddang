@@ -18,7 +18,7 @@ public class FastAPIService {
      * FastAPI로 노래 장르 리스트 전송 후 표지 이미지 URL 반환
      */
     public String callFastAPI(List<String> genres, List<String> imageUrls) {
-        String fastApiUrl = "http://127.0.0.1:8000/generate_cover/";
+        String fastApiUrl = "http://127.0.0.1:8000/generate_cover";
 
         // FastAPI에 보낼 JSON 데이터 생성
         Map<String, Object> payload = Map.of("genres", genres, "imageurls", imageUrls);

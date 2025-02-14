@@ -14,7 +14,7 @@ class GenerateCoverRequest(BaseModel):
     imageurls: list   # 프롬프트에 포함할 캡션을 추출하기위한 이미지
 
 
-@router.post("/generate_cover")
+@router.post("/generate_cover/")
 async def generate_cover_endpoint(request: GenerateCoverRequest):
     """
     요청을 받은 후 S3에서 기존 이미지를 다운로드하고,

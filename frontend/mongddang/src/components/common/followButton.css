@@ -1,0 +1,21 @@
+.FollowButton_Following {
+  width: 75px;
+  height: 30px;
+  border-radius: 5px;
+  background-color: #9747ff;
+  border: 1px solid #9747ff;
+  box-sizing: border-box;
+  font-size: 12px;
+  color: #fff;
+}
+
+.FollowButton_Follow {
+  width: 75px;
+  height: 30px;
+  border-radius: 5px;
+  background-color: #fff;
+  border: 1px solid #9747ff;
+  box-sizing: border-box;
+  font-size: 12px;
+  color: #66656C;;
+}

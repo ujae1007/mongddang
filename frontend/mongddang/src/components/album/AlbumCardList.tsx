@@ -3,6 +3,7 @@
 import React from "react";
 import AlbumCard from "./AlbumCard";
 import { MyAlbum } from "../../pages/user/ProfilePage";
+import './AlbumCardList.css'
 
 interface AlbumListProps {
   albums: MyAlbum[]
@@ -11,7 +12,7 @@ interface AlbumListProps {
 const AlbumList: React.FC<AlbumListProps> = ({albums}) => {
 
   return (
-    <div>
+    <div className="CardList">
       {albums.map((album) => (
         <AlbumCard 
           key={album.albumId}
@@ -23,3 +24,4 @@ const AlbumList: React.FC<AlbumListProps> = ({albums}) => {
 }
 
 export default AlbumList
+

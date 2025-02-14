@@ -1,12 +1,11 @@
 /* 바깥 레이아웃 컨테이너 */
 .profileEditContainer {
   max-width: 338px;        /* 원하는 최대 너비 */
-
   margin: 0 auto;          /* 화면 가운데 정렬 */
   display: flex;
   flex-direction: column;
   align-items: center;     /* 수직 중앙 정렬 */
-  padding-top: 10px;
+  padding-top: 100px;
 }
 
 /* 프로필 이미지 부분 */

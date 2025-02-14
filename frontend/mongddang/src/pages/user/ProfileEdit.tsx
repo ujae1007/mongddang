@@ -13,7 +13,7 @@ function ProfileEdit () {
   const loggedInUser = useAuth()
   const [loggedInUserId, setLoggedInUserId] = useState<number>()
 
-  const preProfileImg = "REMOVED"
+  const preProfileImg = "https://nimoot.s3.us-east-1.amazonaws.com/default-profile.png"
 
   //기존 데이터 불러오기
   useEffect (() => {

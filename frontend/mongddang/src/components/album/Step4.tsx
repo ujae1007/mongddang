@@ -91,6 +91,15 @@ function Step4({
     }
   };
 
+  const handleComplete = async () => {
+    try {
+      onComplete(album.id);
+    } catch (error) {
+      console.error("앨범 완료 처리 중 오류:", error);
+      alert("앨범 완료 처리 중 오류가 발생했습니다.");
+    }
+  };
+
   return (
     <div>
       <TitleInput
@@ -129,28 +138,8 @@ function Step4({
       />
       <Button
         type="Large"
-        onClick={async () => {
-          try {
-            // 앨범 완료 처리
-            await axiosInstance.put(`/albums/complete/${album.id}`, {
-              title: currentTitle
-            });
-            
-            // 앨범 상세 정보 조회
-            const response = await axiosInstance.get(`/albums/detail/${album.id}`);
-            const albumDetail = response.data;
-            console.log("앨범 상세 정보:", albumDetail);
-            
-            // 상세 페이지로 이동 (상태와 함께)
-            navigate(`/albums/${album.id}`, { 
-              state: { albumDetail } 
-            });
-          } catch (error) {
-            console.error("앨범 완료 처리 중 오류:", error);
-          }
-        }}
-        text="완료"
-      
+        onClick={handleComplete}
+        text="생성완료"
       />
       </>
 

@@ -62,7 +62,7 @@ function Step1({ onCreateAlbum }: Step1Props) {
         </div>
 
         <div style={{marginBottom:60}}>
-          <img src={image} alt="앨범커버 생성 전 기본 이미지지" />
+          <img src={image} alt="앨범커버 생성 전 기본 이미지" />
         </div>
 
         <Button
