@@ -82,7 +82,7 @@ public class AlbumController {
         return ResponseEntity.ok(albums);
     }
 
-    // ✅ 내 앨범 조회 (Playlist 정보 제외)
+    // ✅ 내 앨범 중 status=true 인 값들만 상세 조회 (Playlist 정보 포함)
     @GetMapping("/my")
     public ResponseEntity<List<AlbumResponseDto>> getMyAlbums(Principal principal) {
         List<AlbumResponseDto> myAlbums = albumService.getMyAlbums(principal);
@@ -110,5 +110,10 @@ public class AlbumController {
         return ResponseEntity.ok(albumResponse);
     }
     
+    @GetMapping("/recommendation")
+    public ResponseEntity<List<AlbumResponseDto>> getRecommendedAlbums(Principal principal) {
+        List<AlbumResponseDto> recommendedAlbums = albumService.getMyRecommendedAlbums(principal);
+        return ResponseEntity.ok(recommendedAlbums);
+    }
 }
 

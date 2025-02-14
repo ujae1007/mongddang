@@ -9,6 +9,7 @@ import com.mongddang.backend.playlist.repository.PlaylistRepository;
 import com.mongddang.backend.photo.entity.Photo;
 import com.mongddang.backend.photo.repository.PhotoRepository;
 import com.mongddang.backend.playlist.dto.PlaylistDto;
+import com.mongddang.backend.user.dto.UserDTO;
 import com.mongddang.backend.user.service.UserService;
 import com.mongddang.backend.music.repository.MusicRepository;
 import com.mongddang.backend.music.dto.MusicDetailDto;
@@ -105,7 +106,7 @@ public class AlbumService {
         System.out.println("보내지는 플레이리스트 urls: " + imageUrls);
         // 2️⃣ FastAPI 호출하여 앨범 표지 이미지 생성
 
-        String imageUrl = fastAPIService.callFastAPI(genres, imageUrls);
+        String imageUrl = fastAPIService.getAlbumImg(genres, imageUrls);
         
      // FastAPI 응답을 확인하는 로그 추가
         System.out.println("FastAPI 응답 데이터: " + imageUrl);
@@ -186,13 +187,45 @@ public class AlbumService {
         return albums.stream().map(this::toSimpleAlbumResponseDto).collect(Collectors.toList());
     }
 
-    // ✅ 내 앨범 조회 (Playlist 정보 제외)
+    // ✅ 내 앨범 조회 (Playlist 정보 포함)
     @Transactional(readOnly = true)
     public List<AlbumResponseDto> getMyAlbums(Principal principal) {
         String email = principal.getName();
         int userId = userService.getUserByEmail(email).getUserId();  
         List<Album> albums = albumRepository.findByUserIdAndStatus(userId, true);
         return albums.stream().map(this::toDetailedAlbumResponseDto).collect(Collectors.toList());
+    }
+    
+    // ✅ 추천 앨범 조회 (Playlist 정보 포함)
+    @Transactional(readOnly = true)
+    public List<AlbumResponseDto> getMyRecommendedAlbums(Principal principal) {
+        // 1️⃣ 현재 로그인한 사용자 이메일 가져오기
+        String email = principal.getName();
+
+        // 2️⃣ UserDTO에서 사용자 정보 조회
+        UserDTO user = userService.getUserByEmail(email);
+        if (user == null) {
+            throw new IllegalArgumentException("사용자 정보를 찾을 수 없습니다: " + email);
+        }
+
+        // 3️⃣ FastAPI에서 추천 앨범 ID 리스트 받아오기
+        List<Integer> recommendedAlbumIds = fastAPIService.getRecommendedAlbumIds(
+                user.getUserId(),
+                user.getLikeRegion1(),
+                user.getLikeRegion2(),
+                user.getLikeRegion3(),
+                user.getLikeGenre1(),
+                user.getLikeGenre2(),
+                user.getLikeGenre3()
+        );
+
+        // 4️⃣ 받은 앨범 ID로 DB에서 앨범 정보 가져오기
+        List<Album> albums = albumRepository.findAllById(recommendedAlbumIds);
+
+        // 5️⃣ 각 앨범의 상세 정보를 변환하여 반환
+        return albums.stream()
+                .map(this::toDetailedAlbumResponseDto)
+                .collect(Collectors.toList());
     }
 
     // ✅ 특정 사용자의 공개된 앨범 조회 (Playlist 정보 제외)
