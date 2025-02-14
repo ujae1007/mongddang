@@ -18,6 +18,8 @@ import ErrorPage from "./pages/Error";
 
 import YoutubePractice from "./pages/youtube/youtubePrac";
 
+import BottomNav from "./components/common/BottomNav";
+
 function App() {
   return (
 
@@ -42,6 +44,7 @@ function App() {
           
           <Route path="*" element={<ErrorPage />} />
         </Routes>
+        <BottomNav />
       </Router>
     </RecoilRoot>
   );
