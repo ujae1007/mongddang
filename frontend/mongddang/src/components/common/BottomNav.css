@@ -1,0 +1,55 @@
+.bottomNav {
+  position: fixed; /* 화면에 고정 */
+  bottom: 0; /* 뷰포트 하단에 위치 */
+  left: 0; /* 뷰포트 왼쪽 시작 */
+  width: 100%; /* 전체 화면 너비 */
+  max-width: 420px; /* 모바일 화면에 맞는 최대 너비 */
+  height: 82px; /* 탭바 높이 */
+  display: flex;
+  justify-content: space-around; /* 버튼 간 간격 균등 */
+  align-items: center;
+  background-color: white; /* 배경색 */
+  box-shadow: 0 -2px 5px rgba(0, 0, 0, 0.1); /* 위쪽 그림자 효과 */
+  z-index: 100; /* 다른 요소 위에 위치하도록 설정 */
+}
+
+.bottomNavItem {
+  width: 20%;
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+}
+
+.bottomNavItem .navItem{
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.bottomNavItem .navItem p {
+  font-size: 12px;
+  font-weight: 600;
+  margin: 0;
+  color: #66656C
+}
+
+.bottomNavItem .navItem img {
+  width: 28px;
+  height: 28px;
+  margin-bottom: 4px;
+}
+
+.bottomNavItem.active .navItem p {
+  color: #9747FF
+}
+
+/* 모바일 화면에 맞춘 탭바 크기 조정 */
+@media (min-width: 420px) {
+  .bottomNav {
+    margin: 0 auto;
+    left: calc((100% - 420px) / 2); /* 화면 중앙 정렬 */
+  }
+}

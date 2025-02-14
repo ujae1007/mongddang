@@ -17,6 +17,8 @@ import LikeAlbumsPage from "./pages/user/LikesAlbum";
 
 import YoutubePractice from "./pages/youtube/youtubePrac";
 
+import BottomNav from "./components/common/BottomNav";
+
 function App() {
   return (
 
@@ -40,6 +42,7 @@ function App() {
           
           <Route path="/youtube" element={<YoutubePractice />} />
         </Routes>
+        <BottomNav />
       </Router>
     </RecoilRoot>
   );
