@@ -16,8 +16,6 @@ import FollowPage from "./pages/user/FollowPage";
 import LikeAlbumsPage from "./pages/user/LikesAlbum";
 import ErrorPage from "./pages/Error";
 
-import YoutubePractice from "./pages/youtube/youtubePrac";
-
 import BottomNav from "./components/common/BottomNav";
 
 function App() {
@@ -40,7 +38,6 @@ function App() {
 
           <Route path="/create" element={<Create />} />
           <Route path="/albums/:albumId" element={<AlbumDetail />} />
-          <Route path="/youtube" element={<YoutubePractice />} />
           
           <Route path="*" element={<ErrorPage />} />
         </Routes>
