@@ -94,8 +94,8 @@ function SearchLocation({
     onSelectPlace({
       placeName: place.place_name,
       address: place.address_name,
-      latitude: place.y,
-      longitude: place.x,
+      latitude: parseFloat(place.y),
+      longitude: parseFloat(place.x),
     });
     setPlaces([]); // 선택 후 검색 결과 초기화
     setShowResults(false); // 선택 후 팝업 닫기 

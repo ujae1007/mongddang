@@ -112,6 +112,7 @@ function Step3({
     
       // 이미지 파일들 추가
       const imageFiles = imageUrls.map((imageUrl, index) => {
+        // 이미지 처리
         const byteString = atob(imageUrl.split(',')[1]);
         const mimeType = imageUrl.split(',')[0].split(':')[1].split(';')[0];
         const ab = new ArrayBuffer(byteString.length);
@@ -148,8 +149,8 @@ function Step3({
             'Content-Type': 'multipart/form-data',
           },
         }
+  
       );
-
 
       // 프론트엔드 상태 업데이트
       onAddPlaylist({
@@ -169,6 +170,7 @@ function Step3({
         placeName: placeName,
         address: address,
       });
+
 
       setStep(4)
     } catch (error) {

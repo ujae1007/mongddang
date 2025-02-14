@@ -185,9 +185,6 @@ function Create() {
   const fetchTempAlbums = async () => {
     setIsLoading(true);
     try {
-      console.log("Current auth token:", authToken);
-      console.log("Current axios headers:", axiosInstance.defaults.headers);
-
       const response = await axiosInstance.get('/albums/my/uncompleted');
       setTempAlbums(response.data);
     } catch (error) {
@@ -213,9 +210,7 @@ function Create() {
   // 임시저장 앨범 수 조회
   const fetchTempAlbumCount = async () => {
     try {
-      console.log("Fetching with token:", authToken);
       const response = await axiosInstance.get('/albums/my/uncompleted');
-      console.log("Server response:", response);
       setTempAlbumCount(response.data.length);
     } catch (error) {
       console.error("임시저장 앨범 수 조회 중 오류:", error);
