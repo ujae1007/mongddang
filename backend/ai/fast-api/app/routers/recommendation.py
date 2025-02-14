@@ -24,7 +24,7 @@ async def recommendation_endpoint(request: RecommendationCoverRequest):
     """
     try:
         print(request.user_id, request.like_genre1, request.like_region1)
-        return {"recommendation_albums": [13, 24, 55]}
+        return {"recommendation_albums": [5, 8, 10]}
 
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))

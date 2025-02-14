@@ -56,7 +56,6 @@ def upload_image_to_s3(img: Image.Image, bucket_name: str) -> str:
     :param folder: S3 내 폴더 경로 (옵션)
     :return: 업로드된 이미지의 URL (실패 시 None)
     """
-
     # 고유 파일 이름 생성 (예: uuid를 사용)
     file_name = f"{uuid.uuid4().hex}.png"
     image_bytes = pil_image_to_bytes(img)
@@ -79,6 +78,7 @@ def upload_image_to_s3(img: Image.Image, bucket_name: str) -> str:
         )
         # S3 객체 URL 구성 (버킷 설정에 따라 URL 형식이 달라질 수 있음)
         url = f"https://{bucket_name}.s3.{dependencies.AWS_REGION}.amazonaws.com/{file_name}"
+        print("url:", url)
         return url
     except (BotoCoreError, ClientError) as e:
         print(f"S3 업로드 실패: {e}")
