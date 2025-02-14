@@ -97,7 +97,13 @@ function LikesAlbumList ({loggedInuser, thirdSectionRef}:UserProps) {
       
       {/* 첫 번째 앨범 렌더링 일단 사진만 누르면 해당 상세페이지로 이동하게함*/}
         <div>
-          <img src={secondSection.albumImageURL} width={300} onClick={() => goToAlbumDetail(String(secondSection.albumId))}/>
+          {/* 밑바닥 위에 앨범커버 넣고, 위에 버튼 올리면돼~! 고마워~!! */}
+          <div className="LP">
+            <img src="../../public/assets/밑바닥.png" alt=""  width="300"/>
+            <img src={secondSection.albumImageURL} width={150} onClick={() => goToAlbumDetail(String(secondSection.albumId))}/>
+            <img src="../../public/assets/탑.png" alt="" />
+          </div>
+
           <p>{secondSection.authorNickname}</p>
           <p>{secondSection.title}</p>
          {/*노래 리스트 출력*/}
