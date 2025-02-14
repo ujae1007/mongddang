@@ -13,11 +13,7 @@ function ProfileEdit () {
   const loggedInUser = useAuth()
   const [loggedInUserId, setLoggedInUserId] = useState<number>()
 
-<<<<<<< HEAD
-  const preProfileImg = "https://nimoot.s3.us-east-1.amazonaws.com/default-profile.png"
-=======
   const preProfileImg = "REMOVED"
->>>>>>> cb9510a43e6f13edd2fd7a90ab6cc9d3bc7c9982
 
   //기존 데이터 불러오기
   useEffect (() => {
@@ -122,7 +118,7 @@ function ProfileEdit () {
     console.log("프로필 수정 시도")
     console.log(
       "업데이트 된 데이터:",
-      profileImage,
+      // profileImage,  
       changedNickName,
       changedIntroduce,
       selectedPlaces,

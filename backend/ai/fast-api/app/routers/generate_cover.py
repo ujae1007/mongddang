@@ -9,8 +9,8 @@ router = APIRouter()
 
 
 class GenerateCoverRequest(BaseModel):
-    genres: str         # 생성할 이미지에 사용할 음악 장르
-    reference_image_url: str   # 프롬프트에 포함할 캡션을 추출하기위한 이미지
+    genres: list         # 생성할 이미지에 사용할 음악 장르
+    imageUrls: list   # 프롬프트에 포함할 캡션을 추출하기위한 이미지
 
 
 @router.post("/generate_cover")
@@ -21,7 +21,7 @@ async def generate_cover_endpoint(request: GenerateCoverRequest):
     """
     try:
         # 1. S3에서 기존 이미지 다운로드
-        reference_image = gen_internal.fetch_image_from_s3(request.reference_image_url, dependencies.S3_BUCKET)
+        reference_image = gen_internal.fetch_image_from_s3(request.imageUrls, dependencies.S3_BUCKET)
         if reference_image is None:
             raise HTTPException(status_code=404, detail="S3 이미지 다운로드 실패")
         

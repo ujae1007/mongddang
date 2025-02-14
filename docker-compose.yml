@@ -19,8 +19,16 @@ services:
       interval: 10s
       timeout: 5s
       retries: 5
+<<<<<<< HEAD
     networks:
       - app-network
+=======
+<<<<<<< HEAD
+=======
+    networks:
+      - app-network
+>>>>>>> 36fc7ed8c9d5d9c240a9d546249d48ea8ea9a72e
+>>>>>>> 245df27475d1354a891faebacd4df37041fee477
 
   backend:
     image: nimoot/mongddang-backend:2.0
@@ -41,6 +49,19 @@ services:
         condition: service_healthy
     volumes:
       - db_data:/var/lib/mysql
+<<<<<<< HEAD
+=======
+<<<<<<< HEAD
+    #   - ~/.aws:root/.aws:ro
+
+  # frontend:
+  #   build: ./frontend
+  #   ports:
+  #     - "3000:3000"
+  #   depends_on:
+  #     - backend
+=======
+>>>>>>> 245df27475d1354a891faebacd4df37041fee477
     networks:
       - app-network
 
@@ -54,6 +75,10 @@ services:
       - backend
     networks:
       - app-network
+<<<<<<< HEAD
+=======
+>>>>>>> 36fc7ed8c9d5d9c240a9d546249d48ea8ea9a72e
+>>>>>>> 245df27475d1354a891faebacd4df37041fee477
 
 
 volumes:

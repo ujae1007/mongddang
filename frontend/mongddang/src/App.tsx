@@ -13,6 +13,7 @@ import AlbumDetail from "./pages/albumDetail/AlbumDetail";
 import MainPage from "./pages/user/MainPage";
 import IntroPages from "./pages/introduce/Introduce";
 import FollowPage from "./pages/user/FollowPage";
+import LikeAlbumsPage from "./pages/user/LikesAlbum";
 
 import YoutubePractice from "./pages/youtube/youtubePrac";
 
@@ -26,13 +27,18 @@ function App() {
           <Route path="/" element={<IntroPages />} />
           <Route path="/login" element={<Login />} />
           <Route path="/signup" element={<SignUp />} />
+
           <Route path="/mainpage" element={<MainPage />} />
-          <Route path="/profileEdit" element={<ProfileEdit />} />
-          <Route path="/create" element={<Create />} />
+          <Route path="/likes" element={<LikeAlbumsPage />} />
+          
           <Route path="/profile/:userId" element={<ProfilePage />} />
+          <Route path="/profileEdit" element={<ProfileEdit />} />
           <Route path="/follow" element={<FollowPage />} />
-          <Route path="/youtube" element={<YoutubePractice />} />
+
+          <Route path="/create" element={<Create />} />
           <Route path="/albums/:albumId" element={<AlbumDetail />} />
+          
+          <Route path="/youtube" element={<YoutubePractice />} />
         </Routes>
       </Router>
     </RecoilRoot>
