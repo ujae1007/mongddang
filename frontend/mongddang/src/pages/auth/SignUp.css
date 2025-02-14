@@ -1,6 +1,8 @@
 .SignUp {
   width: 333px;
-  margin: 0 auto;
+  margin-top: 180px;
+  align-items: center; 
+  justify-content: flex-start
 }
 .TitleWrap {
   width: 100%;
@@ -59,8 +61,10 @@
   width: 333px;
   display: flex;
   margin-bottom: 10px;
-  
-  
+}
+
+.signUpButton {
+  margin-top: 60px;
 }
 
 

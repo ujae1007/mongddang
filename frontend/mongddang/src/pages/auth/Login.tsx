@@ -68,67 +68,69 @@ function Login () {
 
   return (      
   
+    <div className="LoginPage">
 
-    <div className="Login">
-      <img className="HeadPhoneImage" src="../../public/assets/헤드셋.png" alt="" />
-      <img className= "Mp3Image" src="../../public/assets/mp3.png" alt="" />
     
+      <div className="Login">
+        <img className="HeadPhoneImage" src="../../public/assets/헤드셋.png" alt="" />
+        <img className= "Mp3Image" src="../../public/assets/mp3.png" alt="" />
+      
 
-        <div className="TitleWrap">Log In</div>
+          <div className="TitleWrap">Log In</div>
 
-        <div className="contentwrap">
+          <div className="contentwrap">
 
 
-          <div className="emailInputWrap">
-            <InputBox 
-              type="default"
-              mode="login"
-              placeholder="이메일을 입력해주세요."
-              onChange={handleEmail}
-              value={email}
+            <div className="emailInputWrap">
+              <InputBox 
+                type="default"
+                mode="login"
+                placeholder="이메일을 입력해주세요."
+                onChange={handleEmail}
+                value={email}
+                />
+            </div>
+            <div className="errorMessageWrap">
+              {
+                !emailValid && email.length > 0 && (
+                  <div>올바른 이메일을 입력해주세요.</div>
+                )
+              }
+            </div>
+
+            <div className="passwordInputWrap">
+              <InputBox 
+                type="password"
+                mode="login"
+                placeholder="비밀번호를 입력해주세요."
+                onChange={handlePassword}
+                value={password}
+              />
+            </div>
+
+          </div>
+
+          {/* 에러메세지 */}
+          {errorMessage && <p>{errorMessage}</p>}
+
+          <div>
+              <Button 
+                text="로그인" 
+                type="Large"
+                onClick={handleLogin}
+                disabled={!emailValid || !password} 
               />
           </div>
-          <div className="errorMessageWrap">
-            {
-              !emailValid && email.length > 0 && (
-                <div>올바른 이메일을 입력해주세요.</div>
-              )
-            }
+          <div className="test">
+            <p>
+              계정이 없으신가요? <span onClick={goToSignUp} style={{ color: '#9747FF' }}>가입하기</span>
+            </p>
           </div>
 
-          <div className="passwordInputWrap">
-            <InputBox 
-              type="password"
-              mode="login"
-              placeholder="비밀번호를 입력해주세요."
-              onChange={handlePassword}
-              value={password}
-            />
-          </div>
 
-        </div>
-
-        {/* 에러메세지 */}
-        {errorMessage && <p>{errorMessage}</p>}
-
-        <div>
-            <Button 
-              text="로그인" 
-              type="Large"
-              onClick={handleLogin}
-              disabled={!emailValid || !password} 
-            />
-        </div>
-        <div className="test">
-          <p>
-            계정이 없으신가요? <span onClick={goToSignUp} style={{ color: '#9747FF' }}>가입하기</span>
-          </p>
-        </div>
-
-
-      <img className="MusicNote" src="../public/assets/음표.png" alt="" />
+        <img className="MusicNote" src="../public/assets/음표.png" alt="" />
+      </div>
     </div>
-
   );
 }
 

@@ -14,6 +14,8 @@ html, body {
   height: 100%;
   background-color: rgb(249, 249, 249);
   color: #333;
+  -webkit-overflow-scrolling: touch; /* iOS에서 부드러운 스크롤 */
+  overscroll-behavior: none; /* 스크롤 끝에서 바운스 효과 제거 */
 }  
 
 #root {
@@ -24,8 +26,9 @@ html, body {
   /* 가로 중앙 정렬 */
   align-items: center; 
   /* 세로 중앙 정렬 */
-  justify-content: center;
-  overflow: hidden;
+  justify-content: flex-start;
+  /* overflow: hidden; */
+  overflow: auto;
 }
 
 /* 모바일 화면 중심 */

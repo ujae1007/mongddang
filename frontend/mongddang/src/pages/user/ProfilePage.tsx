@@ -6,6 +6,7 @@ import axiosInstance from "../../api/axiosInstance"
 import AlbumList from "../../components/album/AlbumCardList"
 import Button from "../../components/common/Button"
 import FollowButton from "../../components/common/followButton"
+import './ProfilePage.css'
 
 export interface MyAlbum {
   albumId: number
@@ -132,38 +133,38 @@ function ProfilePage () {
     }
 // --------------------------------------------------------------------//
   return(
-    <div className="profileWrap">
+    <div className="profileWrap" >
 
       {/*앨범 커버 & 프로필 이미지 */}
       <div className="imageWrap">
-        <img
+        <img className="LatestAlbumImage"
           src={profileData.albums && profileData.albums.length > 0 && profileData.albums[0].albumImageURL ? profileData.albums[0].albumImageURL : defaultImage} width="200"
          />
          <br/>
-        <img src={profileData.profileImageURL} width="150"/>
+        <img className="ProfileImage"src={profileData.profileImageURL} width="150"/>
       </div>
 
       {/* 유저 정보들 */}
       <div className="textWrap">
-        <h4>{profileData.nickname}</h4>
-        <h5>{profileData.introduce}</h5>
+        <div className="Nickname">{profileData.nickname}</div>
+        <div className="Introduce">{profileData.introduce}</div>
 
       {/* 나의 프로필일때는 팔로워 팔로잉 버튼 클릭할 수 있도록 */}
         <div className="followWrap">
           {
           isMyProfile? 
             (
-              <>
-                <span onClick={goToFollowerList}>팔로워 {profileData.followedCnt}</span>
-                <span onClick={goToFollowingList}>팔로잉 {profileData.followingCnt}</span>
-              </>
+              <div className="Follow">
+                <div className = "Followers" onClick={goToFollowerList}> {profileData.followedCnt} followers</div>
+                <div className = "Followings"onClick={goToFollowingList}> {profileData.followingCnt} followings</div>
+              </div>
             ) 
           : 
             (
-              <>
-                <span>팔로잉 {profileData.followingCnt}</span>
-                <span>팔로워 {profileData.followedCnt}</span>
-              </>
+              <div className="Follow">
+                <div className = "Followers"> {profileData.followedCnt} followers</div>
+                <div className = "Followings"> {profileData.followingCnt} followings</div>
+              </div>
             )
           }
 
@@ -171,7 +172,7 @@ function ProfilePage () {
       </div>
 
       {/* 버튼 */}
-      <div className="button">
+      <div className="button" style={{marginTop:20}}>
 
         {isMyProfile ? (
           <Button 
@@ -184,6 +185,7 @@ function ProfilePage () {
         (
           <FollowButton
             text={profileData.followStatus ? "팔로잉" : "팔로우"}   //false로 일단 주니까 flase라면 팔로우버튼이 나오고 true면 팔로잉 버튼이 나오도록 
+            type={profileData.followStatus ? "Following" : "Follow" }
             onClick={changeFollowStatus}
           />
         )
