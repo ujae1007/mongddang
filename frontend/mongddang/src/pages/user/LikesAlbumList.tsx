@@ -85,9 +85,9 @@ function LikesAlbumList ({loggedInuser, thirdSectionRef}:UserProps) {
   }
   
   return (
-    <div>
+    <div style={{marginTop:10}}>
       {/* 3개만 렌더링하기 */}
-        <div style={{display: "flex"}}>
+        <div style={{display: "flex", justifyContent:"space-around"}}>
           {firstSection.map((album) => (
             <div key={album.albumId}> 
               <img src={album.albumImageURL} width={100} onClick={() => goToAlbumDetail(String(album.albumId))}/>
