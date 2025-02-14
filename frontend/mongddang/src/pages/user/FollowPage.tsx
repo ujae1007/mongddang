@@ -3,6 +3,7 @@ import { useState } from "react"
 import useAuth from "../../hooks/useAuth"
 import FollowList from "./FollowList"
 import { useLocation } from "react-router-dom"
+import './FollowPage.css'
 
 function FollowPage () {
   
@@ -29,46 +30,23 @@ function FollowPage () {
 
 
   return (
-    <div>
-      {userId}님의 팔로우페이지 <br /> 
-      <button onClick={goToProfile} >&lt; 뒤로가기</button> <br />
+    <div className="FollowPage">
+      <button className="back" onClick={goToProfile} >&lt; </button> <br />
 
       {/* 버튼 */}
       {/* 지피티가 짜준 스타일임 다 삭제해도됨 */}
-      <div style={{ display: "flex", borderBottom: "2px solid #e0e0e0", marginBottom: "10px" }}>
+      <div className = "FollowTab">
 
-        <button 
+        <button
+          className={`Followers_${activeTab}`}
           onClick={() => setActiveTab("followers")} 
-          style={{
-            flex: 1,
-            padding: "10px",
-            borderTop: "none",
-            borderLeft: "none",
-            borderRight: "none",
-            borderBottom: activeTab === "followers" ? "3px solid #9333ea" : "none",
-            color: activeTab === "followers" ? "#9333ea" : "#888",
-            fontWeight: activeTab === "followers" ? "bold" : "normal",
-            cursor: "pointer",
-            background: "none",
-          }}
         >
           Followers
         </button>
 
         <button 
+          className={`Followings_${activeTab}`}
           onClick={() => setActiveTab("followings")} 
-          style={{
-            flex: 1,
-            padding: "10px",
-            borderTop: "none",
-            borderLeft: "none",
-            borderRight: "none",
-            borderBottom: activeTab === "followings" ? "3px solid #9333ea" : "none",
-            color: activeTab === "followings" ? "#9333ea" : "#888",
-            fontWeight: activeTab === "followings" ? "bold" : "normal",
-            cursor: "pointer",
-            background: "none",
-          }}
         >
           Followings
         </button>
