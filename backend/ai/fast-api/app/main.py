@@ -1,7 +1,7 @@
 # app/main.py
 from fastapi import FastAPI
 from app.routers import generate_cover
-# from app.routers import recommendation
+from app.routers import recommendation
 
 
 app = FastAPI(
@@ -15,4 +15,4 @@ app = FastAPI(
 app.include_router(generate_cover.router, tags=["generate_cover"])
 
 # 앨범 추천 라우터를 포함
-# app.include_router(recommendation.router, tags=["recommendation"])
+app.include_router(recommendation.router, tags=["recommendation"])

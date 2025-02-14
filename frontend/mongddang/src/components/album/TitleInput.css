@@ -1,0 +1,21 @@
+/* 앨범 생성 인풋 관련 css */
+
+.title-input {
+  margin: 20px 0; 
+  width: 100%;
+}
+
+
+.title-input .input{
+  width: 100;
+  padding: 10px 0; 
+  font-size: 16px;
+  border: none;   
+  border-bottom: 1px solid #ccc;
+  outline: none; 
+}
+
+.step-container {
+  width: 100%;
+  
+}

@@ -56,7 +56,7 @@ function SearchLocation({
   
   const searchPlaces = async () => {
     if (!keyword.trim()) {
-      alert("키워드를 입력해주세요!");
+      alert("장소명을 입력해주세요");
       return;
     }
 

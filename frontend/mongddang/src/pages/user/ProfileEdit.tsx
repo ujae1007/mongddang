@@ -5,6 +5,7 @@ import InputBox from "../../components/common/input"
 import FavoriteInput from "../../components/common/favoriteInput"
 import Button from "../../components/common/Button"
 import useAuth from "../../hooks/useAuth"
+import './ProfileEdit.css'
 
 function ProfileEdit () {
 
@@ -17,7 +18,7 @@ function ProfileEdit () {
   //기존 데이터 불러오기
   useEffect (() => {
     if(loggedInUser) {
-      setProfileImage(loggedInUser.profileImageURL || '')
+      setProfileImage(loggedInUser.profileImageURL || '') // 기존 프로필이나 디폴드 값
       setChangedNickName(loggedInUser.nickname || '')
       setChangedIntroduce(loggedInUser.introduce || '')
       setLoggedInUserId(loggedInUser.userId)
@@ -39,7 +40,7 @@ function ProfileEdit () {
   }, [loggedInUser])
 
   //상태 변화 감지
-  const [profileImage, setProfileImage] = useState<string>('')
+  const [profileImage, setProfileImage] = useState<string | null>(""); 
   const [changedNickName, setChangedNickName] = useState('')
   const [changedIntroduce, setChangedIntroduce] = useState('')
   const [selectedPlaces, setSelectedPlaces] = useState<string[]>([])
@@ -49,16 +50,17 @@ function ProfileEdit () {
   
   const [isUpdated, setIsUpdated] = useState(false)
 
+  
   //이미지 수정 핸들러
   const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0]
-
-    //만약에 파일이 없다면 우리의 기존사진으로 교체 
+    
+    //만약 취소를 눌렀다면 마지막으로 했던거 나오기 
     if(!file){
-      setProfileImage(preProfileImg)
+      setProfileImage(profileImage)
       return
     }
-
+    
     if(file) {
       if(file.size > 5 * 1024 * 1024) {
         alert('파일 크기는 5MB를 초과할 수 없습니다. 다른 이미지를 선택해주세요.')
@@ -77,6 +79,13 @@ function ProfileEdit () {
       reader.readAsDataURL(file)
     }
   }
+  
+  //이미지 삭제 버튼 핸들러 
+  const handleImageDelete = () => {
+    setProfileImage(null)
+    setIsUpdated(true)
+  }
+
   //닉네임 수정 핸들러
   const handleNickNameChange = (e:React.ChangeEvent<HTMLInputElement>) => {
     setChangedNickName(e.target.value)
@@ -104,11 +113,12 @@ function ProfileEdit () {
     nav(-1)
   }
 
-  // 수정하기 axios 전송
-  const handleSubmit = async () => {
+   // 수정하기 axios 전송
+   const handleSubmit = async () => {
     console.log("프로필 수정 시도")
     console.log(
       "업데이트 된 데이터:",
+      // profileImage,  
       changedNickName,
       changedIntroduce,
       selectedPlaces,
@@ -126,26 +136,29 @@ function ProfileEdit () {
     formData.append("likeGenre3", selectedGenres[2] || "")
   
     // 프로필 이미지 변경이 있을 경우 추가
-    if (profileImage && profileImage !== preProfileImg) {
+    if (profileImage && profileImage !== "") {
       const fileInput = document.querySelector('input[type="file"]') as HTMLInputElement
       if (fileInput?.files?.[0]) {
         formData.append("profileImage", fileInput.files[0])
       }
     }
-
+    if (profileImage === null) {
+      formData.append("profileImage", "");
+    }
     try { 
       const res = await axiosInstance.put("/auth/update", formData, {
         headers: {
           "Content-Type": "multipart/form-data",
         }
       }) 
-      console.log(formData)
       console.log(res, "수정하기 완료")
       nav(`/profile/${loggedInUserId}`, {replace:true, state: { updated: true }})
     }catch (err) {
         console.error("수정하기 실패", err)
       }
     }
+    
+
     
     // 입력값들이 다 유효하고, 수정을 할 경우 버튼 활성화하기 
     useEffect(() => {
@@ -176,69 +189,90 @@ function ProfileEdit () {
     }
 
   return (
-    <div>
-      <div className="imageWrap">
-        <img src={profileImage} alt="profile" className="profileImage" width="100"/>
-        <input type="file" accept="image/*" onChange={handleImageChange} />
+    <div className="profileEditContainer">
+    <div className="profileImageContainer">
+      <img
+        src={profileImage || preProfileImg}
+        alt="profile"
+        className="profileImage"
+      />
+      <div className="imageButtonGroup">
+        <label htmlFor="fileInput" className="fileInputLabel">이미지 수정</label>
+        <input
+          id="fileInput"
+          type="file"
+          accept="image/*"
+          onChange={handleImageChange}
+        />
+        <button onClick={handleImageDelete} className="deleteButton">삭제</button>
+      </div>
+    </div>
+
+    <div className="formContainer">
+      <div className="formGroup">
+        <label htmlFor="nickname">닉네임</label>
+        <InputBox
+          type="default"
+          mode="edit"
+          onChange={handleNickNameChange}
+          value={changedNickName}
+        
+        />
       </div>
 
-      <div className="inputWrap">
-
-        <div className="nickname">
-          <h6 className="subtitle" >닉네임</h6>
-            <InputBox 
-              type="default"   
-              mode="edit"
-              onChange={handleNickNameChange}     
-              value={changedNickName}
-          />
-        </div>
-
-
-        <div className="introduce">
-          <h6 className="subtitle" >자기소개</h6>
-            <InputBox 
-              type="default"  
-              mode="edit" 
-              onChange={handleIntroduceChange}     
-              value={changedIntroduce}
-          />
-        </div>
-
-        <div className="favorite">
-          <FavoriteInput
-            type="place"
-            placeholder={"선호하는 지역을 선택해주세요."}
-            onChange={handlePlaceChange}
-            defaultValues={selectedPlaces}
-            mode="edit"
-          />
-          <FavoriteInput
-            type="genre"
-            placeholder={"선호하는 음악 장르를 선택해주세요."}
-            onChange={handleGenreChange}
-            defaultValues={selectedGenres}
-            mode="edit"
-          />
-        </div>
-
+      <div className="formGroup">
+        <label htmlFor="introduce">자기소개</label>
+        <InputBox
+          type="default"
+          mode="edit"
+          onChange={handleIntroduceChange}
+          value={changedIntroduce}
+     
+        />
       </div>
 
+      <div className="formGroup">
+        <label>선호하는 지역</label>
+        <FavoriteInput
+          type="place"
+          placeholder="선호 지역을 3개까지 선택해주세요."
+          onChange={handlePlaceChange}
+          defaultValues={selectedPlaces}
+          mode="edit"
+        />
+      </div>
+
+      <div className="formGroup">
+        <label>선호하는 음악 장르</label>
+        <FavoriteInput
+          type="genre"
+          placeholder="선호 장르를 3개까지 선택해주세요."
+          onChange={handleGenreChange}
+          defaultValues={selectedGenres}
+          mode="edit"
+        />
+      </div>
+    </div>
+
+    <div className="buttonContainer">
       <Button
         text="취소하기"
         type="Middium"
         onClick={goToBack}
       />
-
       <Button
         text="수정하기"
         type="Middium"
         onClick={handleSubmit}
         disabled={isButtonDisabled}
       />
+    </div>
 
-      <p onClick={deleteUser}>계정을 삭제하시겠습니까?</p>
-    </div> 
+    <p className="deleteUserText" onClick={deleteUser}>
+      계정을 삭제하시겠습니까?
+    </p>
+    
+  </div>
   )
 }
 

@@ -51,7 +51,6 @@ function Login () {
       // accessToken : 토큰값
       // 즉 authTokenAtom에 accessToken을 저장하겠다는 의미
       setRecoil(authTokenAtom, accessToken)
-
       console.log("로그인 성공")
       alert("로그인에 성공했습니다.")
       nav("/mainpage", {replace:true})
@@ -68,12 +67,12 @@ function Login () {
   };
 
   return (      
-    
-    <>
+  
+
+    <div className="Login">
       <img className="HeadPhoneImage" src="../../public/assets/헤드셋.png" alt="" />
       <img className= "Mp3Image" src="../../public/assets/mp3.png" alt="" />
     
-    <div className="Login">
 
         <div className="TitleWrap">Log In</div>
 
@@ -127,12 +126,9 @@ function Login () {
         </div>
 
 
+      <img className="MusicNote" src="../public/assets/음표.png" alt="" />
     </div>
-    <img className="MusicNote" src="../public/assets/음표.png" alt="" />
 
-
-
-    </>
   );
 }
 

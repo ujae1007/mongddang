@@ -2,15 +2,16 @@ import "./Button.css"
 
 interface ButtonProps {
   text: string
-  type: "Large" | "Middium" | "ProfileEdit" | "PopUp" | "confirm"
+  using?: "Album" | "Album2"
+  type?: "Large" | "Middium" | "ProfileEdit" | "PopUp" | "confirm | edit | delete"
   onClick?: () => void
   disabled?: boolean
 }
 
-const Button = ({text, type, onClick, disabled}:ButtonProps) => {
+const Button = ({text, using, type, onClick, disabled}:ButtonProps) => {
   return (
     <button 
-      className={`Button Button_${type}`}
+      className={`Button Button_${type} Button_${using} Button_${using}_${type}`}
       onClick={onClick}
       disabled={disabled}
     >

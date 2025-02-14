@@ -19,7 +19,7 @@ const useAuth = () => {
       try {
         const res = await axiosInstance.get("/auth/current")
         setUser(res.data)
-        console.log("로그인한 유저 닉네임: ", res.data.nickname)
+        console.log("로그인한 유저 닉네임: ", res.data.nickname, res.data.userId, "번 유저")
       } catch (err) {
         console.log("유저 정보 가져오기 실패", err)
         setUser(null)

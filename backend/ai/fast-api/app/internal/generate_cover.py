@@ -6,6 +6,7 @@ import boto3
 from PIL import Image
 from botocore.exceptions import BotoCoreError, ClientError
 from app import dependencies
+import random
 
 
 
@@ -17,7 +18,7 @@ def pil_image_to_bytes(img: Image.Image) -> bytes:
     return buffered.getvalue()
 
 
-def fetch_image_from_s3(image_url: str, bucket_name: str) -> Image.Image:
+def fetch_image_from_s3(image_urls: list, bucket_name: str) -> Image.Image:
     """
     S3 링크에서 이미지를 다운로드하여 PIL 이미지로 반환합니다.
     
@@ -32,6 +33,8 @@ def fetch_image_from_s3(image_url: str, bucket_name: str) -> Image.Image:
     #     aws_access_key_id=dependencies.AWS_ACCESS_KEY_ID,
     #     aws_secret_access_key=dependencies.AWS_SECRET_ACCESS_KEY
     # )
+
+    image_url = ', '.join(random.sample(image_urls, 1))
 
     try:
         response = requests.get(image_url)
@@ -82,7 +85,7 @@ def upload_image_to_s3(img: Image.Image, bucket_name: str) -> str:
         return None
 
 
-def run_generate_cover(genres: str, reference_image: Image.Image) -> Image.Image:
+def run_generate_cover(genres: list, reference_image: Image.Image) -> Image.Image:
     """
     BLIP을 통해 캡션을 추출하고,
     Stable Diffusion 모델을 이용해 이미지를 생성합니다.
@@ -93,6 +96,8 @@ def run_generate_cover(genres: str, reference_image: Image.Image) -> Image.Image
     inputs = processor_caption(reference_image, return_tensors="pt")
     generated_ids = model_caption.generate(**inputs)
     caption = processor_caption.decode(generated_ids[0], skip_special_tokens=True)
+
+    genre = ', '.join(random.sample(genres, 1))
 
     # Prompt with caption
     prompt = f"abstract oil painting illustration of {caption} inspired by music genre rock"

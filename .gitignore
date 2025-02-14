@@ -1,3 +1,12 @@
+<<<<<<< HEAD
+=======
+<<<<<<< HEAD
+.env
+=======
+>>>>>>> 245df27475d1354a891faebacd4df37041fee477
+<<<<<<< HEAD
+.env
+=======
 # Created by https://www.toptal.com/developers/gitignore/api/react,python,dotenv,java
 # Edit at https://www.toptal.com/developers/gitignore?templates=react,python,dotenv,java
 
@@ -261,3 +270,8 @@ out/
 
 
 # End of https://www.toptal.com/developers/gitignore/api/react,python,dotenv,java
+>>>>>>> 79ce1cbd60cdb6887e1bef794fe146e2aeb5a6ce
+<<<<<<< HEAD
+=======
+>>>>>>> 36fc7ed8c9d5d9c240a9d546249d48ea8ea9a72e
+>>>>>>> 245df27475d1354a891faebacd4df37041fee477

@@ -1,26 +1,27 @@
 .Login {
   position: relative;
-  z-index: 3;
+  margin-top: 200px;
 }
 
 .Mp3Image{
   position: absolute;
-  top: 40px;
+  top: -200px;
   left: 270px;
   width: 145.5px;
   height: 170px;
   transform: rotate(13deg);
   opacity: 60%;
+  z-index: 1;
 }
 
 .HeadPhoneImage {
   position: absolute;
   width: 322px;
   height: 380px;
-  top: 24px;
+  top: -250px;
   left: -50px;
   transform: scaleX(-1);
-  z-index: 1;
+  z-index: 2;
   opacity: 20%;
 }
 
@@ -28,10 +29,10 @@
   position: absolute;
   width:327px;
   height: 300px;
-  top:620px;
-  left: 70px;
+  top:350px;
+  left: 40px;
   opacity: 50%;
-  z-index: 1;
+  z-index: 3;
 }
 
 .TitleWrap {
@@ -45,8 +46,9 @@
 }
 
 .contentwrap {
-  z-index: 3;
+  position: relative;
   margin-top: 5px;
+  z-index: 10;
 }
 
 .emailInputWrap {

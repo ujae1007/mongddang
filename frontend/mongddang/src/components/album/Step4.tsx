@@ -3,6 +3,11 @@ import { useRecoilState, useRecoilValue } from "recoil";
 import { currentAlbumState, albumStepState } from "../../recoil/albumState";
 import { Album, Playlist } from "../../types";
 import axiosInstance from "../../api/axiosInstance";
+import { useNavigate } from "react-router-dom";
+
+import TitleInput from "./TitleInput";
+import Button from "../common/Button";
+import PlaylistItem from "./PlayListItem";
 
 interface Step4Props {
   album: Album;
@@ -11,6 +16,7 @@ interface Step4Props {
   onTempSave: () => void;
   onDeletePlaylist: (playlistId: number) => void;
   onEditPlaylist: (playlist: Playlist) => void;
+  onCreatePlaylist: (playlistData: any) => void;
 }
 
 function Step4({
@@ -20,15 +26,18 @@ function Step4({
   onTempSave,
   onDeletePlaylist,
   onEditPlaylist,
+  onCreatePlaylist
 }: Step4Props) {
   const [currentTitle, setCurrentTitle] = useState(album.title);
   const [isDeleting, setIsDeleting] = useState(false);
+  const [isCreatingPlaylist, setIsCreatingPlaylist] = useState(false); // 플레이리스트 생성 중인지 확인 
 
   const currentAlbum = useRecoilValue(currentAlbumState);
   const [_, setStep] = useRecoilState(albumStepState);
 
-  const handleTitleChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
-    const newTitle = e.target.value;
+  const navigate = useNavigate();
+
+  const handleTitleChange = async (newTitle:string) => {
     setCurrentTitle(newTitle);
     
     try {
@@ -62,55 +71,78 @@ function Step4({
     }
   };
 
-  const handleMoveToStep3 = () => {
-    setStep(3);
+  const handleMoveToStep3 = async () => {
+    setIsCreatingPlaylist(true);
+    try {
+      // 플레이리스트 생성 API 호출
+      const { data } = await axiosInstance.post(
+        `/playlists/${album.id}`,
+      );
+      console.log('생성된 플레이리스트:', data);
+      // 생성된 플레이리스트 데이터를 부모 컴포넌트로 전달
+      onCreatePlaylist(data);
+      // Step3로 이동
+      setStep(3);
+    } catch (error) {
+      console.error("플레이리스트 생성 오류:", error);
+      alert("플레이리스트 생성 중 오류가 발생했습니다.");
+    } finally {
+      setIsCreatingPlaylist(false);
+    }
+  };
+
+  const handleComplete = async () => {
+    try {
+      onComplete(album.id);
+    } catch (error) {
+      console.error("앨범 완료 처리 중 오류:", error);
+      alert("앨범 완료 처리 중 오류가 발생했습니다.");
+    }
   };
 
   return (
     <div>
-      <div>
-        <label htmlFor="title">앨범 제목</label>
-        <input
-          type="text"
-          id="title"
-          value={currentTitle}
-          onChange={handleTitleChange}
-        />
-      </div>
+      <TitleInput
+      title={currentTitle}
+      onChange={handleTitleChange}
+      />
 
-      <div>
+      <div className="playlist-container">
         {album.playlists.map((playlist, index) => (
-          <div key={playlist.playlistId || index}>
-            {playlist.photos &&
-              playlist.photos.map((photo, photoIndex) => (
-                <img
-                  key={`${playlist.playlistId}-photo-${photoIndex}`}
-                  src={photo}
-                  alt={`Track ${index + 1} Photo ${photoIndex + 1}`}
-                  style={{ width: "100px", height: "100px", cursor: "pointer" }}
-                  onClick={() => onEditPlaylist(playlist)}
-                />
-              ))}
-            <span>트랙 {index + 1} / </span>
-            <span>{playlist.placeName} / </span>
-            <span>{playlist.music}</span>
-            <button
-              onClick={() => handleDeletePlaylist(playlist.playlistId || 0)}
-              disabled={isDeleting}
-            >
-              {isDeleting ? "삭제 중..." : "삭제"}
-            </button>
-          </div>
+          <PlaylistItem
+            key={playlist.playlistId || index}
+            playlist={playlist}
+            index={index}
+            onEdit={onEditPlaylist}
+            onDelete={handleDeletePlaylist}
+            isDeleting={isDeleting}
+          />
         ))}
       </div>
 
+      <div>
       {album.playlists.length < 5 && (
-        <button onClick={handleMoveToStep3}>플레이리스트 추가</button>
+          <Button
+            type="Large"
+            onClick={handleMoveToStep3}
+            disabled={isCreatingPlaylist}
+            text={isCreatingPlaylist ? "플레이리스트 생성 중..." : "플레이리스트 추가"}
+          />
       )}
+      </div>
+      <>
+      <Button
+        type="Large"
+        onClick={onTempSave}
+        text="임시저장"
+      />
+      <Button
+        type="Large"
+        onClick={handleComplete}
+        text="생성완료"
+      />
+      </>
 
-      <button onClick={onTempSave}>임시저장</button>
-
-      <button onClick={() => onComplete(album.albumId || 0)}>완료</button>
     </div>
   );
 }

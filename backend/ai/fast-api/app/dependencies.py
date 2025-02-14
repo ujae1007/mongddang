@@ -26,7 +26,6 @@ except Exception as e:
 # Load Stable Diffusion
 try:
     model_sd = StableDiffusionPipeline.from_pretrained("runwayml/stable-diffusion-v1-5", torch_dtype=torch.float16)
-    print(os.getcwd())
     # model_sd.unet.load_attn_procs("C:/Users/SSAFY/Desktop/pjt/fast-api/models/oil_finetuned")
     model_sd.unet.load_attn_procs("./models/oil_finetuned")
     model_sd.to("cuda")  # GPU 사용, CPU 사용 시 model.to("cpu")
