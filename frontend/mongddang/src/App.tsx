@@ -10,10 +10,11 @@ import ProfileEdit from "./pages/user/ProfileEdit";
 import Create from "./pages/album/Create";
 import ProfilePage from "./pages/user/ProfilePage";
 import AlbumDetail from "./pages/albumDetail/AlbumDetail";
-import MainPage from "./pages/user/MainPage";
+import MainPage from "./pages/user/MainPage/MainPage";
 import IntroPages from "./pages/introduce/Introduce";
 import FollowPage from "./pages/user/FollowPage";
 import LikeAlbumsPage from "./pages/user/LikesAlbum";
+import ErrorPage from "./pages/Error";
 
 import YoutubePractice from "./pages/youtube/youtubePrac";
 
@@ -37,8 +38,9 @@ function App() {
 
           <Route path="/create" element={<Create />} />
           <Route path="/albums/:albumId" element={<AlbumDetail />} />
-          
           <Route path="/youtube" element={<YoutubePractice />} />
+          
+          <Route path="*" element={<ErrorPage />} />
         </Routes>
       </Router>
     </RecoilRoot>
