@@ -1,5 +1,5 @@
 # app/routers/inference.py
-from fastapi import APIRouter, BackgroundTasks
+from fastapi import APIRouter, BackgroundTasks, HTTPException
 from pydantic import BaseModel
 from app.internal import generate_cover as gen_internal
 from app import dependencies
@@ -9,11 +9,11 @@ router = APIRouter()
 
 
 class GenerateCoverRequest(BaseModel):
-    genres: str         # 생성할 이미지에 사용할 음악 장르
-    reference_image_url: str   # 프롬프트에 포함할 캡션을 추출하기위한 이미지
+    genres: list         # 생성할 이미지에 사용할 음악 장르
+    imageurls: list   # 프롬프트에 포함할 캡션을 추출하기위한 이미지
 
 
-@router.post("/generate_cover")
+@router.post("/generate_cover/")
 async def generate_cover_endpoint(request: GenerateCoverRequest):
     """
     요청을 받은 후 S3에서 기존 이미지를 다운로드하고,
@@ -21,7 +21,7 @@ async def generate_cover_endpoint(request: GenerateCoverRequest):
     """
     try:
         # 1. S3에서 기존 이미지 다운로드
-        reference_image = gen_internal.fetch_image_from_s3(request.reference_image_url, dependencies.S3_BUCKET)
+        reference_image = gen_internal.fetch_image_from_s3(request.imageurls, dependencies.S3_BUCKET)
         if reference_image is None:
             raise HTTPException(status_code=404, detail="S3 이미지 다운로드 실패")
         
@@ -34,7 +34,7 @@ async def generate_cover_endpoint(request: GenerateCoverRequest):
             raise HTTPException(status_code=500, detail="S3 업로드 실패")
         
         # 4. 결과 반환
-        return {"generated_image_url": s3_url}
+        return {"imageUrl": s3_url}
 
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))

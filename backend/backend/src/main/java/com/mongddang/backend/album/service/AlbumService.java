@@ -127,36 +127,6 @@ public class AlbumService {
             updatedAlbum.getUpdatedAt()
         );
     }
-
-//    @Transactional
-//    public AlbumResponseDto updateAlbumComplete(int albumId, AlbumUpdateDto albumUpdateDto, int currentUserId) {
-//        Album album = albumRepository.findById(albumId)
-//                .orElseThrow(() -> new IllegalArgumentException("해당 앨범을 찾을 수 없습니다: " + albumId));
-//
-//        // 소유자가 아닌 경우 예외 발생
-//        if (album.getUserId() != currentUserId) {
-//            throw new AccessDeniedException("권한이 없습니다.");
-//        }
-//
-//        // 제목 수정 (존재하는 경우)
-//        if (albumUpdateDto.getTitle() != null) {
-//            album.setTitle(albumUpdateDto.getTitle());
-//        }
-//        // status는 무조건 true로 설정
-//        album.setStatus(true);
-//
-//        Album updatedAlbum = albumRepository.save(album);
-//
-//        return new AlbumResponseDto(
-//            updatedAlbum.getAlbumId(),
-//            updatedAlbum.getUserId(),
-//            updatedAlbum.getTitle(),
-//            updatedAlbum.getAlbumImageUrl(),
-//            updatedAlbum.isStatus(),
-//            updatedAlbum.getCreatedAt(),
-//            updatedAlbum.getUpdatedAt()
-//        );
-//    }
     
     // 앨범 제목 수정 - 사용자 소유권 체크 추가
     @Transactional
@@ -221,8 +191,8 @@ public class AlbumService {
     public List<AlbumResponseDto> getMyAlbums(Principal principal) {
         String email = principal.getName();
         int userId = userService.getUserByEmail(email).getUserId();  
-        List<Album> albums = albumRepository.findByUserId(userId);
-        return albums.stream().map(this::toSimpleAlbumResponseDto).collect(Collectors.toList());
+        List<Album> albums = albumRepository.findByUserIdAndStatus(userId, true);
+        return albums.stream().map(this::toDetailedAlbumResponseDto).collect(Collectors.toList());
     }
 
     // ✅ 특정 사용자의 공개된 앨범 조회 (Playlist 정보 제외)
@@ -249,22 +219,27 @@ public class AlbumService {
     public AlbumResponseDto getAlbumById(int albumId) {
         Album album = albumRepository.findById(albumId)
                 .orElseThrow(() -> new IllegalArgumentException("해당 앨범을 찾을 수 없습니다: " + albumId));
-
+        return toDetailedAlbumResponseDto(album);
+    }
+    
+ // ✅ Playlist + Music 정보를 포함한 AlbumResponseDto 생성
+    private AlbumResponseDto toDetailedAlbumResponseDto(Album album) {
         // 플레이리스트 정보 조회
-        List<PlaylistDto> playlists = playlistRepository.findByAlbum_AlbumId(albumId).stream()
+        List<PlaylistDto> playlists = playlistRepository.findByAlbum_AlbumId(album.getAlbumId()).stream()
                 .map(playlist -> {
                     PlaylistDto playlistDto = new PlaylistDto(playlist);
                     // 음악 정보 조회
                     if (playlist.getMusicId() != null) {
                         Music music = musicRepository.findById(playlist.getMusicId())
                                 .orElseThrow(() -> new IllegalArgumentException("해당 음악을 찾을 수 없습니다: " + playlist.getMusicId()));
-                        MusicDetailDto musicDetailDto = new MusicDetailDto();
-                        musicDetailDto.setMusicId(music.getMusicId());
-                        musicDetailDto.setTrackName(music.getTrackName());
-                        musicDetailDto.setArtistName(music.getArtistName());
-                        musicDetailDto.setGenre(music.getGenre());
-                        musicDetailDto.setPopularity(music.getPopularity());
-                        playlistDto.setMusicDetails(musicDetailDto); // PlaylistDto에 Music 정보를 추가
+                        MusicDetailDto musicDetailDto = new MusicDetailDto(
+                                music.getMusicId(),
+                                music.getTrackName(),
+                                music.getArtistName(),
+                                music.getGenre(),
+                                music.getPopularity()
+                        );
+                        playlistDto.setMusicDetails(musicDetailDto); // PlaylistDto에 Music 정보 추가
                     }
                     return playlistDto;
                 })
@@ -278,11 +253,10 @@ public class AlbumService {
                 album.isStatus(),
                 album.getCreatedAt(),
                 album.getUpdatedAt(),
-                playlists
+                playlists // ✅ Playlist 정보 추가
         );
     }
-
-
+    
     // ✅ Playlist 정보 제외한 AlbumResponseDto 생성
     private AlbumResponseDto toSimpleAlbumResponseDto(Album album) {
         return new AlbumResponseDto(
