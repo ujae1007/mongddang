@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { GetfollowInfo } from "../../types";
 import { getFollowingList, getFollowerList } from "../../api/follow";
 import { useNavigate } from "react-router-dom";
+import './FollowList.css'
 
 interface FollowListProps {
   userId: string ;
@@ -48,14 +49,20 @@ const FollowList = ({userId, type}: FollowListProps) => {
     <div>
       {lists.length > 0 ? (
         lists.map((user) => (
-          <div key={user.userId} onClick={() => nav(`/profile/${String(user.userId)}`)}>
+          <div className = "FollowMember"key={user.userId} onClick={() => nav(`/profile/${String(user.userId)}`)}>
             <img src={user.profileImageURL} alt="" width="100" />
-            <div>{user.nickname}</div>
-            <div>{user.introduce}</div>
+            <div className="UserInfo">
+              <div className="UserNickname">{user.nickname}</div>
+              <div className="UserIntroduce">{user.introduce}</div>
+            </div>
           </div>
         ))
       ) : (
-        <p>목록이 없습니다.</p>
+        <div className="FollowMemberList">
+          <div className="NotFound">
+            목록이 없습니다.
+          </div>
+        </div>
       )}
     </div>
   )
