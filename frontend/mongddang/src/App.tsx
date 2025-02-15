@@ -13,6 +13,7 @@ import Create from "./pages/album/Create";
 import ProfilePage from "./pages/user/ProfilePage";
 import AlbumDetail from "./pages/albumDetail/AlbumDetail";
 import MainPage from "./pages/user/MainPage/MainPage";
+import SearchPage from "./pages/Search/Search";
 import IntroPages from "./pages/introduce/Introduce";
 import FollowPage from "./pages/user/FollowPage";
 import LikeAlbumsPage from "./pages/user/LikesAlbum";
@@ -48,6 +49,7 @@ function AppContent() {
           <Route path="/signup" element={<SignUp />} />
 
           <Route path="/mainpage" element={<MainPage />} />
+          <Route path="/search" element={<SearchPage/>} />
           <Route path="/likes" element={<LikeAlbumsPage />} />
           
           <Route path="/profile/:userId" element={<ProfilePage />} />
