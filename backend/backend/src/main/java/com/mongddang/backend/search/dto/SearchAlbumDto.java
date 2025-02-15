@@ -8,15 +8,17 @@ public class SearchAlbumDto {
     private String albumImageUrl;
     private boolean status;
     private LocalDateTime createdAt;
+    private String nickname;
 
     public SearchAlbumDto() {}
 
-    public SearchAlbumDto(int albumId, String title, String albumImageUrl, boolean status, LocalDateTime createdAt) {
+    public SearchAlbumDto(int albumId, String title, String albumImageUrl, boolean status, LocalDateTime createdAt, String nickname) {
         this.albumId = albumId;
         this.title = title;
         this.albumImageUrl = albumImageUrl;
         this.status = status;
         this.createdAt = createdAt;
+        this.nickname = nickname;
     }
 
     public int getAlbumId() {
@@ -48,5 +50,12 @@ public class SearchAlbumDto {
     }
     public void setCreatedAt(LocalDateTime createdAt) {
         this.createdAt = createdAt;
+    }
+    public String getNickname() { 
+    	return nickname; 
+    }
+    // ✅ 닉네임 Getter 추가
+    public void setNickname(String nickname) { 
+    	this.nickname = nickname; 
     }
 }

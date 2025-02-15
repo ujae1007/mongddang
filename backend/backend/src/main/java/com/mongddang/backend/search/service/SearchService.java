@@ -47,12 +47,22 @@ public class SearchService {
         // status가 true인 조건 추가
         List<SearchAlbum> albums = searchAlbumRepository.findByTitleContainingAndStatus(title, true);
         for (SearchAlbum album : albums) {
+            // `userId`로 `nickname` 조회
+            int userId = album.getUserId();
+            String nickname = searchUserRepository.findById(userId)
+            		// 사용자 닉네임 가져오기
+                    .map(SearchUser::getNickname)
+                    // 닉네임이 없으면 "Unknown" 처리
+                    .orElse("Unknown");
+
+            // `nickname` 포함해서 DTO 생성
             SearchAlbumDto dto = new SearchAlbumDto(
                     album.getAlbumId(),
                     album.getTitle(),
                     album.getAlbumImageURL(),
                     album.isStatus(),
-                    album.getCreatedAt()
+                    album.getCreatedAt(),
+                    nickname
             );
             result.add(dto);
         }
