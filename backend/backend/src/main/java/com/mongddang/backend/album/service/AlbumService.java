@@ -147,15 +147,7 @@ public class AlbumService {
 
         Album updatedAlbum = albumRepository.save(album);
 
-        return new AlbumResponseDto(
-            updatedAlbum.getAlbumId(),
-            updatedAlbum.getUserId(),
-            updatedAlbum.getTitle(),
-            updatedAlbum.getAlbumImageUrl(),
-            updatedAlbum.isStatus(),
-            updatedAlbum.getCreatedAt(),
-            updatedAlbum.getUpdatedAt()
-        );
+        return toDetailedAlbumResponseDto(album);
     }
     
     // 앨범 삭제 - 사용자 소유권 체크 추가
