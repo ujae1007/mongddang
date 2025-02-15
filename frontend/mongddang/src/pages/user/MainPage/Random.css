@@ -1,0 +1,43 @@
+.RandomSection {
+  margin-top: 30px;
+  position: relative;
+  height: 320px;
+}
+
+
+.RandomSectionImage .MainImage {
+  width: 100%;
+  height: 307px;
+  z-index: 1;
+  opacity: 70%;
+  position: absolute;
+}
+
+.RandomSectionImage .SubImage {
+  border-radius: 50%;
+  width: 212px;
+  height: 212px;
+  z-index: 2;
+  position: absolute;
+  top: -25px;
+  left: 80px;
+}
+
+.RandomSectionImage .SubImage2 {
+  position: absolute;
+  z-index: 3;
+  top: 65px;
+  left: 166px;
+}
+
+.RandomSection .RandomAlbumPlaylist{
+  width: 100%;
+  margin-top: 10px;
+  position: absolute;
+  z-index: 4;
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+  top: 180px;
+}
+

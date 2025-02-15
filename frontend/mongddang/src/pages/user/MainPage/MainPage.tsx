@@ -24,8 +24,8 @@ function MainPage () {
   const loggedInUsernickname = loggedInUser?.nickname
 
   return (
-    <div>
-      <p>반갑습니다.{loggedInUsernickname}님!</p>
+    <div style={{width:"100%"}}>
+      <p style={{marginLeft:10, fontSize: 18, fontWeight:400, color:"#252525"}}>반갑습니다. {loggedInUsernickname}님!</p>
       
       {/* 첫번째 랜덤 앨범 */}
       <div>
@@ -38,7 +38,8 @@ function MainPage () {
       </div>
 
       {/* 내 플레이리스트 일단 3개만 보이도록 하자*/}
-      <div>
+      <div style={{padding:10}}>
+        <p style={{fontSize:20, fontWeight:500}}>나의 플레이리스트</p>
         <MyPlayListSection loggedInUser={String(loggedInUsernickname)}/>
       </div>
 
