@@ -19,8 +19,7 @@ export interface Playlist {
 
 // 앨범
 export interface Album {
-  id?: number;
-  albumId?: number;
+  albumId: number;
   userId?: number;
   title: string;
   albumImageUrl: string;

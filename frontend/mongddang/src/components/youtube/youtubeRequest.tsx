@@ -33,7 +33,7 @@ const searchVideos = async (trackName: string, artistName:string,): Promise<Yout
         type: "video"
       }
     })
-    console.log("유투브 정보", res.data)
+    console.log("유튜브 정보", res.data)
     return res.data.items
   }catch(err){
     console.log("youtube 오류", err)
@@ -43,28 +43,53 @@ const searchVideos = async (trackName: string, artistName:string,): Promise<Yout
 
 const MusicPlayer: React.FC<MusicPlayerProps> = ({trackName, artistName}) => {
   const [videoId, setVideoId] = useState<string | null>(null)
+  const [isLoading, setIsLoading] = useState<boolean>(true);
+  const [error, setError] = useState<string | null>(null);
 
-  useEffect(() =>{
+  useEffect(() => {
+    let isMounted = true;
+
     const fetchVideo = async () => {
-      const videos = await searchVideos(trackName, artistName)
-      if (videos.length > 0) {
-        setVideoId(videos[0].id.videoId)
+      setIsLoading(true)
+      setError(null)
+      try {
+        const videos = await searchVideos(trackName, artistName);
+        if (isMounted && videos.length > 0) {
+          setVideoId(videos[0].id.videoId);
+        } else {
+          setError('비디오를 찾을 수 없습니다.');
+        }
+      } catch (err) {
+        if (isMounted) {
+          setError('비디오를 불러오는 중 오류가 발생했습니다.')
+        }
+      } finally {
+        if(isMounted) {
+          setIsLoading(false);
+        }
       }
-    }
+    };
+
     if (trackName && artistName) {
-      fetchVideo()
+      fetchVideo();
     }
-  }, [trackName, artistName])
+    return () => {
+      isMounted = false;
+    };
+  }, [trackName, artistName]);
 
-  if (!videoId) 
-    return null
-
+  if (isLoading) return <div>로딩 중...</div>;
+  if (error) return <div>{error}</div>;
+  if (!videoId) return null;
+  
   return (
     <div>
     <iframe
       width="200"
       height="200"
-      src={`https://www.youtube.com/embed/${videoId}`}
+      // src={`https://www.youtube.com/embed/${videoId}`}
+      src={`https://www.youtube-nocookie.com/embed/${videoId}`}
+
       title="YouTube video player"
       allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
       allowFullScreen
