@@ -175,7 +175,7 @@ function AlbumDetail() {
       </div>
 
       <div>
-        <MapBox playlists={mapBoxPlaylists} />
+        {/* <MapBox playlists={mapBoxPlaylists} /> */}
       </div>
 
       <hr />

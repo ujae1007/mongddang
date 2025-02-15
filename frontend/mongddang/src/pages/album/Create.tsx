@@ -69,7 +69,7 @@ function Create() {
   // 앨범 생성
   const handleCreateAlbum = (albumId: number, title: string) => {
     setAlbum({
-      id: albumId,
+      albumId: albumId,
       title: title,
       albumImageUrl: "",
       status: false,
@@ -114,10 +114,23 @@ function Create() {
   };
 
   // 임시저장
-  const handleTempSave = () => {
-    setAlbum(null);
-    setEditingPlaylist(undefined);
-    setStep(1);
+  const handleTempSave = async () => {
+    try {
+      // 현재 앨범의 최신 상태를 서버에서 가져옴
+      const response = await axiosInstance.get(`/albums/detail/${album?.albumId}`);
+      
+      // 앨범 상태 초기화 전에 서버에서 최신 데이터 불러오기기
+      setAlbum(null);
+      setEditingPlaylist(undefined);
+      setStep(1);
+      
+      // 임시저장 목록 갱신
+      fetchTempAlbums();
+      fetchTempAlbumCount();
+    } catch (error) {
+      console.error("임시저장 중 오류 발생:", error);
+      alert("임시저장 중 오류가 발생했습니다.");
+    }
   };
 
   // 플레이리스트 생성 
@@ -134,7 +147,7 @@ function Create() {
           playlist.playlistId === editingPlaylist.playlistId
             ? playlistData
             : playlist
-        );
+        ) || []; // album.playlists가 undefined인 경우가 존재할 수 있기에 추가
         setAlbum({
           ...album,
           playlists: updatedPlaylists,
@@ -143,7 +156,7 @@ function Create() {
       } else {
         setAlbum({
           ...album,
-          playlists: [...album.playlists, playlistData],
+          playlists: [...(album.playlists || []), playlistData], // // playlists가 없으면 빈 배열로 초기화
         });
       }
       setPlaylistId(null);
@@ -175,10 +188,21 @@ function Create() {
   };
 
   // 플레이리스트 작업 취소
-  const handleCancelPlaylist = () => {
-    setEditingPlaylist(undefined);
-    setPlaylistId(null);
-    setStep(2);
+  const handleCancelPlaylist = async () => {
+    try {
+      // 생성 중인 플레이리스트 삭제하기
+      // 이미 플레이리스트 추가했을 때 플레이리스트가 생성되었기 때문에 삭제 진행 
+      if (playlistId) {
+        await axiosInstance.delete(`/playlists/${playlistId}`);
+      }
+  
+      // 상태 초기화
+      setEditingPlaylist(undefined);
+      setPlaylistId(null);
+      setStep(2);
+    } catch (error) {
+      console.error("플레이리스트 취소 중 오류 발생:", error);
+    }
   };
 
   // 임시저장 앨범 목록 조회
@@ -186,7 +210,16 @@ function Create() {
     setIsLoading(true);
     try {
       const response = await axiosInstance.get('/albums/my/uncompleted');
-      setTempAlbums(response.data);
+
+      // 플레이리스트 정보를 함께 가져오기 위해 각 앨범의 상세 정보를 조회
+      const albumsWithPlaylists = await Promise.all(
+        response.data.map(async (album: Album) => {
+          const detailResponse = await axiosInstance.get(`/albums/detail/${album.albumId}`);
+          return detailResponse.data;
+        })
+      );
+
+      setTempAlbums(albumsWithPlaylists);
     } catch (error) {
       console.error("임시저장 앨범 조회 오류:", error);
     } finally {
@@ -201,11 +234,40 @@ function Create() {
   };
 
   // 임시저장 앨범 선택
-  const handleSelectTempAlbum = (album: Album) => {
-    setAlbum(album);
-    setStep(2);
-    setShowTempAlbums(false);
-  };
+  const handleSelectTempAlbum = async (album: Album) => {
+    try {
+        // 선택한 앨범의 상세 정보를 다시 조회
+        const response = await axiosInstance.get(`/albums/detail/${album.albumId}`);
+        const albumWithPlaylists = response.data;
+
+        // 플레이리스트 데이터 구조 변환
+        const formattedPlaylists = albumWithPlaylists.playlists.map(playlist => ({
+            playlistId: playlist.playlistId,
+            photos: playlist.photoUrls,
+            placeName: playlist.locationAddress,
+            music: playlist.musicDetails.trackName,
+            latitude: playlist.latitude,
+            longitude: playlist.longitude,
+            musicId: playlist.musicId,
+            startTime: playlist.startTime,
+            endTime: playlist.endTime
+        }));
+
+        setAlbum({
+            ...albumWithPlaylists,
+            playlists: formattedPlaylists
+        });
+
+        if (albumWithPlaylists.playlists && albumWithPlaylists.playlists.length > 0) {
+            setStep(4);
+        } else {
+            setStep(2);
+        }
+        setShowTempAlbums(false);
+    } catch (error) {
+        console.error("앨범 상세 정보 조회 오류:", error);
+    }
+};
 
   // 임시저장 앨범 수 조회
   const fetchTempAlbumCount = async () => {
@@ -243,7 +305,7 @@ function Create() {
 
       {step === 2 && album && (
         <Step2
-          albumId={album.id || 0}
+          albumId={album.albumId || 0}
           title={album.title}
           onUpdateTitle={handleUpdateTitle}
           onTempSave={handleTempSave}
@@ -253,7 +315,7 @@ function Create() {
 
       {step === 3 && album && (
         <Step3
-          albumId={album.id!}
+          albumId={album.albumId!}
           playlistId={playlistId!}
           title={album.title}
           onUpdateTitle={handleUpdateTitle}

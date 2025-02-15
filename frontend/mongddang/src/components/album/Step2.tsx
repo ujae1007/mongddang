@@ -75,6 +75,7 @@ function Step2({
         `/playlists/${albumId}`,
       );
       onCreatePlaylist(data);
+      console.log("플레이리스트 생성 완료:", data);
       setStep(3);
     } catch (error) {
       console.error("플레이리스트 생성 오류", error);

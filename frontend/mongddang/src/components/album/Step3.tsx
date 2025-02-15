@@ -112,6 +112,12 @@ function Step3({
     
       // 이미지 파일들 추가
       const imageFiles = imageUrls.map((imageUrl, index) => {
+
+        // 이미 서버에서 온 이미지 URL이면 그대로 반환
+      if (imageUrl.startsWith('http') || imageUrl.startsWith('/')) {
+        return null;
+      }
+
         // 이미지 처리
         const byteString = atob(imageUrl.split(',')[1]);
         const mimeType = imageUrl.split(',')[0].split(':')[1].split(';')[0];
@@ -123,7 +129,7 @@ function Step3({
         }
         const blob = new Blob([ab], { type: mimeType });
         return new File([blob], `image${index}.${mimeType.split('/')[1]}`, { type: mimeType });
-      });
+      }).filter(file => file !== null); // null 제거
 
         imageFiles.forEach(file => {
           formData.append('files', file);
@@ -151,6 +157,12 @@ function Step3({
         }
   
       );
+      console.log("플레이리스트 생성/수정 완료:", response.data);
+
+      // imageUrls에 기존 서버 이미지 URL 포함
+      const finalImageUrls = imageUrls.map(url => 
+        url.startsWith('http') || url.startsWith('/') ? url : url
+      );
 
       // 프론트엔드 상태 업데이트
       onAddPlaylist({
@@ -161,7 +173,7 @@ function Step3({
         latitude,
         longitude,
         locationAddress: placeName,
-        photos: imageUrls,
+        photos: finalImageUrls,
         createdAt: new Date().toISOString(),
         updatedAt: new Date().toISOString(),
 
@@ -170,8 +182,6 @@ function Step3({
         placeName: placeName,
         address: address,
       });
-
-
       setStep(4)
     } catch (error) {
       console.error("플레이리스트 생성/수정 중 오류 발생:", error);
@@ -179,7 +189,15 @@ function Step3({
     }
   };
 
+  // 모든 내용을 다 입력하였는지 확인
   const isFormValid = music && placeName && address && imageUrls.length > 0;
+
+  // 플레이리스트 수정 여부 확인 
+  const hasChanges = 
+  music !== editingPlaylist?.music || 
+  placeName !== editingPlaylist?.placeName || 
+  address !== editingPlaylist?.address || 
+  imageUrls.length !== (editingPlaylist?.photos?.length || 0);
 
   return (
     <div>
@@ -268,7 +286,7 @@ function Step3({
         type="Large"
         text={isSaving ? "저장 중..." : (editingPlaylist ? "수정하기" : "추가하기")}
         onClick={handleSubmit}
-        disabled={!isFormValid|| isSaving}
+        disabled={editingPlaylist ? !hasChanges : !isFormValid || isSaving}
         />
     </div>
   );

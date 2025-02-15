@@ -42,7 +42,7 @@ function Step4({
     
     try {
       // 앨범 제목 변경 API 호출
-      await axiosInstance.put(`/albums/title/${album.id}`, {
+      await axiosInstance.put(`/albums/title/${album.albumId}`, {
         title: newTitle
       });
       
@@ -75,8 +75,9 @@ function Step4({
     setIsCreatingPlaylist(true);
     try {
       // 플레이리스트 생성 API 호출
+
       const { data } = await axiosInstance.post(
-        `/playlists/${album.id}`,
+        `/playlists/${album.albumId}`,
       );
       console.log('생성된 플레이리스트:', data);
       // 생성된 플레이리스트 데이터를 부모 컴포넌트로 전달
@@ -93,7 +94,8 @@ function Step4({
 
   const handleComplete = async () => {
     try {
-      onComplete(album.id);
+      onComplete(album.albumId);
+      console.log("앨범 완료 처리 완료", album);
     } catch (error) {
       console.error("앨범 완료 처리 중 오류:", error);
       alert("앨범 완료 처리 중 오류가 발생했습니다.");
@@ -107,8 +109,9 @@ function Step4({
       onChange={handleTitleChange}
       />
 
-      <div className="playlist-container">
-        {album.playlists.map((playlist, index) => (
+      <div>
+      {album.playlists.map((playlist, index) => {
+        return (
           <PlaylistItem
             key={playlist.playlistId || index}
             playlist={playlist}
@@ -117,7 +120,8 @@ function Step4({
             onDelete={handleDeletePlaylist}
             isDeleting={isDeleting}
           />
-        ))}
+          );
+        })}
       </div>
 
       <div>
