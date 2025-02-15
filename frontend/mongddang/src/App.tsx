@@ -56,6 +56,7 @@ function AppContent() {
 
           <Route path="/create" element={<Create />} />
           <Route path="/albums/:albumId" element={<AlbumDetail />} />
+
           
           <Route path="*" element={<ErrorPage />} />
         </Routes>

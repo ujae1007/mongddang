@@ -95,6 +95,7 @@ function Step4({
   const handleComplete = async () => {
     try {
       onComplete(album.albumId);
+      console.log("앨범 완료 처리 완료", album);
     } catch (error) {
       console.error("앨범 완료 처리 중 오류:", error);
       alert("앨범 완료 처리 중 오류가 발생했습니다.");
@@ -109,7 +110,8 @@ function Step4({
       />
 
       <div>
-        {album.playlists.map((playlist, index) => (
+      {album.playlists.map((playlist, index) => {
+        return (
           <PlaylistItem
             key={playlist.playlistId || index}
             playlist={playlist}
@@ -118,7 +120,8 @@ function Step4({
             onDelete={handleDeletePlaylist}
             isDeleting={isDeleting}
           />
-        ))}
+          );
+        })}
       </div>
 
       <div>
