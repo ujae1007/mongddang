@@ -1,0 +1,78 @@
+.LikeAlbums {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr); /* 3열 레이아웃 */
+}
+
+.LikeAlbum {
+  display: flex;
+  justify-content: center;
+}
+
+.LP {
+  position: relative;
+}
+
+.AlbumImage{
+  width: 198px;
+  border-radius: 50%;
+  position: absolute;
+  right: 110px;
+  top: 22px;
+}
+
+.PlayButton {
+  position: absolute;
+  right: 185px;
+  top:100px;
+}
+
+.AlbumAuthor {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.AuthorNickname {
+  margin: 0;
+  color: #9999a1;
+  font-size: 16px;
+  font-weight: 400;
+}
+
+.AlbumTitle {
+  margin: 0;
+  color: #111;
+  font-size: 22px;
+  font-weight: 600;
+
+}
+
+.Playlist {
+  margin-left: 15px;
+  margin-top: 30px;
+}
+
+.Playlist img{
+  width: 70px;
+  height: 70px;
+}
+
+.Playlist .MusicInfo .TrackName {
+  margin: 12px 0px 5px 15px ;
+  font-size: 16px;
+  font-weight: 600;
+}
+
+.Playlist .MusicInfo .ArtistName {
+  margin: 0px 0px 0px 15px;
+  color: #9999a1;
+  font-size: 14px;
+  font-weight: 400;
+}
+
+.RemainLikeAlbum {
+  margin-top: 20px;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr); /* 2열 레이아웃 예시 */
+}
