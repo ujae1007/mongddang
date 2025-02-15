@@ -3,7 +3,7 @@ import "./Button.css"
 interface ButtonProps {
   text: string
   using?: "Album" | "Album2"
-  type?: "Large" | "Middium" | "ProfileEdit" | "PopUp" | "confirm | edit | delete"
+  type?: "Large" | "Middium" | "ProfileEdit" | "PopUp" | "confirm" | "edit" | "delete"
   onClick?: () => void
   disabled?: boolean
 }

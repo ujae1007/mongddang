@@ -27,6 +27,7 @@ interface AlbumDetail {
       artist: string;
     };
   }>;
+  albumImageUrl: string;
 }
 
 // 앨범 생성자 정보
@@ -44,7 +45,8 @@ function AlbumDetail() {
   const [albumData, setAlbumData] = useState<AlbumDetail | null>(location.state?.albumDetail || null);
   const [isLoading, setIsLoading] = useState(true);
 
-  const image = "/assets/앨범커버생성전.png"; // 앨범 커버 이미지 생성 기능 추가하면 변경 예정 
+  const coverimage = albumData.albumImageUrl // 생성된 커버 이미지
+  const lpimage = '/assets/LP판.png' // Lp 이미지
 
   const { userId } = useParams<{ userId: string }>(); // 앨범 생성자 정보
 
@@ -117,7 +119,6 @@ function AlbumDetail() {
     }
   };
 
-
   return (
     <div>
      {/* 내가 임시로 직접 스타일 지정해뒀엉..*/}
@@ -169,9 +170,11 @@ function AlbumDetail() {
 
       </div>
 
-
-      <div>
-        <img src={image} alt="앨범커버 생성 전 기본 이미지" />
+      {/*겹치게 만들어서 피그마처럼 만들기...*/}  
+      {/*크기를 지정하지 않으면 너무 커서 임시로 크기 설정했어요.*/}  
+      <div style={{ display: "flex", justifyContent: "space-between" }}>
+        <img src={coverimage} alt="생성된 커버 이미지" style={{width:"150px"}}/>
+        <img src={lpimage} alt="LP" style={{width:"150px"}}/>
       </div>
 
       <div>
