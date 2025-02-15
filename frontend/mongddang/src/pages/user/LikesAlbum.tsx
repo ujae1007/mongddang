@@ -2,7 +2,7 @@ import useAuth from "../../hooks/useAuth"
 // import { useNavigate } from "react-router-dom"
 import LikesAlbumList from "./LikesAlbumList"
 import { useRef } from "react"
-
+import './LikeAlbumList.css'
 
 function LikeAlbumsPage () {
   
@@ -25,10 +25,10 @@ function LikeAlbumsPage () {
 
   return (
     <div style={{width:"100%"}}>
-      <p style={{marginBottom:0, marginTop:40, color:"#111", fontSize:16}}><span style={{fontSize:30, color:"#111"}}>{loggedInUserNickname}</span>님이</p>
+      <p style={{marginBottom:0, marginTop:40, color:"#111", fontSize:16}}><span style={{marginLeft:16,fontSize:30, color:"#111"}}>{loggedInUserNickname}</span>님이</p>
       <div style={{display:"flex", justifyContent:"space-between"}}>
-        <p style={{margin:0, color:"#111", fontSize:16}}>좋아한 앨범</p>
-        <button style={{backgroundColor:"rgb(249, 249, 249)", border:"none", fontSize:16, color:"#66656c"}} onClick={handleScrollToThirdSection}>더보기 +</button>
+        <p style={{margin:0, marginLeft:16, color:"#111", fontSize:16}}>좋아한 앨범 목록</p>
+        <button style={{marginRight:10,backgroundColor:"rgb(249, 249, 249)", border:"none", fontSize:16, color:"#66656c"}} onClick={handleScrollToThirdSection}>더보기 +</button>
       </div>
 
       <div>

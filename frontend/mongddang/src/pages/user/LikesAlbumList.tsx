@@ -87,9 +87,9 @@ function LikesAlbumList ({loggedInuser, thirdSectionRef}:UserProps) {
   return (
     <div style={{marginTop:10}}>
       {/* 3개만 렌더링하기 */}
-        <div style={{display: "flex", justifyContent:"space-around"}}>
+        <div className = "LikeAlbums">
           {firstSection.map((album) => (
-            <div key={album.albumId}> 
+            <div className="LikeAlbum"key={album.albumId}> 
               <img src={album.albumImageURL} width={100} onClick={() => goToAlbumDetail(String(album.albumId))}/>
             </div>
           ))}
@@ -100,34 +100,37 @@ function LikesAlbumList ({loggedInuser, thirdSectionRef}:UserProps) {
           {/* 밑바닥 위에 앨범커버 넣고, 위에 버튼 올리면돼~! 고마워~!! */}
           <div className="LP">
             <img src="../../public/assets/밑바닥.png" alt=""  width="300"/>
-            <img src={secondSection.albumImageURL} width={150} onClick={() => goToAlbumDetail(String(secondSection.albumId))}/>
-            <img src="../../public/assets/탑.png" alt="" />
+            <img className="AlbumImage"src={secondSection.albumImageURL} onClick={() => goToAlbumDetail(String(secondSection.albumId))}/>
+            <img className="PlayButton"src="../../public/assets/탑.png" alt="" />
           </div>
-
-          <p>{secondSection.authorNickname}</p>
-          <p>{secondSection.title}</p>
+          <div className="AlbumAuthor">
+            <p className="AuthorNickname">{secondSection.authorNickname}</p>
+            <p className="AlbumTitle">{secondSection.title}</p>
+          </div>
          {/*노래 리스트 출력*/}
           <div>
-          {secondSection.playlists.map((playlist) => {
-            const randomIndex = Math.floor(Math.random() * (playlist.photos?.length || 1)); // 랜덤 인덱스 계산
-            return (
-              <div key={playlist.music.musicId} style={{display: "flex"}}>
-                {/* 랜덤 이미지 선택 */}
-                <img src={playlist.photos?.[randomIndex]?.photoURL}  width={50}/>
-                <p>{playlist.music.trackName}</p>
-                <p>{playlist.music.artistName}</p>
-              </div>
-            );
-          })}
+            {secondSection.playlists.map((playlist) => {
+              const randomIndex = Math.floor(Math.random() * (playlist.photos?.length || 1)); // 랜덤 인덱스 계산
+              return (
+                <div className="Playlist" key={playlist.music.musicId} style={{display: "flex"}}>
+                  {/* 랜덤 이미지 선택 */}
+                  <img src={playlist.photos?.[randomIndex]?.photoURL}/>
+                  <div className="MusicInfo">
+                    <p className="TrackName">{playlist.music.trackName}</p>
+                    <p className="ArtistName">{playlist.music.artistName}</p>
+                  </div>
+                </div>
+              );
+            })}
           </div>
           
         {/* 네번째 앨범부터 다시 렌더링 */}
-          <div ref={thirdSectionRef} style={{display: "flex"}} >
-          {thirdSection.map((album) => (
-            <div key={album.albumId} onClick={() => goToAlbumDetail(String(album.albumId))}> 
-              <img src={album.albumImageURL} width={100}/>
-            </div>
-          ))}
+          <div className = "LikeAlbums" ref={thirdSectionRef} style={{marginTop:20}} >
+            {thirdSection.map((album) => (
+              <div className="LikeAlbum" key={album.albumId} onClick={() => goToAlbumDetail(String(album.albumId))}> 
+                <img src={album.albumImageURL} width={100}/>
+              </div>
+            ))}
           </div>
         </div>
 

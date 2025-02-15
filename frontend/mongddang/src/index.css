@@ -35,7 +35,7 @@ html, body {
 /* 모바일 화면 중심 */
 @media (min-width: 420px) {
   body {
-    max-width: 420px; 
+    max-width: 390px; 
     margin: 0 auto;
     background-color:white;
     overflow: auto;
