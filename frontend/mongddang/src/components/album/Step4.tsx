@@ -8,15 +8,17 @@ import { useNavigate } from "react-router-dom";
 import TitleInput from "./TitleInput";
 import Button from "../common/Button";
 import PlaylistItem from "./PlayListItem";
+import Popup from "./Popup"
 
 interface Step4Props {
   album: Album;
   onUpdateTitle: (newTitle: string) => void;
-  onComplete: (albumId: number) => void;
+  onComplete: (albumId: number) => Promise<{albumImageUrl: string; albumId: number; albumDetail: any;}>;
   onTempSave: () => void;
   onDeletePlaylist: (playlistId: number) => void;
   onEditPlaylist: (playlist: Playlist) => void;
   onCreatePlaylist: (playlistData: any) => void;
+  onReset: () => void;
 }
 
 function Step4({
@@ -26,8 +28,11 @@ function Step4({
   onTempSave,
   onDeletePlaylist,
   onEditPlaylist,
-  onCreatePlaylist
+  onCreatePlaylist,
+  onReset
 }: Step4Props) {
+  const [showPopup, setShowPopup] = useState(false); //팝업 출력 여부
+
   const [currentTitle, setCurrentTitle] = useState(album.title);
   const [isDeleting, setIsDeleting] = useState(false);
   const [isCreatingPlaylist, setIsCreatingPlaylist] = useState(false); // 플레이리스트 생성 중인지 확인 
@@ -94,8 +99,21 @@ function Step4({
 
   const handleComplete = async () => {
     try {
-      onComplete(album.albumId);
-      console.log("앨범 완료 처리 완료", album);
+
+      // 완료 버튼을누르면
+      setShowPopup(true); // 팝업 표시
+
+      // 앨범 완료 처리 및 정보 받아오기
+      const { albumDetail } = await onComplete(album.albumId);
+
+      // 응답 데이터 받으면
+      navigate(`/albums/${album.albumId}`, {
+        state: { albumDetail: albumDetail }});
+      
+      // 리셋
+      onReset();
+
+      console.log("앨범 완료 처리", album);
     } catch (error) {
       console.error("앨범 완료 처리 중 오류:", error);
       alert("앨범 완료 처리 중 오류가 발생했습니다.");
@@ -145,6 +163,10 @@ function Step4({
         onClick={handleComplete}
         text="생성완료"
       />
+
+      <div>
+        {showPopup && <Popup isLoading={true} />}
+      </div>
       </>
 
     </div>

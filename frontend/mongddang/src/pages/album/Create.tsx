@@ -100,14 +100,14 @@ function Create() {
       const response = await axiosInstance.get(`/albums/detail/${albumId}`);
       const albumDetail = response.data;
 
-      // state 초기화
-      setAlbum(null);
-      setStep(1)
 
-      // 상세 페이지로 이동
-      navigate(`/albums/${albumId}`, { 
-        state: { albumDetail } 
-      });
+      // stage2, 4로 전달하기 위해 이미지 URL 추가
+      return {
+        albumId: albumDetail.albumId,
+        albumDetail: albumDetail
+      }
+
+
     } catch (error) {
       console.error("앨범 완료 처리 중 오류:", error);
     }
@@ -279,6 +279,12 @@ function Create() {
     }
   };
 
+  // 앨범 생성 정보 초기화 
+  const handleReset = () => {
+    setAlbum(null);
+    setStep(1);
+  }
+
   return (
     <>
       {step === 1 && !showTempAlbums && (
@@ -334,6 +340,7 @@ function Create() {
           onDeletePlaylist={handleDeletePlaylist}
           onEditPlaylist={handleEditPlaylist}
           onCreatePlaylist={handleCreatePlaylist}
+          onReset={handleReset}
         />
       )}
     </>

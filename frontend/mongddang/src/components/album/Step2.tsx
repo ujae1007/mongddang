@@ -2,10 +2,10 @@ import { useState } from "react";
 import { useSetRecoilState } from "recoil";
 import { albumStepState } from "../../recoil/albumState";
 import axiosInstance from "../../api/axiosInstance";
-import { useNavigate } from "react-router-dom";
 
 import TitleInput from "./TitleInput";
 import Button from "../common/Button";
+
 import './Step2.css'
 interface Step2Props {
   albumId: number;
@@ -42,13 +42,11 @@ function Step2({
   title,
   onUpdateTitle,
   onCreatePlaylist,
-  onTempSave
+  onTempSave,
 }: Step2Props) {
   const [isCreating, setIsCreating] = useState(false);
   const [isSaving, setIsSaving] = useState(false);
   const setStep = useSetRecoilState(albumStepState);
-
-  const navigate = useNavigate();
 
   // 앨범 제목 변경
   const handleTitleChange = async (newTitle: string) => {
@@ -101,27 +99,6 @@ function Step2({
     }
   };
 
-  // 앨범 생성 완료
-  const handleCompleteAlbum = async () => {
-    try {
-      // 앨범 완료 처리
-      await axiosInstance.put(`/albums/complete/${albumId}`, {
-        title: title
-      });
-      
-      // 앨범 상세 정보 조회
-      const response = await axiosInstance.get(`/albums/detail/${albumId}`);
-      
-      // 완료 후 앨범 상세 페이지로 이동
-      navigate(`/albums/${albumId}`, {
-        state: { albumDetail: response.data }
-      });
-    } catch (error) {
-      console.error("앨범 완료 처리 중 오류 발생:", error);
-      alert("앨범 완료 처리 중 오류가 발생했습니다.");
-    }
-  };
-
   return (
     <>
       <div className="step-container">
@@ -152,13 +129,7 @@ function Step2({
             disabled={isCreating || isSaving}
             onClick={handleTempSave}
           />
-          <Button
-            type="Middium"
-            using="Album2"
-            text="완료"
-            disabled={isCreating || isSaving}
-            onClick={handleCompleteAlbum}
-          />
+
         </div>
       </div>
 
