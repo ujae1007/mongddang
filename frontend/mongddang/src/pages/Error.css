@@ -1,0 +1,82 @@
+/* Error.css */
+
+/* 전체 레이아웃 초기화 */
+html, body {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: sans-serif;
+  }
+  
+  /* Error.tsx 최상단의 div를 전체 컨테이너로 가정 */
+  div {
+    width: 100vw;
+    height: 100vh;
+    position: relative; /* 이미지, 버튼 등을 배치하기 위해 relative 사용 */
+    background-color: #fff;
+    overflow: hidden; /* 필요 시 스크롤 제거 */
+  }
+  
+  /* 상단 제목 "Page Not Found" */
+  div > h1 {
+    /* margin: 3rem 0 6.5rem 1.5rem;  */
+    margin-top: 140px;
+    margin-left: 25px;
+    font-size: 1.7rem;
+    font-weight: 700;
+    color: #333;
+  }
+  
+  /* 첫 번째 문단: "죄송합니다. 페이지를 찾을 수 없습니다." */
+  div > p:nth-of-type(1) {
+    margin-top: 80px;
+    margin-left: 25px;
+    font-weight: 600;
+    font-size: 0.78rem;
+    color: #666;
+  }
+  
+  /* 두 번째 문단: "존재하지 않는 주소를 입력하셨거나..." */
+  div > p:nth-of-type(2) {
+    margin-top: 10px;
+    margin-left: 25px;
+    font-weight: 600;
+    font-size: 0.78rem;
+    color: #666;
+    line-height: 1.5;
+  }
+  
+  /* 404 에러 이미지 (캐릭터 포함) */
+  div > img:nth-of-type(1) {
+    position: absolute;
+    top: 58%;
+    left: 50%;
+    transform: translate(-50%, -60%); /* 원하는 위치로 조정 */
+    width: 300px !important;  /* TSX에서 width가 지정되어 있어도 덮어씌우기 */
+  }
+  
+  /* 구름 이미지 */
+  div > img:nth-of-type(2) {
+    position: absolute;
+    bottom: 18%;
+    left: 40%;
+    transform: translateX(-50%);
+    width: 80px !important;
+  }
+  
+  /* 마지막 문단: "메인으로 가기 →" */
+  div > p:nth-of-type(3) {
+    position: absolute;
+    bottom: 18%;
+    left: 40%;
+    font-size: 0.8rem;
+    font-weight: 600;
+    color: #000;
+    cursor: pointer;
+    transition: opacity 0.2s ease;
+  }
+  
+  div > p:nth-of-type(3):hover {
+    opacity: 0.7;
+  }
+  
