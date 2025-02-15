@@ -170,8 +170,6 @@ function Step3({
         placeName: placeName,
         address: address,
       });
-
-
       setStep(4)
     } catch (error) {
       console.error("플레이리스트 생성/수정 중 오류 발생:", error);
