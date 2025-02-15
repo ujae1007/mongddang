@@ -36,6 +36,7 @@ function Step3({
   const [imageUrls, setImageUrls] = useState<string[]>(editingPlaylist?.photos || []);
   const [isSaving, setIsSaving] = useState(false);
   const [currentTitle, setCurrentTitle] = useState(title);
+  const [selectedMusic, setSelectedMusic] = useState<Music | null>(null); // 검색해서 선택한 노래 정보보
   
   const fileInputRef = useRef<HTMLInputElement>(null);
   const setStep = useSetRecoilState(albumStepState);
@@ -136,7 +137,7 @@ function Step3({
         });
 
       // 다른 데이터들 추가
-      formData.append('musicId', 1); // 일단 임시로 DB에 넣어둔 1로 설정
+      formData.append('musicId', String(music)); // 일단 임시로 DB에 넣어둔 1로 설정
       formData.append('startTime', 0); 
       formData.append('endTime', 0); 
       formData.append('latitude', latitude.toString());
@@ -167,7 +168,7 @@ function Step3({
       // 프론트엔드 상태 업데이트
       onAddPlaylist({
         playlistId: targetPlaylistId,
-        musicId: music,
+        musicId: selectedMusic?.musicId || music,
         startTime: null,
         endTime: null,
         latitude,
@@ -178,7 +179,7 @@ function Step3({
         updatedAt: new Date().toISOString(),
 
         // 프론트엔드에서만 사용
-        music: music,
+        music: selectedMusic ? `${selectedMusic.trackName} - ${selectedMusic.artistName}` : music,
         placeName: placeName,
         address: address,
       });
@@ -194,10 +195,10 @@ function Step3({
 
   // 플레이리스트 수정 여부 확인 
   const hasChanges = 
-  music !== editingPlaylist?.music || 
-  placeName !== editingPlaylist?.placeName || 
-  address !== editingPlaylist?.address || 
-  imageUrls.length !== (editingPlaylist?.photos?.length || 0);
+      music !== editingPlaylist?.music || 
+      placeName !== editingPlaylist?.placeName || 
+      address !== editingPlaylist?.address || 
+      imageUrls.length !== (editingPlaylist?.photos?.length || 0);
 
   return (
     <div>
@@ -205,6 +206,8 @@ function Step3({
       title={currentTitle}
       onChange={handleTitleChange}
        />
+
+      {/* 사진 */}
       <div>
         <label>사진 업로드</label>
         <input
@@ -246,7 +249,8 @@ function Step3({
           ))}
         </div>
       </div>
-
+      
+      {/* 장소 */}
       {imageUrls.length > 0 && (
         <div>
           <label>위치 검색</label>
@@ -262,19 +266,24 @@ function Step3({
           )}
         </div>
       )}
-
+  
+      {/* 노래 */}
       {placeName && (
         <div>
           <label>노래 선택</label>
-          <SearchMusic onSelectMusic={setMusic} defaultKeyword={music} />
+          <SearchMusic 
+            onSelectMusic={(music) => {
+              setMusic(music.musicId);
+              setSelectedMusic(music); // 선택한 음악 정보 저장장
+            }} 
+            defaultKeyword={music} />
           {music && (
             <div>
-              <p>{music}</p>
+              <p>{selectedMusic.trackName} - {selectedMusic.artistName}</p>
             </div>
           )}
         </div>
       )}
-
 
       <Button
         type="Large"

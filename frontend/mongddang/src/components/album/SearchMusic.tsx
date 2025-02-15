@@ -1,28 +1,24 @@
 import { useState } from 'react';
 import axiosInstance from "../../api/axiosInstance";
 
+
+interface Music {
+  musicId: number;
+  trackName: string;
+  artistName: string;
+  genre: string;
+  popularity: number;
+}
+
 interface SearchMusicProps {
-  onSelectMusic: (music: string) => void;
+  onSelectMusic: (music: Music) => void;
   defaultKeyword?: string;
 }
 
-const mockMusicDatabase = [
-  "신호등 - 이무진",
-  "사건의 지평선 - 윤하",
-  "Ditto - NewJeans",
-  "LOVE DIVE - IVE",
-  "Hype Boy - NewJeans",
-  "After LIKE - IVE",
-  "새삥 - ZICO",
-  "Cookie - NewJeans",
-  "자격지심 - BE'O",
-  "FEARLESS - LE SSERAFIM", 
-  "아마겟돈 - 에스파"
-];
 
 function SearchMusic({ onSelectMusic, defaultKeyword = '' }: SearchMusicProps) {
   const [keyword, setKeyword] = useState(defaultKeyword);
-  const [musicList, setMusicList] = useState<string[]>([]);
+  const [musicList, setMusicList] = useState<Music[]>([]);
   const [isSearching, setIsSearching] = useState(false);
   const [showResults, setShowResults] = useState(false);
 
@@ -35,38 +31,13 @@ function SearchMusic({ onSelectMusic, defaultKeyword = '' }: SearchMusicProps) {
 
     setIsSearching(true); // 검색 중 상태로 변경
     
-    // ======================================================================
-    // 실제 서버 API 호출
-    // try {
-    //   const { data } = await axiosInstance.get(`/music/autocomplete?query=${keyword}`);
-      
-    //   setMusicList(data);
-      
-    //   if (data.length === 0) {
-    //     // DB에 존재하지 않는 키워드를 입력한 경우
-    //     alert('검색 결과가 없습니다.');
-    //   }
-    // } catch (error) {
-    //   console.error('Error searching music:', error);
-    //   alert('음악 검색 중 오류가 발생했습니다.');
-    //   setMusicList([]);
-    // } finally {
-    //   setIsSearching(false);
-    // }
-    //======================================================================
-
-    //======================================================================
-    // 목업 데이터를 사용해서 진행 
     try {
-      const filteredMusic = mockMusicDatabase.filter(music => 
-        music.toLowerCase().includes(keyword.toLowerCase())
-      );
+      const { data } = await axiosInstance.get(`/music/autocomplete?query=${keyword}`);
       
-      setMusicList(filteredMusic);
+      setMusicList(data);
       
-      if (filteredMusic.length === 0) {
+      if (data.length === 0) {
         // DB에 존재하지 않는 키워드를 입력한 경우
-        // 존재하지 않는 음악을 검색한 경우
         alert('검색 결과가 없습니다.');
       }
     } catch (error) {
@@ -76,7 +47,6 @@ function SearchMusic({ onSelectMusic, defaultKeyword = '' }: SearchMusicProps) {
     } finally {
       setIsSearching(false);
     }
-    //======================================================================
 };
 
   const handleSubmit = (e: React.FormEvent) => {
@@ -85,7 +55,7 @@ function SearchMusic({ onSelectMusic, defaultKeyword = '' }: SearchMusicProps) {
     setShowResults(true);
   };
 
-  const handleSelectMusic = (music: string) => {
+  const handleSelectMusic = (music: Music) => {
     onSelectMusic(music);
     setMusicList([]); // 선택 후 검색 결과 초기화
     setShowResults(false);
@@ -106,18 +76,18 @@ function SearchMusic({ onSelectMusic, defaultKeyword = '' }: SearchMusicProps) {
       </form>
 
       {showResults && musicList.length > 0 && (
-  <div style={{
-    position: 'fixed',
-    top: 0,
-    left: 0,
-    width: '100%',
-    height: '100%',
-    backgroundColor: 'rgba(0, 0, 0, 0.5)',
-    display: 'flex',
-    justifyContent: 'center',
-    alignItems: 'center',
-    zIndex: 1000
-  }}>
+      <div style={{
+        position: 'fixed',
+        top: 0,
+        left: 0,
+        width: '100%',
+        height: '100%',
+        backgroundColor: 'rgba(0, 0, 0, 0.5)',
+        display: 'flex',
+        justifyContent: 'center',
+        alignItems: 'center',
+        zIndex: 1000
+      }}>
     {/* 모달 컨텐츠 */}
     <div style={{
       width: '80%',
@@ -152,9 +122,9 @@ function SearchMusic({ onSelectMusic, defaultKeyword = '' }: SearchMusicProps) {
         padding: 0,
         margin: 0
       }}>
-        {musicList.map((music, index) => (
+        {musicList.map((music) => (
           <li
-            key={index}
+            key={music.musicId}
             onClick={() => handleSelectMusic(music)}
             style={{
               padding: '15px',
@@ -162,7 +132,7 @@ function SearchMusic({ onSelectMusic, defaultKeyword = '' }: SearchMusicProps) {
               cursor: 'pointer'
             }}
           >
-            {music}
+            {music.trackName} - {music.artistName}
           </li>
         ))}
       </ul>
