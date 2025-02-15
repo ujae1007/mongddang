@@ -160,6 +160,7 @@ function AlbumDetail() {
               <Button 
                 text='수정'
                 type='edit'
+                onClick={() => navigate(`/edit/${albumId}`)}
               />
               <Button 
                 text='삭제'
