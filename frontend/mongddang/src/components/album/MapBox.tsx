@@ -4,6 +4,7 @@ import 'mapbox-gl/dist/mapbox-gl.css';
 
 interface MapBoxProps {
   playlists: Playlist[];
+  onPlaylistSelect: (playlistId: number) => void; // 선택한 플레이리스트 정보를 전달
 }
 
 interface Playlist {
@@ -22,7 +23,7 @@ interface Playlist {
   };
 }
 
-function MapBox({ playlists }: MapBoxProps) {
+function MapBox({ playlists, onPlaylistSelect }: MapBoxProps) {
   const mapContainer = useRef<HTMLDivElement>(null); // MapBox 지도 자체를 렌더링하기위한 컨테이너
   const map = useRef<mapboxgl.Map | null>(null);  // MapBox 인스턴스를 저장할 ref  
   const markers = useRef<mapboxgl.Marker[]>([]);  // 마커들을 저장할 ref
@@ -33,6 +34,7 @@ function MapBox({ playlists }: MapBoxProps) {
   
   // 마커 정보를 저장할 state
   interface MarkerInfo {
+    playlistId: number;
     locationAddress: string;
     musicDetails: {
       title: string;
@@ -48,6 +50,7 @@ function MapBox({ playlists }: MapBoxProps) {
   useEffect(() => {
     // playlists의 정보를 markerInfos로 변환
     const newMarkerInfos = playlists.map(playlist => ({
+      playlistId: playlist.playlistId,
       locationAddress: playlist.locationAddress,
       musicDetails: playlist.musicDetails,
       coordinates: {
@@ -61,8 +64,9 @@ function MapBox({ playlists }: MapBoxProps) {
     // 첫 번째 마커를 선택 상태로 설정
     if (newMarkerInfos.length > 0 && !selectedLocation) {
       setSelectedLocation(newMarkerInfos[0].locationAddress);
+      onPlaylistSelect(playlists[0].playlistId);
     }
-  }, [playlists]);
+  }, [playlists, onPlaylistSelect]);
 
   // 지도 생성 및 마커 추가 
   useEffect(() => {
@@ -132,6 +136,10 @@ function MapBox({ playlists }: MapBoxProps) {
 
             // 선택된 마커의 색상 변경
             setSelectedLocation(markerInfo.locationAddress);
+
+            // 선택한 플레이리스트 정보 전달
+            onPlaylistSelect(markerInfo.playlistId);
+
             
             // 팝업 표시
             popup.addTo(map.current!);

@@ -45,6 +45,9 @@ function AlbumDetail() {
   const [albumData, setAlbumData] = useState<AlbumDetail | null>(location.state?.albumDetail || null);
   const [isLoading, setIsLoading] = useState(true);
 
+  const [selectedPlaylistId, setSelectedPlaylistId] = useState<number | null>(null);
+
+
   const coverimage = albumData.albumImageUrl // 생성된 커버 이미지
   const lpimage = '/assets/LP판.png' // Lp 이미지
 
@@ -81,6 +84,17 @@ function AlbumDetail() {
 
     fetchAlbumCreator();
   }, []);
+
+  // 선택한 플레이리스트 정보
+  useEffect(() => {
+    if (albumData?.playlists.length > 0 && !selectedPlaylistId) {
+      setSelectedPlaylistId(albumData.playlists[0].playlistId);
+    }
+  }, [albumData]);
+
+  const selectedPlaylist = albumData?.playlists.find(
+    playlist => playlist.playlistId === selectedPlaylistId
+  );
 
   // MapBox에 전달할 데이터 형식 변환
   const mapBoxPlaylists = albumData.playlists.map(playlist => ({
@@ -178,29 +192,31 @@ function AlbumDetail() {
       </div>
 
       <div>
-        {/* <MapBox playlists={mapBoxPlaylists} /> */}
+        <MapBox 
+          playlists={mapBoxPlaylists} 
+          onPlaylistSelect={(playlistId) => setSelectedPlaylistId(playlistId)}
+          />
       </div>
 
       <hr />
       
       <h3>플레이리스트 정보</h3>
-      {albumData.playlists.map((playlist, index) => (
-        <div key={playlist.playlistId || index}>
-          <h3>트랙 {index + 1}</h3>
+      {selectedPlaylist && (
+        <div key={selectedPlaylist.playlistId}>
           <div>
-            {playlist.photoUrls && playlist.photoUrls.map((photo, photoIndex) => (
+            {selectedPlaylist.photoUrls && selectedPlaylist.photoUrls.map((photo, photoIndex) => (
               <img
                 key={photoIndex}
                 src={photo}
-                alt={`Track ${index + 1} Photo ${photoIndex + 1}`}
+                alt={`Selected Track Photo ${photoIndex + 1}`}
                 style={{ width: "100px", height: "100px", objectFit: "cover", margin: "5px" }}
               />
             ))}
           </div>
-          <p>장소: {playlist.locationAddress}</p>
-          <hr />
+          <p>장소: {selectedPlaylist.locationAddress}</p>
+          <p>음악: {selectedPlaylist.musicDetails.trackName} - {selectedPlaylist.musicDetails.artistName}</p>
         </div>
-      ))}
+      )}
     </div>
   );
 }
