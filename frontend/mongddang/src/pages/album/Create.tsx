@@ -188,10 +188,21 @@ function Create() {
   };
 
   // 플레이리스트 작업 취소
-  const handleCancelPlaylist = () => {
-    setEditingPlaylist(undefined);
-    setPlaylistId(null);
-    setStep(2);
+  const handleCancelPlaylist = async () => {
+    try {
+      // 생성 중인 플레이리스트 삭제하기
+      // 이미 플레이리스트 추가했을 때 플레이리스트가 생성되었기 때문에 삭제 진행 
+      if (playlistId) {
+        await axiosInstance.delete(`/playlists/${playlistId}`);
+      }
+  
+      // 상태 초기화
+      setEditingPlaylist(undefined);
+      setPlaylistId(null);
+      setStep(2);
+    } catch (error) {
+      console.error("플레이리스트 취소 중 오류 발생:", error);
+    }
   };
 
   // 임시저장 앨범 목록 조회
@@ -208,7 +219,7 @@ function Create() {
         })
       );
 
-      setTempAlbums(response.data);
+      setTempAlbums(albumsWithPlaylists);
     } catch (error) {
       console.error("임시저장 앨범 조회 오류:", error);
     } finally {
@@ -224,21 +235,39 @@ function Create() {
 
   // 임시저장 앨범 선택
   const handleSelectTempAlbum = async (album: Album) => {
-    
-     // 선택한 앨범의 상세 정보를 다시 조회
-     const response = await axiosInstance.get(`/albums/detail/${album.albumId}`);
-     const albumWithPlaylists = response.data;
+    try {
+        // 선택한 앨범의 상세 정보를 다시 조회
+        const response = await axiosInstance.get(`/albums/detail/${album.albumId}`);
+        const albumWithPlaylists = response.data;
 
-    setAlbum(album);
-    if (album.playlists && album.playlists.length > 0) {
-      // 임시저장 앨범에 플레이리스트가 있는 경우
-      setStep(4);
-    } else {
-      // 임시저장 앨범에 플레이리스트가 없는 경우
-      setStep(2);
+        // 플레이리스트 데이터 구조 변환
+        const formattedPlaylists = albumWithPlaylists.playlists.map(playlist => ({
+            playlistId: playlist.playlistId,
+            photos: playlist.photoUrls,
+            placeName: playlist.locationAddress,
+            music: playlist.musicDetails.trackName,
+            latitude: playlist.latitude,
+            longitude: playlist.longitude,
+            musicId: playlist.musicId,
+            startTime: playlist.startTime,
+            endTime: playlist.endTime
+        }));
+
+        setAlbum({
+            ...albumWithPlaylists,
+            playlists: formattedPlaylists
+        });
+
+        if (albumWithPlaylists.playlists && albumWithPlaylists.playlists.length > 0) {
+            setStep(4);
+        } else {
+            setStep(2);
+        }
+        setShowTempAlbums(false);
+    } catch (error) {
+        console.error("앨범 상세 정보 조회 오류:", error);
     }
-    setShowTempAlbums(false);
-  };
+};
 
   // 임시저장 앨범 수 조회
   const fetchTempAlbumCount = async () => {

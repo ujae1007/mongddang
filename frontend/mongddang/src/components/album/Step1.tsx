@@ -42,6 +42,7 @@ function Step1({ onCreateAlbum }: Step1Props) {
       });
 
       onCreateAlbum(data.albumId, data.title); // 앨범 생성 후 response로 받은 데이터를 Step2로 전달
+      console.log("앨범 생성 완료:", data);
       setStep(2);
     } catch (error) {
       console.error("앨범 생성 중 오류 발생:", error);
