@@ -13,7 +13,6 @@ function Edit() {
   const navigate = useNavigate();
   const [step, setStep] = useRecoilState(albumStepState);
   const [album, setAlbum] = useRecoilState(currentAlbumState);
-  const [isLoading, setIsLoading] = useState(true);
   const [editingPlaylist, setEditingPlaylist] = useState<Playlist | undefined>();
   const [playlistId, setPlaylistId] = useState<number | null>(null);
 
