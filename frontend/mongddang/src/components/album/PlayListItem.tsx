@@ -6,6 +6,8 @@ interface PlaylistItemProps {
     photos: string[];
     placeName: string;
     music: string;
+    musicId?: number; // 음악 ID도 함께 저장
+    musicName?: string; // 출력용 음악 이름 (음악 - 가수)
   };
   index: number;
   onEdit: (playlist: any) => void;
