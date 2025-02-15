@@ -1,6 +1,5 @@
-import "./PlatListItem.css";
+import "./PlayListItem.css";
 
-// PlaylistItem.tsx
 interface PlaylistItemProps {
   playlist: {
     playlistId: number;
@@ -16,9 +15,9 @@ interface PlaylistItemProps {
 
 function PlaylistItem({ playlist, index, onEdit, onDelete, isDeleting }: PlaylistItemProps) {
   return (
-    <div className="playlist-item">
+    <div className="playlistItem">
 
-      <div className="photo-section">
+      <div className="photoSection">
         {playlist.photos && playlist.photos.length > 0 && (
             <img
               src={playlist.photos[0]}  // 첫 번째 사진만 표시
@@ -28,14 +27,14 @@ function PlaylistItem({ playlist, index, onEdit, onDelete, isDeleting }: Playlis
           )}
       </div>
 
-      <div className="info-section">
-        <div className="place-info">{playlist.placeName}</div>
-        <div className="music-info">{playlist.music}</div>
+      <div className="infoSection">
+        <div className="placeInfo">{playlist.placeName}</div>
+        <div className="musicInfo">{playlist.music}</div>
       </div>
 
-      <div className="delete-section">
+      <div className="deleteSection">
         <button
-          className="delete-button"
+          className="deleteButton"
           onClick={() => onDelete(playlist.playlistId)}
           disabled={isDeleting}
         >
