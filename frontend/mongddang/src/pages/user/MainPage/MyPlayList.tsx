@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import axiosInstance from "../../../api/axiosInstance";
+import './MyPlayList.css'
 
 interface Album {
   albumId: number;
@@ -325,27 +326,32 @@ function MyPlayListSection({loggedInUser}: UserProps) {
   return (
 
     // 각각의 앨범 조회
-    <div>
-
+    <div className="MyAlbums">
       {displayAlbum.map((currentAlbum) => (
-        <div key={currentAlbum.albumId} onClick={() =>{nav(`/albums/detail/${currentAlbum.albumId}`)}}>
+        <div className="MyPlayList"key={currentAlbum.albumId} onClick={() =>{nav(`/albums/detail/${currentAlbum.albumId}`)}}>
+          <div className="MyPlayListInfo">
+              <div className="ImageTitle">
+                {/* 앨범 정보 렌더링 */}
+                <img src={currentAlbum.albumImageUrl} alt=""  width="100"/>
+                <h3>{currentAlbum.title}</h3>
+              </div>
+            <p>지금 당신의 플레이리스트를 감상하세요.</p>
 
-          {/* 앨범 정보 렌더링 */}
-          <img src={currentAlbum.albumImageUrl} alt=""  width="100"/>
-          <h3>{currentAlbum.title}</h3>
-          <p>지금 여행지 플레이리스크를 감상하세요.</p>
-
-          {/* 해당 앨범의 플레이리스트 렌더링 */}
-          {currentAlbum.playlists.map((currentPlaylist) => (
-            <div key={currentPlaylist.playlistId}>
-              <img src={currentPlaylist.photoUrls[0]} alt="" width="50"/>
-              <p>{currentPlaylist.locationAddress}</p>
-              <p>{currentPlaylist.musicDetails.artistName}&nbsp;&nbsp; - &nbsp;&nbsp;{currentPlaylist.musicDetails.trackName}</p>
-          
+            {/* 해당 앨범의 플레이리스트 렌더링 */}
+            <div className="Playlists">
+              {currentAlbum.playlists.map((currentPlaylist) => (
+                
+                  <div className = "Playlist" key={currentPlaylist.playlistId}>
+                    <img src={currentPlaylist.photoUrls[0]} alt="" width="50"/>
+                    <div className="text">
+                      <p className="LocationAddress">{currentPlaylist.locationAddress}</p>
+                      <p className="MucisInfo">{currentPlaylist.musicDetails.artistName}&nbsp;&nbsp; - &nbsp;&nbsp;{currentPlaylist.musicDetails.trackName}</p>
+                    </div>
+                  </div>
+              ))}   
             </div>
-          ))}       
-       
-        </div>
+            </div>    
+          </div>
       ))}
 
 

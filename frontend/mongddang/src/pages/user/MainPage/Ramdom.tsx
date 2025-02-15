@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import axiosInstance from "../../../api/axiosInstance";
+import './Random.css'
 
 interface Album {
   albumId: number;
@@ -295,16 +296,16 @@ function RamdomSection({loggedInUser}: UserProps) {
       setAlbum(mockAlbum)
       setIsLoading(false)
 
-    //   try {
-    //     const res = await axiosInstance.get('/albums/my')
-    //     setAlbum(res.data)
-    //     setIsLoading(false)
-    //     console.log("랜덤 앨범 목록 불러오기 성공:", res.data)
-    //   } catch (err) {
-    //     console.log("랜덤 앨범 목록 불러오기 실패:", err)
-    //   } finally {
-    //     setIsLoading(false)
-    // }
+      // try {
+      //   const res = await axiosInstance.get('/albums/my')
+      //   setAlbum(res.data)
+      //   setIsLoading(false)
+      //   console.log("랜덤 앨범 목록 불러오기 성공:", res.data)
+      // } catch (err) {
+      //   console.log("랜덤 앨범 목록 불러오기 실패:", err)
+      // } finally {
+      //   setIsLoading(false)
+      // }
 
 
     }
@@ -330,35 +331,45 @@ function RamdomSection({loggedInUser}: UserProps) {
   )
 
   return (
-    <div>
+    <>
 
       {/* 텍스트 section */}
       <div>
-        <p>{formattedDate}로 떠나볼까요?</p>
+        <p style={{marginLeft:10, fontSize:12, fontWeight:300, color:"#66656C"}}>{formattedDate}로 떠나볼까요?</p>
       </div>
 
       {/* 앨범 정보 section */}
-      <div onClick={() =>{nav(`/albums/detail/${ramdomAlbum.albumId}`)}}>
+      <div className = "RandomSection" onClick={() =>{nav(`/albums/detail/${ramdomAlbum.albumId}`)}}>
         {/* 사진 렌더링 */}
-        <div>
-          <img src={ramdomAlbum.albumImageUrl} alt=""  width="100"/>
-          <img src={ramdomAlbum.albumImageUrl} alt="" width="100" style={{borderRadius:"50%"}}/>
-          <img src="/assets/탑.png" alt="" />
+        <div className="RandomSectionImage">
+          <img className="MainImage"src={ramdomAlbum.albumImageUrl} alt="" />
+          <img className="SubImage" src={ramdomAlbum.albumImageUrl} alt="" />
+          <img className="SubImage2"src="/assets/탑.png" alt="" />
         </div>
 
         {/* 플레이리스트 렌더링 */}
+        <div className="RandomAlbumPlaylist">
+
         {ramdomAlbum.playlists.map((playlist, index) => (
-          <div key={playlist.playlistId} style={{display: "flex"}}>
+          <div key={playlist.playlistId} style={{display:"flex", justifyContent:"start"}}>
             {/* 1부터 시작해서 두 자리 문자열로 변환하기 */}
-            <p>{String(index+1).padStart(2, "0")}&nbsp;</p>
-            <p>{playlist.locationAddress}&nbsp;|&nbsp;</p>
-            <p>{playlist.musicDetails[0].trackName}&nbsp;-&nbsp; </p>
-            <p>{playlist.musicDetails[0].artistName}</p>
+            <p style={{color:"white", margin:5}}> 
+              <span style={{fontWeight:900, fontSize:16}}>{String(index+1).padStart(2, "0")}&nbsp;</span> 
+              <span style={{
+                fontSize:12,
+                fontWeight:400
+              }}>
+                {playlist.locationAddress}&nbsp;|&nbsp;
+                {playlist.musicDetails[0].trackName}&nbsp;-&nbsp; 
+                {playlist.musicDetails[0].artistName}
+              </span>
+            </p>
           </div>
         ))}
+        </div>
       </div>
 
-    </div>
+    </>
   )
 }
 

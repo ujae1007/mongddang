@@ -1,0 +1,83 @@
+.MyAlbums {
+  width: 100%;
+  overflow-x: auto;
+  display: flex;
+  flex-wrap: nowrap;
+  gap: 16px;
+}
+
+.MyPlayList {
+  background-color: #252525;
+  flex: 0 0 300px; /* 예: 카드 폭 고정 */
+  margin-right: 8px; /* 카드 간격 주기 */
+  border-radius: 5px;
+}
+
+.MyPlayList .MyPlayListInfo {
+  padding: 10px;
+  color: #fff;
+}
+
+.MyPlayListInfo .ImageTitle {
+  display: flex;
+  justify-content: space-between;
+}
+
+.ImageTitle img {
+  width: 100px;
+  height: 100px;
+}
+
+.ImageTitle h3 {
+  display: flex;  
+  flex-direction: column;
+  justify-content: center;
+  font-size: 28px;
+  margin:0;
+  padding-left: 10px;
+
+}
+
+.MyPlayListInfo p {
+  color: #9999a1;
+}
+
+.Playlists {
+  display: flex;
+  flex-direction: column;
+  margin: 0;
+}
+
+.Playlists .Playlist {
+  display: flex;
+  margin: 0px 0px 10px 0px;
+  
+}
+
+.Playlist img {
+  width: 70px;
+  height: 70px;
+}
+
+.Playlist p {
+  margin: 0;
+}
+
+.Playlist .text {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  margin-left: 10px;
+}
+
+.Playlist .LocationAddress {
+  color: #fff;
+  font-size: 18px;
+  font-weight: 600;
+}
+
+.Playlist .MusicInfo {
+  font-size: 16px;
+  font-weight: 400;
+  color: #9999a1;
+}
