@@ -10,6 +10,9 @@
 # Created by https://www.toptal.com/developers/gitignore/api/react,python,dotenv,java
 # Edit at https://www.toptal.com/developers/gitignore?templates=react,python,dotenv,java
 
+### pycache ###
+*.pyc
+
 ### .properties ###
 application-env.properties
 *.properties
