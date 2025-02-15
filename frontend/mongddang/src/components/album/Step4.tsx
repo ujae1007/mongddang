@@ -19,6 +19,7 @@ interface Step4Props {
   onEditPlaylist: (playlist: Playlist) => void;
   onCreatePlaylist: (playlistData: any) => void;
   onReset: () => void;
+  isEditMode?: boolean; 
 }
 
 function Step4({
@@ -29,7 +30,8 @@ function Step4({
   onDeletePlaylist,
   onEditPlaylist,
   onCreatePlaylist,
-  onReset
+  onReset,
+  isEditMode
 }: Step4Props) {
   const [showPopup, setShowPopup] = useState(false); //팝업 출력 여부
 
@@ -103,13 +105,20 @@ function Step4({
       // 완료 버튼을누르면
       setShowPopup(true); // 팝업 표시
 
-      // 앨범 완료 처리 및 정보 받아오기
-      const { albumDetail } = await onComplete(album.albumId);
-
-      // 응답 데이터 받으면
-      navigate(`/albums/${album.albumId}`, {
-        state: { albumDetail: albumDetail }});
-      
+      if (isEditMode) {
+        // 수정 모드일 때는 바로 앨범 상세 페이지로 이동
+        // 제목 수정 API 넣어서 수정 예정 
+        // navigate(`/albums/${album.albumId}`);
+      } else {
+        // 생성 모드일 때는 앨범 완료처리 및 정보 받아오기기
+        const { albumDetail } = await onComplete(album.albumId);
+        // 응답 데이터를 받으면면
+        navigate(`/albums/${album.albumId}`, {
+          state: { albumDetail: albumDetail }
+        });
+        onReset();
+      }
+  
       // 리셋
       onReset();
 
@@ -153,15 +162,17 @@ function Step4({
       )}
       </div>
       <>
-      <Button
-        type="Large"
-        onClick={onTempSave}
-        text="임시저장"
-      />
+      {!isEditMode && (
+        <Button
+          type="Large"
+          onClick={onTempSave}
+          text="임시저장"
+        />
+      )}
       <Button
         type="Large"
         onClick={handleComplete}
-        text="생성완료"
+        text={isEditMode ? "수정완료" : "생성완료"}
       />
 
       <div>

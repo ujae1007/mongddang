@@ -18,6 +18,7 @@ import IntroPages from "./pages/introduce/Introduce";
 import FollowPage from "./pages/user/FollowPage";
 import LikeAlbumsPage from "./pages/user/LikesAlbum";
 import ErrorPage from "./pages/Error";
+import Edit from "./pages/album/Edit";
 
 import BottomNav from "./components/common/BottomNav";
 
@@ -58,6 +59,7 @@ function AppContent() {
 
           <Route path="/create" element={<Create />} />
           <Route path="/albums/:albumId" element={<AlbumDetail />} />
+          <Route path="/edit/:albumId" element={<Edit />} />
 
           
           <Route path="*" element={<ErrorPage />} />
