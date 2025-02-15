@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { useEffect } from "react";
 import axiosInstance from "../../api/axiosInstance";
+import './Search.css'
 
 interface User {
   userId: number;
@@ -70,12 +71,12 @@ function SearchPage () {
   const noResultsMessage = selectedTab === 'users' ? '검색된 유저가 없습니다.' : '검색된 앨범이 없습니다.'
 
   return (
-    <div>
+    <div className="SearchPage">
       
       {/* 검색 */}
-      <div>
+      <div className="SearchBar">
         <input 
-          type="text" 
+          type="search" 
           value={searchTerm} 
           onChange={(e) => setSearchTerm(e.target.value)}  
           placeholder="검색어를 입력하세요"
