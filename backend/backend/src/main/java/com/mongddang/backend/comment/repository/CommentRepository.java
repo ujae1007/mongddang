@@ -1,10 +1,16 @@
 package com.mongddang.backend.comment.repository;
 
+import java.util.List;
+
 import org.apache.ibatis.annotations.Param;
 
+import com.mongddang.backend.comment.dto.CommentListDTO;
 import com.mongddang.backend.comment.dto.CommentRequestDTO;
 
 public interface CommentRepository {
+	// 댓글 조회
+	public List<CommentListDTO> getComment(@Param("albumId") int albumId);
+	
 	
 	// 댓글 생성
 	public int insertComment(@Param("dto") CommentRequestDTO dto,

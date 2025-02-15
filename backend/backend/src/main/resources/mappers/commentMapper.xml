@@ -2,7 +2,22 @@
   PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
   "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.mongddang.backend.comment.repository.CommentRepository"> <!-- 내가 지금 연결하고  싶은 Dao 풀패키지명 -->
-
+	<!-- 댓글 조회 -->
+	<select id="getComment" parameterType="int" resultType="CommentListDTO">
+		SELECT
+			c.comment_id as commentId,
+		    c.content as content,
+		    c.created_at as createdAt,
+		    c.updated_at as updatedAt,
+		    u.user_id as userId,
+		    u.nickname as nickname,
+		    u.profile_image_URL as profileImageURL
+		FROM (SELECT * FROM comment WHERE album_id = #{albumId}) as c
+		INNER JOIN user as u ON u.user_id = c.user_id;
+	</select>
+	
+	
+	
 	<!-- 댓글 생성 -->
 	<insert id="insertComment" parameterType="map">
 		INSERT INTO comment (user_id, album_id, content)

@@ -1,10 +1,12 @@
 package com.mongddang.backend.comment.controller;
 
 import java.security.Principal;
+import java.util.List;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
@@ -12,6 +14,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.mongddang.backend.comment.dto.CommentListDTO;
 import com.mongddang.backend.comment.dto.CommentRequestDTO;
 import com.mongddang.backend.comment.service.CommentService;
 import com.mongddang.backend.user.dto.UserDTO;
@@ -30,6 +33,24 @@ public class CommentController {
 		this.commentService = commentService;
 		this.userService = userService;
 	}
+	
+	// 댓글 조회
+	@GetMapping("/{album_id}")
+	public ResponseEntity<?> getCommentList(@PathVariable("album_id") int album_id) {
+		try {
+			List<CommentListDTO> commentList=commentService.getCommentList(album_id);
+			if (commentList == null || commentList.size() == 0) {
+				return new ResponseEntity<Void>(HttpStatus.NO_CONTENT);
+			}
+			
+			return ResponseEntity.ok(commentList);
+		} catch (Exception e) {
+			return ResponseEntity
+                    .badRequest()
+                    .body("Error: " + e.getMessage());
+		}
+	}
+	
 	
 	// 댓글 생성 -> JSON으로 요청 보내야 됨
 	@PostMapping("/{album_id}")
@@ -86,6 +107,7 @@ public class CommentController {
                     .body("Error: " + e.getMessage());
 		}
 	}
+	
 	
 	
 }

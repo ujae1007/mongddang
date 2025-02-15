@@ -1,8 +1,11 @@
 package com.mongddang.backend.comment.service;
 
+import java.util.List;
+
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.mongddang.backend.comment.dto.CommentListDTO;
 import com.mongddang.backend.comment.dto.CommentRequestDTO;
 import com.mongddang.backend.comment.repository.CommentRepository;
 import com.mongddang.backend.user.repository.UserRepository;
@@ -16,6 +19,13 @@ public class CommentService {
 		this.commentRepository = commentRepository;
 		this.userRepository = userRepository;
 	}
+	
+	// 댓글 조회
+	public List<CommentListDTO> getCommentList(int albumId) {
+		return commentRepository.getComment(albumId);
+	}
+	
+	
 	
 	// 댓글 생성
 	@Transactional
