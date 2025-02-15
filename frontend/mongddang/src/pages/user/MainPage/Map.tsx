@@ -1,7 +1,7 @@
 function MapSection () {
   return (
     <div>
-      지도 페이지
+      <h1>지도 Section</h1>
     </div>
   )
 }
