@@ -14,12 +14,12 @@ import ProfilePage from "./pages/user/ProfilePage";
 import AlbumDetail from "./pages/albumDetail/AlbumDetail";
 import MainPage from "./pages/user/MainPage/MainPage";
 import SearchPage from "./pages/Search/Search";
-import IntroPages from "./pages/introduce/Introduce";
 import FollowPage from "./pages/user/FollowPage";
 import LikeAlbumsPage from "./pages/user/LikesAlbum";
 import ErrorPage from "./pages/Error";
 import Edit from "./pages/album/Edit";
 
+import SlideWrapper from "./pages/NewIntro/Slider";
 import BottomNav from "./components/common/BottomNav";
 
 function App() {
@@ -45,7 +45,7 @@ function AppContent() {
 
     <>
       <Routes>
-          <Route path="/" element={<IntroPages />} />
+          <Route path="/" element={<SlideWrapper />} />
           <Route path="/login" element={<Login />} />
           <Route path="/signup" element={<SignUp />} />
 
