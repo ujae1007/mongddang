@@ -21,6 +21,7 @@ function SearchMusic({ onSelectMusic, defaultKeyword = '' }: SearchMusicProps) {
   const [musicList, setMusicList] = useState<Music[]>([]);
   const [isSearching, setIsSearching] = useState(false);
   const [showResults, setShowResults] = useState(false);
+  const [selectedMusic, setSelectedMusic] = useState<Music | null>(null);
 
   const searchMusic = async () => {
     if (!keyword.trim()) {
@@ -51,14 +52,29 @@ function SearchMusic({ onSelectMusic, defaultKeyword = '' }: SearchMusicProps) {
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    searchMusic();
-    setShowResults(true);
+    if (selectedMusic) {
+      // 음악이 선택된 상태면 댓글 생성
+      onSelectMusic(selectedMusic);
+    } else {
+      // 음악이 선택되지 않은 상태면 검색 실행
+      searchMusic();
+      setShowResults(true);
+    }
   };
 
   const handleSelectMusic = (music: Music) => {
     onSelectMusic(music);
+    setKeyword(`${music.trackName} - ${music.artistName}`);  // input에 선택된 음악 표시
     setMusicList([]); // 선택 후 검색 결과 초기화
     setShowResults(false);
+  };
+
+  const handleInputClick = () => {
+    if (selectedMusic) {
+      // 음악이 선택된 상태에서 input 클릭 시 초기화
+      setSelectedMusic(null);
+      setKeyword('');
+    }
   };
 
   return (
@@ -68,10 +84,12 @@ function SearchMusic({ onSelectMusic, defaultKeyword = '' }: SearchMusicProps) {
           type="text"
           value={keyword}
           onChange={(e) => setKeyword(e.target.value)}
+          onClick={handleInputClick}
           placeholder="노래 제목을 입력하세요"
         />
         <button type="submit" disabled={isSearching}>
-          {isSearching ? '검색 중...' : '검색'}
+          {/* 선택된 음악이 있으면 '작성', 없으면 '검색' 버튼 표시 */}
+          {selectedMusic ? '작성' : (isSearching ? '검색 중...' : '검색')}
         </button>
       </form>
 
@@ -88,6 +106,7 @@ function SearchMusic({ onSelectMusic, defaultKeyword = '' }: SearchMusicProps) {
         alignItems: 'center',
         zIndex: 1000
       }}>
+
     {/* 모달 컨텐츠 */}
     <div style={{
       width: '80%',

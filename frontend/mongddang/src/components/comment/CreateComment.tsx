@@ -14,35 +14,28 @@ interface Music {
 interface CreateCommentProps {
   albumId: number;  // URL의 album_id
   userProfileImage: string;  // 현재 로그인한 사용자의 프로필 이미지
-  onCommentCreated?: () => void;  // 댓글 생성 후 호출
+  onCommentCreated?: () => void;  // 댓글 생성 후 호출될 함수
 }
 
 const CreateComment = ({ albumId, userProfileImage, onCommentCreated }: CreateCommentProps) => {
-  // 선택된 음악 정보를 저장
-  const [selectedMusic, setSelectedMusic] = useState<Music | null>(null);
+ 
+  const [selectedMusic, setSelectedMusic] = useState<Music | null>(null);  // 선택된 음악 정보를 저장
 
-  // 댓글 생성 API 호출
-  const createComment = async () => {
-    if (!selectedMusic) return;
-
+  /// 음악 선택 시 호출
+  const handleMusicSelect = async (music: Music) => {
     try {
-      const content = `${selectedMusic.trackName} - ${selectedMusic.artistName}`;
-      await axiosInstance.post(`/api/comment/${albumId}`, {
+      // 음악 정보로 댓글 생성
+      const content = `${music.trackName} - ${music.artistName}`;
+      await axiosInstance.post(`/comment/${albumId}`, {
         content: content
       });
       
       // 댓글 생성 성공 후 처리
       setSelectedMusic(null);  // 선택된 음악 초기화
-      onCommentCreated?.();
+      onCommentCreated?.();    // 댓글 목록 새로고침
     } catch (error) {
-      console.error('Error creating comment:', error);
+      console.error('댓글 작성 중 오류 발생:', error);
     }
-  };
-
-  // 음악 선택 시 자동으로 댓글 생성
-  const handleMusicSelect = async (music: Music) => {
-    setSelectedMusic(music);
-    await createComment();
   };
 
   return (
