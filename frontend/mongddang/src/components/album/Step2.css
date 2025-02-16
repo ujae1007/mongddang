@@ -1,18 +1,34 @@
-.step-container {
-  width: 85%;
-  display: inline-flex;
+.step2-container {
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+
 }
 
+.step2-container .AlbumTitle {
+  width: 236px;
+}
+
+
+.step2-container .AlbumTitleInputactive {
+  padding-left: 10px;
+  font-size: 16px;
+  width: 236px;
+  padding-top: 14px;
+  padding-bottom: 0px;
+}
 
 .PlayListButton {
   display: flex;
   justify-content: center;
   margin-bottom: 100px;
+  height: 320px;
+ 
 }
 
 
 .BottomButton {
   display: flex;
-  justify-content: space-between;
+  justify-content: center;
   
 }

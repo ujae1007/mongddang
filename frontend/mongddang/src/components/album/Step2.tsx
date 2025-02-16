@@ -101,17 +101,16 @@ function Step2({
 
   return (
     <>
-      <div className="step-container">
-        <div style={{fontSize:18, width:100, display:"flex", alignItems:"center", paddingRight:20}}>
-          <p>앨범 제목</p>
-        </div>
+      <div className="step2-container">
+        
+        <p style={{fontSize:"20px", padding:"10px 0px 10px 0px", color:"#66656C"}}>앨범 제목</p>
         <TitleInput
             title={title}
             onChange={handleTitleChange}
         />
       </div>
 
-      <div>
+      <div style={{marginTop:"20px"}}>
         <div className="PlayListButton">
           <Button
             type="Large"

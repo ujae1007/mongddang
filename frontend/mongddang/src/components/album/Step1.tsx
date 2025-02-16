@@ -55,7 +55,7 @@ function Step1({ onCreateAlbum }: Step1Props) {
   return (
     <>
       <form className="StepOnePage" onSubmit={handleSubmit}>
-        <div className="step-container">
+        <div className="step1-container">
           <TitleInput 
             title={title} 
             onChange={setTitle} 
@@ -66,11 +66,13 @@ function Step1({ onCreateAlbum }: Step1Props) {
           <img src={image} alt="앨범커버 생성 전 기본 이미지" />
         </div>
 
-        <Button
-          using="Album"
-          text ={isCreating ? "생성 중..." : "생성하기"}
-          disabled={!title.trim() || isCreating}
-        />
+        <div style={{width:"100%",display:"flex", justifyContent:"center"}}>
+          <Button
+            using="Album"
+            text ={isCreating ? "생성 중..." : "생성하기"}
+            disabled={!title.trim() || isCreating}
+          />
+        </div>
       </form>
     </>
   );
