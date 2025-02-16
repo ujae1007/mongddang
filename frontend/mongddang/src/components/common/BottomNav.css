@@ -3,7 +3,7 @@
   bottom: 0; /* 뷰포트 하단에 위치 */
   left: 0; /* 뷰포트 왼쪽 시작 */
   width: 100%; /* 전체 화면 너비 */
-  max-width: 420px; /* 모바일 화면에 맞는 최대 너비 */
+  max-width: 390px; 
   height: 82px; /* 탭바 높이 */
   display: flex;
   justify-content: space-around; /* 버튼 간 간격 균등 */
@@ -50,6 +50,7 @@
 @media (min-width: 420px) {
   .bottomNav {
     margin: 0 auto;
-    left: calc((100% - 420px) / 2); /* 화면 중앙 정렬 */
+    max-width: 390px; 
+    left: calc((100% - 390px) / 2); /* 화면 중앙 정렬 */
   }
 }

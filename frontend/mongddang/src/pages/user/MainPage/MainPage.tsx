@@ -1,6 +1,6 @@
 import useAuth from "../../../hooks/useAuth"
 import RamdomSection from "./Ramdom"
-import MapSection from "./Map"
+import Map from "./Map"
 import MyPlayListSection from "./MyPlayList"
 import { useNavigate } from "react-router-dom"
 import { useRecoilValue } from "recoil"
@@ -34,7 +34,7 @@ function MainPage () {
 
       {/* 지도 */}
       <div>
-        <MapSection />
+        <Map />
       </div>
 
       {/* 내 플레이리스트 일단 3개만 보이도록 하자*/}

@@ -1,4 +1,4 @@
-import { useParams, useLocation, useNavigate } from 'react-router-dom';
+import { useParams, useNavigate } from 'react-router-dom';
 import { useEffect, useState } from 'react';
 import useAuth from "../../hooks/useAuth"
 
@@ -10,7 +10,6 @@ import Modal from '../../components/common/Modal';
 import Comment from '../../components/comment/Comment';
 
 import YoutubePlayer from '../youtube/youtubePrac';
-import { set } from 'date-fns';
 
 // 앨범 정보
 interface AlbumDetail {
@@ -44,7 +43,6 @@ interface AlbumUser {
 
 function AlbumDetail() {
   const { albumId } = useParams();
-  const location = useLocation();
 
   const [albumData, setAlbumData] = useState<AlbumDetail | null>(null);
   const [isLoading, setIsLoading] = useState(true);
