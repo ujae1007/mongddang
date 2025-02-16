@@ -9,6 +9,9 @@ import Button from '../../components/common/Button';
 import Modal from '../../components/common/Modal';
 import Comment from '../../components/comment/Comment';
 
+import YoutubePlayer from '../youtube/youtubePrac';
+import { set } from 'date-fns';
+
 // 앨범 정보
 interface AlbumDetail {
   userId: number;
@@ -46,7 +49,8 @@ function AlbumDetail() {
   const [albumData, setAlbumData] = useState<AlbumDetail | null>(null);
   const [isLoading, setIsLoading] = useState(true);
 
-  const [selectedPlaylistId, setSelectedPlaylistId] = useState<number | null>(null);
+  const [selectedPlaylistId, setSelectedPlaylistId] = useState<number | null>(null); // 선택한 플레이리스트 아이디
+  const [selectedPlaylistIndex, setSelectedPlaylistIndex] = useState<number | null>(null); // 선택한 플레이리스트 인덱스
 
   const lpimage = '/assets/LP판.png' // Lp 이미지
 
@@ -55,6 +59,7 @@ function AlbumDetail() {
   const navigate = useNavigate();
 
   const [isModalOpen, setIsModalOpen] = useState(false); // 모달 창 열기/닫기
+
 
   // 현재 로그인한 사용자 정보
   const loggedInUser = useAuth();
@@ -111,6 +116,7 @@ function AlbumDetail() {
   useEffect(() => {
     if (albumData?.playlists.length > 0 && !selectedPlaylistId) {
       setSelectedPlaylistId(albumData.playlists[0].playlistId);
+      setSelectedPlaylistIndex(0);
     }
   }, [albumData]);
 
@@ -118,6 +124,15 @@ function AlbumDetail() {
     playlist => playlist.playlistId === selectedPlaylistId
   );
 
+  // 플레이리스트를 선택하면 해당 인덱스도 함께 업데이트
+  const handlePlaylistSelect = (playlistId: number) => {
+    setSelectedPlaylistId(playlistId);
+    // playlists 배열에서 선택한 플레이리스트의 인덱스 찾기
+    const playlistIndex = albumData?.playlists.findIndex(
+      playlist => playlist.playlistId === playlistId
+    );
+    setSelectedPlaylistIndex(playlistIndex);
+  }
   // MapBox에 전달할 데이터 형식 변환
   const mapBoxPlaylists = albumData?.playlists?.map(playlist => ({
    ...playlist,
@@ -188,7 +203,7 @@ function AlbumDetail() {
             <div>
               <MapBox 
                 playlists={mapBoxPlaylists} 
-                onPlaylistSelect={(playlistId) => setSelectedPlaylistId(playlistId)}
+                onPlaylistSelect={handlePlaylistSelect}
               />
             </div>
           )}
@@ -201,20 +216,21 @@ function AlbumDetail() {
                   <img src="/assets/지도마커2.svg" alt="" />
                   <h4>{selectedPlaylist.locationAddress}</h4>
                 </div>
-                {/* 이미지 */}
-                {/* 이후 유튭 ifrme 연결 예정 */}
+                {/* 이미지 및 iframe*/}
                 <div>
                   {selectedPlaylist.photoUrls && selectedPlaylist.photoUrls.map((photo, photoIndex) => (
                     <img
                       key={photoIndex}
                       src={photo}
                       alt={`Selected Track Photo ${photoIndex + 1}`}
-                      style={{ width: "100px", height: "100px", objectFit: "cover", margin: "5px" }}
+                      style={{ width: "200px", height: "200px", objectFit: "cover", margin: "5px" }}
                     />
                   ))}
+                  <YoutubePlayer 
+                    playlistIndex = {selectedPlaylistIndex}/>
                 </div>
                 <div>
-                {/*음악정보보*/}
+                {/*음악정보*/}
                 <div>
                   <img src="/assets/음표.svg" alt="" />
                   <p>{selectedPlaylist.musicDetails.trackName} - {selectedPlaylist.musicDetails.artistName}</p>

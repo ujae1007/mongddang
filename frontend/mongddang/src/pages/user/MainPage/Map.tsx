@@ -1,3 +1,5 @@
+import MapBox from "../../../components/album/MapBox"
+
 function MapSection () {
   return (
     <div>

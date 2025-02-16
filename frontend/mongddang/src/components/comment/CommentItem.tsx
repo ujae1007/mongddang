@@ -12,7 +12,7 @@ interface CommentItemProps {
 const CommentItem = ({ comment, onDelete }:CommentItemProps) => {
 
   const utcDate = parseISO(comment.createdAt);
-  const kstDate = addHours(utcDate, -9); // 한국 시간으로 바꾸기
+  const kstDate = addHours(utcDate, -9); // 한국 시간과의 시간 차이 적용
   const newDate = format(kstDate, 'yyyy-MM-dd', { locale: ko }); // 한국 시간으로 바꾸기
 
 

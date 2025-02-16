@@ -6,7 +6,7 @@ import MusicPlayer from "../../components/youtube/youtubeRequest";
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 
-
+import axiosInstance from "../../api/axiosInstance";
 
 interface MusicDetails {
   musicId: number;
@@ -56,70 +56,20 @@ const YoutubePlayer = ({ playlistIndex}: YoutubePracticeProps) => {
   // 첫 렌더링 될 때, 앨범 아이디가 변경될 때 데이터 받아오기
   useEffect (() => {
 
-
-        // 임시 데이터
-        const mockData: AlbumResponse = {
-          albumId: 1,
-          userId: 1,
-          title: "테스트 앨범",
-          albumImageUrl: "test.jpg",
-          status: true,
-          createdAt: "2024-02-14",
-          updatedAt: "2024-02-14",
-          playlists: [
-            {
-              playlistId: 1,
-              albumId: 1,
-              musicId: 1,
-              startTime: 0,
-              endTime: 200,
-              latitude: 37.5,
-              longitude: 127.0,
-              locationAddress: "서울",
-              photoUrls: ["test1.jpg", "test2.jpg"],
-              musicDetails: {
-                musicId: 1,
-                trackName: "신호등",
-                artistName: "이무진",
-                genre: "K-POP",
-                popularity: 100
-              }
-            },
-            {
-              playlistId: 2,
-              albumId: 1,
-              musicId: 2,
-              startTime: 0,
-              endTime: 180,
-              latitude: 37.5,
-              longitude: 127.0,
-              locationAddress: "서울",
-              photoUrls: ["test3.jpg", "test4.jpg"],
-              musicDetails: {
-                musicId: 2,
-                trackName: "Butter",
-                artistName: "방탄소년단",
-                genre: "K-POP",
-                popularity: 95
-              }
-            }
-          ]
-        };
-    setAlbumData(mockData);
-
-    // const fetchMusicData = async() => {
-    //   console.log("유튜브 검색 시작")
-    //   try {
-    //     const res = await axiosInstance.get<AlbumResponse>(`/albums/detail/${albumId}`) 
-    //     console.log("유튜브 영상 데이터", res.data)
-    //     setAlbumData(res.data)
-    //   } catch(err) {
-    //     console.log("유튜브 검색 실패", err)
-    //   }
-    // }
-    // if (albumId){
-    //   fetchMusicData()
-    // }
+    const fetchMusicData = async() => {
+      console.log("유튜브 검색 시작")
+      try {
+        const res = await axiosInstance.get<AlbumResponse>(`/albums/detail/${albumId}`) 
+        // console.log("유튜브 영상 데이터", res.data)
+        console.log("유튜브 영상 데이터", res.data.playlists[playlistIndex])
+        setAlbumData(res.data)
+      } catch(err) {
+        console.log("유튜브 검색 실패", err)
+      }
+    }
+    if (albumId){
+      fetchMusicData()
+    }
 
   }, [albumId])
 
@@ -132,10 +82,10 @@ const YoutubePlayer = ({ playlistIndex}: YoutubePracticeProps) => {
 
   return (
     <div>
-  <MusicPlayer 
-    trackName={trackName} 
-    artistName={artistName}
-  />
+      <MusicPlayer 
+        trackName={trackName} 
+        artistName={artistName}
+      />
     </div>
   )
 }
