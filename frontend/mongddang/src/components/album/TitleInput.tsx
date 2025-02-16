@@ -7,9 +7,9 @@ interface TitleInputProps {
 
 const TitleInput = ({ title, onChange }: TitleInputProps) => {
   return (
-    <div className='title-input'>
+    <div className='AlbumtTitle'>
       <input
-        className={"input"}
+        className={`AlbumTitleInput${title !== "" ? "active":""}`}
         type="text"
         id="title"
         value={title}

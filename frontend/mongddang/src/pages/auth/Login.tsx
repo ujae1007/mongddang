@@ -80,7 +80,7 @@ function Login () {
 
           <div className="contentwrap">
 
-
+          <div style={{height:"70px"}}>
             <div className="emailInputWrap">
               <InputBox 
                 type="default"
@@ -97,6 +97,7 @@ function Login () {
                 )
               }
             </div>
+          </div>
 
             <div className="passwordInputWrap">
               <InputBox 

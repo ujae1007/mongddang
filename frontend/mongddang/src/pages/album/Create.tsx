@@ -288,7 +288,7 @@ function Create() {
   return (
     <>
       {step === 1 && !showTempAlbums && (
-        <>
+        <div style={{marginTop:"140px"}}>
           <div className="TempCount">
             <a
               onClick={handleShowTempAlbums}
@@ -297,9 +297,8 @@ function Create() {
             </a>
           </div>
           <Step1 onCreateAlbum={handleCreateAlbum} />
-        </>
+        </div>
       )}
-
       {step === 1 && showTempAlbums && (
         <TempAlbumList
           albums={tempAlbums}
@@ -308,15 +307,18 @@ function Create() {
           isLoading={isLoading}
         />
       )}
-
+    
       {step === 2 && album && (
-        <Step2
-          albumId={album.albumId || 0}
-          title={album.title}
-          onUpdateTitle={handleUpdateTitle}
-          onTempSave={handleTempSave}
-          onCreatePlaylist={handleCreatePlaylist}
-        />
+        <div style={{marginTop:"140px"}}>
+
+          <Step2
+            albumId={album.albumId || 0}
+            title={album.title}
+            onUpdateTitle={handleUpdateTitle}
+            onTempSave={handleTempSave}
+            onCreatePlaylist={handleCreatePlaylist}
+          />
+        </div>
       )}
 
       {step === 3 && album && (
