@@ -229,7 +229,7 @@ function AlbumDetail() {
             albumId={Number(albumId)}
             userProfileImage={loggedInUser.profileImageURL}
           />
-        )}
+          )}
 
         </>
       )}
