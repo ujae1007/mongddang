@@ -37,3 +37,13 @@ export interface GetfollowInfo {
   profileImageURL:string 
   introduce: string;
 }
+
+// 댓글
+export interface Comment {
+  commentId: number;
+  nickname: string;
+  content: string;
+  date: string;
+  isEditing?: boolean;
+  profileImageURL: string;
+}
