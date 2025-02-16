@@ -1,6 +1,6 @@
 import './input.css'
 interface InputBoxProps {
-  type: "password" | "default" | "search"
+  type: "password" | "default"
   mode: "login" |"signup" | "edit" 
   placeholder?: string
   onChange?: (e: React.ChangeEvent<HTMLInputElement>) => void

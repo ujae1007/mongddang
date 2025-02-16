@@ -75,7 +75,8 @@ function SearchPage () {
       
       {/* 검색 */}
       <div className="SearchBar">
-        <input 
+        <input
+          className="SearchInput"
           type="search" 
           value={searchTerm} 
           onChange={(e) => setSearchTerm(e.target.value)}  
@@ -83,14 +84,14 @@ function SearchPage () {
         />
         <button
           onClick={handleSearch}>
-          검색 
+          <img src="../../../public/assets/검색.svg" alt="" /> 
         </button>
       </div>
 
       {/* 유저, 앨범 탭 */}
-      <div>
-        <button onClick={() => setSelectedTab('users')}>유저</button>
-        <button onClick={() => setSelectedTab('albums')}>앨범</button>
+      <div className="SearchTab">
+        <button className={`SearchButton ${selectedTab === "users" ? "active" : ""}`} onClick={() => setSelectedTab('users')}>유저</button>
+        <button className={`SearchButton ${selectedTab === "albums" ? "active" : ""}`} onClick={() => setSelectedTab('albums')}>앨범</button>
       </div>
 
       {/* 검색 결과 */}
@@ -108,11 +109,11 @@ function SearchPage () {
             <div>{noResultsMessage}</div>
           ) : (
             // 유저탭인데 검색결과가 있을 때
-            <div style={{ display: 'flex', flexWrap: 'wrap' }}>
+            <div className="SearchResults">
               {users.map((user) => (
-                <div key={user.userId}>
-                  <img src={user.profileImageUrl} style={{ borderRadius: '50%' }} width={100} />
-                  <div>{user.nickname}</div>
+                <div className="UserSearchResult" key={user.userId}>
+                  <img src={user.profileImageUrl}/>
+                  <div style={{fontSize:16, fontWeight:400, color:"#717171"}}>{user.nickname}</div>
                 </div>
               ))}
             </div>
@@ -126,12 +127,16 @@ function SearchPage () {
             <div>{noResultsMessage}</div>
           ) : (
             // 앨범탭인데 검색 결과가 있을 때
-            <div style={{ display: 'flex', flexWrap: 'wrap' }}>
+            <div className="SearchResults">
               {albums.map((album) => (
-                <div key={album.albumId}>
+                <div className="AlbumSearchResult" key={album.albumId}>
                   <img src={album.albumImageUrl} alt="album" width={100}/>
-                  <div>{album.title}</div>
-                  <div>{album.nickname}</div>
+                  <div className="AlbumInfo">
+                    <p style={{fontSize:"16px", fontWeight:400, color:"#717171"}}>{album.title}</p>
+                    <p style={{fontSize:"12px", fontWeight:400, color:"#A6A6A6"}}>조기흠</p>  
+                    {/* <div>{album.nickname}</div> */}
+                  </div>
+                  
                 </div>
               ))}
             </div>

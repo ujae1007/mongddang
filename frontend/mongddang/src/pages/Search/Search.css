@@ -1,12 +1,87 @@
 .SearchPage {
-  width: 351px;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
+  width: 355px;
   padding-top: 16px;
 }
 
 .SearchPage .SearchBar {
   display: flex;
   justify-content: center;
+}
+
+.SearchBar .SearchInput {
+  padding: 10px 0px 10px 0;
+  width: 291px;
+  border: none;
+  border-bottom: 1px solid;
+  background-color: rgb(249,249,249);
+
+}
+
+.SearchBar button {
+  border: none;
+  border-bottom: 1px solid;
+  background-color: rgb(249,249,249);
+}
+
+.SearchTab {
+  margin: 16px 0px 16px 0px;
+  padding: 16px 0px 16px 0px;
+}
+
+.SearchTab .SearchButton {
+  border: none;
+  background-color:rgb(249,249,249);
+  height: 14px;
+  font-size: 14px;
+  color: #9999A1;
+  
+}
+
+.SearchTab .SearchButton.active {
+  color: #111111;
+
+}
+
+
+.SearchResults {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr); /* 3열 */
+  grid-gap: 30px;
+}
+
+.SearchResults .UserSearchResult {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.UserSearchResult img {
+  width: 91px;
+  margin-bottom: 13px;
+  border-radius: 50%;
+  border: 2.6px solid #F4F4F6;
+  background-color: rgb(249,249,249);
+  box-shadow: 3.9px 3.9px 13px 3.9px rgba(17, 17, 17, 0.20);
+}
+
+.AlbumSearchResult {
+  display: flex;
+  flex-direction: column;
+}
+
+.AlbumSearchResult img {
+  width: 94px;
+  height: 94px;
+  border: 2.603px solid rgba(235, 235, 235, 0.20);
+  box-shadow: 2.603px 2.603px 6.507px 1.301px rgba(0, 0, 0, 0.15);
+  margin-bottom: 10px;
+}
+
+.AlbumSearchResult .AlbumInfo {
+  border-left: 1.5px solid #000
+}
+
+.AlbumSearchResult .AlbumInfo p {
+  margin: 0px 0px 0px 5px;
 }
