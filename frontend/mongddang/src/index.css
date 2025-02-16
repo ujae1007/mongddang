@@ -33,7 +33,7 @@ html, body {
 }
 
 /* 모바일 화면 중심 */
-@media (min-width: 420px) {
+@media (min-width: 390px) {
   body {
     max-width: 390px; 
     margin: 0 auto;
