@@ -4,8 +4,8 @@ import {atom} from "recoil"
 export const authTokenAtom = atom<string | null>({
   key: 'authTokenAtom',
   default: (() => {
-    // 초기 값으로 로컬 스토리지에 저장된 토큰을 사용
-    const token = localStorage.getItem("auth_token");
+    // 초기 값으로 세션 스토리지에 저장된 토큰을 사용
+    const token = sessionStorage.getItem("auth_token");
     return token || null;
     })(),
   // effects를 사용해서 전역 변수 globalToken에 값을 저장
@@ -14,11 +14,11 @@ export const authTokenAtom = atom<string | null>({
     ({ onSet }) => {
       onSet((newValue) => {
         if (newValue) {
-        // 새로운 토큰 값이 설정될 경우 로컬 스토리지에 저장
-        localStorage.setItem("auth_token", newValue as string);
+        // 새로운 토큰 값이 설정될 경우 세션션 스토리지에 저장
+        sessionStorage.setItem("auth_token", newValue as string);
       } else {
         // 토큰이 null일 경우 로컬 스토리지에서 제거
-        localStorage.removeItem("auth_token");
+        sessionStorage.removeItem("auth_token");
       }
     });
     },

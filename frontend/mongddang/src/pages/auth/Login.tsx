@@ -1,14 +1,28 @@
-import { useState } from "react"
+import { useState, useEffect } from "react"
 import { useNavigate } from "react-router-dom"
 import { setRecoil } from "recoil-nexus"
 import Button from "../../components/common/Button"
 import InputBox from "../../components/common/input"
 import axiosInstance from "../../api/axiosInstance"
 import { authTokenAtom } from "../../recoil/userAtom"
+import { useRecoilValue } from "recoil"
 import './Login.css'
+
+
 function Login () {
 
   const nav = useNavigate()
+  const authToken = useRecoilValue(authTokenAtom)
+
+  useEffect(() => { 
+    if (authToken) {
+      alert("로그아웃 후 이용하세요.");
+      nav(-1);
+    } 
+  }, [authToken, nav]);
+
+
+
 
   //사용자 입력에 따른 상태관리
   const [email, setEmail] = useState<string>("")
@@ -52,7 +66,7 @@ function Login () {
       // 즉 authTokenAtom에 accessToken을 저장하겠다는 의미
       setRecoil(authTokenAtom, accessToken)
       console.log("로그인 성공")
-      alert("로그인에 성공했습니다.")
+      // alert("로그인에 성공했습니다.")
       nav("/mainpage", {replace:true})
       }catch(err) {
         console.log(err, "로그인실패")
@@ -66,6 +80,13 @@ function Login () {
     nav("/signup", { replace: true });
   };
 
+  // 엔터를 했을 경우 로그인 버튼이 눌러지도록
+
+  const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
+    if (e.key === "Enter" && emailValid && password) {
+      handleLogin()
+    }
+  }
   return (      
   
     <div className="LoginPage">
@@ -80,17 +101,18 @@ function Login () {
 
           <div className="contentwrap">
 
-          <div style={{height:"70px"}}>
+          <div>
             <div className="emailInputWrap">
               <InputBox 
                 type="default"
                 mode="login"
                 placeholder="이메일을 입력해주세요."
                 onChange={handleEmail}
+                onKeyDown={handleKeyDown}
                 value={email}
                 />
             </div>
-            <div className="errorMessageWrap">
+            <div className={`errorMessageWrap ${!emailValid && email.length > 0 ? "show" : ""}`}>
               {
                 !emailValid && email.length > 0 && (
                   <div>올바른 이메일을 입력해주세요.</div>
@@ -105,6 +127,7 @@ function Login () {
                 mode="login"
                 placeholder="비밀번호를 입력해주세요."
                 onChange={handlePassword}
+                onKeyDown={handleKeyDown}
                 value={password}
               />
             </div>
@@ -112,8 +135,9 @@ function Login () {
           </div>
 
           {/* 에러메세지 */}
-          {errorMessage && <p>{errorMessage}</p>}
-
+          <div className="wrong-input">
+            {errorMessage && <p>{errorMessage}</p>}
+          </div>    
           <div>
               <Button 
                 text="로그인" 
@@ -124,7 +148,7 @@ function Login () {
           </div>
           <div className="test">
             <p>
-              계정이 없으신가요? <span onClick={goToSignUp} style={{ color: '#9747FF' }}>가입하기</span>
+              계정이 없으신가요? <span onClick={goToSignUp} style={{ color: '#9747FF', fontWeight: 600 }}>가입하기</span>
             </p>
           </div>
 

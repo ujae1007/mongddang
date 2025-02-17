@@ -4,26 +4,29 @@
   display: flex;
   flex-wrap: nowrap;
   gap: 16px;
+  height: 500px;
 }
 
 .MyPlayList {
   background-color: #252525;
-  flex: 0 0 300px; /* 예: 카드 폭 고정 */
   margin-right: 8px; /* 카드 간격 주기 */
   border-radius: 5px;
+  height: 411px;
 }
 
 .MyPlayList .MyPlayListInfo {
+  width: 300px;
   padding: 10px;
   color: #fff;
+ 
 }
 
 .MyPlayListInfo .ImageTitle {
   display: flex;
-  justify-content: space-between;
+  /* justify-content: space-between; */
 }
 
-.ImageTitle img {
+.MyPlayListInfo .ImageTitle img {
   width: 100px;
   height: 100px;
 }
@@ -48,35 +51,37 @@
   margin: 0;
 }
 
-.Playlists .Playlist {
+.Playlists .MyPlaylist {
   display: flex;
   margin: 0px 0px 10px 0px;
   
 }
 
-.Playlist img {
+.MyPlaylist .MyAlbumPlaylistImage {
   width: 70px;
   height: 70px;
 }
 
-.Playlist p {
-  margin: 0;
-}
 
-.Playlist .text {
+.MyPlaylist .text {
   display: flex;
   flex-direction: column;
   justify-content: center;
-  margin-left: 10px;
+  padding-left: 10px;
+  width: 200px;
 }
 
-.Playlist .LocationAddress {
+.MyPlaylist .text p {
+  margin: 0;
+}
+
+.MyPlaylist .LocationAddress {
   color: #fff;
   font-size: 18px;
   font-weight: 600;
 }
 
-.Playlist .MusicInfo {
+.MyPlaylist .MusicInfo {
   font-size: 16px;
   font-weight: 400;
   color: #9999a1;

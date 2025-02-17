@@ -5,9 +5,22 @@ import InputBox from "../../components/common/input"
 import FavoriteInput from "../../components/common/favoriteInput"
 import Button from "../../components/common/Button"
 import useAuth from "../../hooks/useAuth"
+import { useRecoilValue } from "recoil"
+import { authTokenAtom } from "../../recoil/userAtom"
 import './ProfileEdit.css'
 
 function ProfileEdit () {
+
+    const nav = useNavigate()
+    const authToken = useRecoilValue(authTokenAtom)
+  
+    useEffect(() => { 
+      if (!authToken) {
+        alert("로그인 후 이용하세요.");
+        nav("/login");
+      } 
+    }, [authToken, nav]); 
+  
 
   // 유저 정보 가져오기 비동기적으로 가져옴 
   const loggedInUser = useAuth()
@@ -108,7 +121,6 @@ function ProfileEdit () {
   };
 
   //취소버튼 핸들러 
-  const nav = useNavigate()
   const goToBack = () => {
     nav(-1)
   }

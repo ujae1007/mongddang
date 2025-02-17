@@ -85,7 +85,7 @@ function MyPlayListSection({loggedInUser}: UserProps) {
     // 각각의 앨범 조회
     <div className="MyAlbums">
       {displayAlbum.map((currentAlbum) => (
-        <div className="MyPlayList"key={currentAlbum.albumId} onClick={() =>{nav(`/albums/${currentAlbum.albumId}`)}}>
+        <div className="MyPlayList" key={currentAlbum.albumId} onClick={() =>{nav(`/albums/${currentAlbum.albumId}`)}}>
           <div className="MyPlayListInfo">
               <div className="ImageTitle">
                 {/* 앨범 정보 렌더링 */}
@@ -98,8 +98,8 @@ function MyPlayListSection({loggedInUser}: UserProps) {
             <div className="Playlists">
               {currentAlbum.playlists.map((currentPlaylist) => (
                 
-                  <div className = "Playlist" key={currentPlaylist.playlistId}>
-                    <img src={currentPlaylist.photoUrls[0]} alt="" width="50"/>
+                  <div className = "MyPlaylist" key={currentPlaylist.playlistId}>
+                    <img className="MyAlbumPlaylistImage" src={currentPlaylist.photoUrls[0]} alt=""/>
                     <div className="text">
                       <p className="LocationAddress">{currentPlaylist.locationAddress}</p>
                       <p className="MucisInfo">{currentPlaylist.musicDetails.artistName}&nbsp;&nbsp; - &nbsp;&nbsp;{currentPlaylist.musicDetails.trackName}</p>

@@ -1,14 +1,24 @@
-import {useState } from "react"
+import {useState, useEffect} from "react"
 import { useNavigate } from "react-router-dom"
 import Button from "../../components/common/Button"
 import InputBox from "../../components/common/input"
 import FavoriteInput from "../../components/common/favoriteInput"
 import axiosInstance from "../../api/axiosInstance"
+import { useRecoilValue } from "recoil"
+import { authTokenAtom } from "../../recoil/userAtom"
 import './SignUp.css'
 function SignUp () {
 
   // const defaultImage = "REMOVED"
   const nav = useNavigate()
+  const authToken = useRecoilValue(authTokenAtom)
+
+  useEffect(() => { 
+    if (authToken) {
+      alert("로그아웃 후 이용하세요.");
+      nav(-1);
+    } 
+  }, [authToken, nav]);
   
   //상태변화 감지
   // const [profileImage, setProfileImage] = useState<string>(defaultImage)
