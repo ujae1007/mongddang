@@ -16,6 +16,7 @@ import com.mongddang.backend.music.dto.MusicDetailDto;
 import com.mongddang.backend.music.entity.Music;
 import com.mongddang.backend.album.service.FastAPIService;
 import com.mongddang.backend.playlist.entity.Playlist;
+import com.mongddang.backend.album.repository.MyLikeRepository;
 
 import org.springframework.security.access.AccessDeniedException;
 import org.springframework.stereotype.Service;
@@ -33,14 +34,16 @@ public class AlbumService {
     private final UserService userService;
     private final MusicRepository musicRepository;
     private final FastAPIService fastAPIService;
+    private final MyLikeRepository myLikeRepository;
 
-    public AlbumService(AlbumRepository albumRepository, PlaylistRepository playlistRepository, PhotoRepository photoRepository, UserService userService, MusicRepository musicRepository, FastAPIService fastAPIService) {
+    public AlbumService(AlbumRepository albumRepository, PlaylistRepository playlistRepository, PhotoRepository photoRepository, UserService userService, MusicRepository musicRepository, FastAPIService fastAPIService, MyLikeRepository myLikeRepository) {
         this.albumRepository = albumRepository;
         this.playlistRepository = playlistRepository;
         this.photoRepository = photoRepository;
         this.userService = userService;
         this.musicRepository = musicRepository;
         this.fastAPIService = fastAPIService;
+        this.myLikeRepository = myLikeRepository;
     }
 
     @Transactional
@@ -133,70 +136,6 @@ public class AlbumService {
         );
     }
 
-
-//    @Transactional
-//    public AlbumResponseDto updateAlbumComplete(int albumId, AlbumUpdateDto albumUpdateDto, int currentUserId) {
-//        Album album = albumRepository.findById(albumId)
-//                .orElseThrow(() -> new IllegalArgumentException("해당 앨범을 찾을 수 없습니다: " + albumId));
-//
-//        // 소유자가 아닌 경우 예외 발생
-//        if (album.getUserId() != currentUserId) {
-//            throw new AccessDeniedException("권한이 없습니다.");
-//        }
-//
-//        // 제목 수정 (존재하는 경우)
-//        if (albumUpdateDto.getTitle() != null) {
-//            album.setTitle(albumUpdateDto.getTitle());
-//        }
-//
-//        // 1️⃣ FastAPI 호출을 위한 노래 장르 정보 가져오기
-//        List<Integer> musicIds = playlistRepository.findByAlbum_AlbumId(albumId).stream()
-//                .map(Playlist::getMusicId)
-//                .filter(id -> id != null)
-//                .collect(Collectors.toList());
-//
-//        List<String> genres = musicRepository.findAllById(musicIds).stream()
-//                .map(Music::getGenre)
-//                .distinct()
-//                .collect(Collectors.toList());
-//        
-//        // 1️⃣ FastAPI 호출을 위한 노래 장르 정보 가져오기
-//        List<Playlist> playlists = playlistRepository.findByAlbum_AlbumId(albumId);
-//        
-//        List<String> imageUrls = playlists.stream()
-//                .map(photoRepository::findByPlaylist)  // `findByPlaylist()`로 리스트 가져오기
-//                .filter(Objects::nonNull)  // `null` 값 제거
-//                .flatMap(List::stream)  // 리스트를 스트림으로 변환
-//                .map(Photo::getPhotoUrl)  // `Photo` 객체에서 `imageUrl` 추출
-//                .filter(url -> url != null && !url.isEmpty())  // `null`과 빈 값 제거
-//                .collect(Collectors.toList());
-//
-//
-//        System.out.println("보내지는 플레이리스트 urls: " + imageUrls);
-//        // 2️⃣ FastAPI 호출하여 앨범 표지 이미지 생성
-//
-//        String imageUrl = fastAPIService.getAlbumImg(genres, imageUrls);
-//        
-//     // FastAPI 응답을 확인하는 로그 추가
-//        System.out.println("FastAPI 응답 데이터: " + imageUrl);
-//
-//
-//        // 3️⃣ 생성된 이미지 URL을 album_image_URL 컬럼에 저장
-//        album.setAlbumImageUrl(imageUrl);
-//        album.setStatus(true); // status는 true로 설정
-//
-//        Album updatedAlbum = albumRepository.save(album);
-//
-//        return new AlbumResponseDto(
-//            updatedAlbum.getAlbumId(),
-//            updatedAlbum.getUserId(),
-//            updatedAlbum.getTitle(),
-//            updatedAlbum.getAlbumImageUrl(), // 수정된 album_image_URL 포함
-//            updatedAlbum.isStatus(),
-//            updatedAlbum.getCreatedAt(),
-//            updatedAlbum.getUpdatedAt()
-//        );
-//    }
     
     // 앨범 제목 수정 - 사용자 소유권 체크 추가
     @Transactional
@@ -310,14 +249,23 @@ public class AlbumService {
 
     // ✅ 특정 앨범 상세 조회 (Playlist + Music 포함)
     @Transactional(readOnly = true)
-    public AlbumResponseDto getAlbumById(int albumId) {
+    public AlbumResponseDto getAlbumById(int albumId, int userId) {
         Album album = albumRepository.findById(albumId)
                 .orElseThrow(() -> new IllegalArgumentException("해당 앨범을 찾을 수 없습니다: " + albumId));
-        return toDetailedAlbumResponseDto(album);
+        
+        if (!album.isStatus()) {
+            throw new IllegalArgumentException("해당 앨범은 비공개 상태입니다.");
+        }
+
+        // ✅ 사용자가 좋아요를 눌렀는지 여부 확인 (⭐ 특정 앨범 상세 조회에서만 실행)
+        boolean isLiked = myLikeRepository.existsByUserIdAndAlbumId(userId, albumId);
+
+        // ✅ 상세 응답을 생성하며, 좋아요 상태 포함
+        return toDetailedAlbumResponseDto(album, isLiked);
     }
     
  // ✅ Playlist + Music 정보를 포함한 AlbumResponseDto 생성
-    private AlbumResponseDto toDetailedAlbumResponseDto(Album album) {
+    private AlbumResponseDto toDetailedAlbumResponseDto(Album album, boolean isLiked) {
         // 플레이리스트 정보 조회
         List<PlaylistDto> playlists = playlistRepository.findByAlbum_AlbumId(album.getAlbumId()).stream()
                 .map(playlist -> {
@@ -347,8 +295,14 @@ public class AlbumService {
                 album.isStatus(),
                 album.getCreatedAt(),
                 album.getUpdatedAt(),
-                playlists // ✅ Playlist 정보 추가
+                playlists, // ✅ Playlist 정보 추가
+                isLiked
         );
+    }
+    
+    // ✅ 좋아요 상태 없이 반환하는 오버로딩된 메서드
+    private AlbumResponseDto toDetailedAlbumResponseDto(Album album) {
+        return toDetailedAlbumResponseDto(album, false); // 기본값 false로 설정
     }
     
     // ✅ Playlist 정보 제외한 AlbumResponseDto 생성
