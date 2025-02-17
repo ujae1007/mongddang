@@ -4,6 +4,7 @@
   display: flex;
   flex-wrap: nowrap;
   gap: 16px;
+  height: 500px;
 }
 
 .MyPlayList {
@@ -20,7 +21,7 @@
 
 .MyPlayListInfo .ImageTitle {
   display: flex;
-  justify-content: space-between;
+  /* justify-content: space-between; */
 }
 
 .ImageTitle img {
