@@ -70,7 +70,7 @@ function LikesAlbumList ({loggedInuser, thirdSectionRef}:UserProps) {
 
 
   // 만약 좋아요한 앨범이 없을 떄
-  if (lists.likeAlbums.length === 0) {
+  if (!lists.likeAlbums) {
     return <div>좋아요한 앨범이 없습니다.</div>
   }
 

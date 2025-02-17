@@ -58,6 +58,11 @@ function AlbumDetail() {
 
   const [isModalOpen, setIsModalOpen] = useState(false); // 모달 창 열기/닫기
 
+  const [isLiked, setIsLiked] = useState(false); // 좋아요 여부
+
+  const likeIcon = "/assets/좋아요.svg";
+  const likedIcon = "/assets/안좋아요.svg"
+
 
   // 현재 로그인한 사용자 정보
   const loggedInUser = useAuth();
@@ -76,7 +81,8 @@ function AlbumDetail() {
       try {
         const response = await axiosInstance.get(`/albums/detail/${albumId}`);
         setAlbumData(response.data);
-        console.log("앨범 상세 정보:", response.data);
+        setIsLiked(response.data.liked); // 좋아요 여부 저장
+        console.log("앨범 상세 정보 - 좋아요 확인용:", response.data);
       } catch (error) {
         console.error("앨범 상세 정보 조회 실패:", error);
       } finally {
@@ -98,7 +104,7 @@ function AlbumDetail() {
         setIsLoading(true);
         try {
           const response = await axiosInstance.get(`/profile/${albumData.userId}`);
-          setAlbumUser(response.data); // 받아온 앨범 생성자 정보 저장장
+          setAlbumUser(response.data); // 받아온 앨범 생성자 정보 저장
         } catch (error) {
           console.error("앨범 생성자 정보 조회 실패:", error);
         } finally {
@@ -150,6 +156,24 @@ function AlbumDetail() {
     }
   };
 
+  // 좋아요
+  const handleLike = async () => {
+    try{
+      if(isLiked){
+        // 좋아요 취소
+        await axiosInstance.delete(`/like/${albumId}`);
+      } else {
+        // 좋아요 
+        await axiosInstance.post(`/like/${albumId}`);
+      }
+      setIsLiked(!isLiked);
+    } catch (error) {
+      console.error("좋아요 처리 중 오류 발생:", error);
+   }
+  }
+
+
+
   return (
     <div>
       {/* albumData가 있을 때만 렌더링 */}
@@ -157,6 +181,7 @@ function AlbumDetail() {
         <>
           {/* 앨범 생성자 정보 */}
           {albumUser && (
+            <>
             <div style={{ display: "flex", alignItems: "center", gap: "15px" }}>
               <img 
                 src={albumUser.profileImageURL} 
@@ -166,11 +191,20 @@ function AlbumDetail() {
               />
               <span>{albumUser.nickname}</span>
             </div>
+            <div>
+            <img 
+            src={isLiked ? likedIcon : likeIcon}
+            alt={isLiked ? "좋아요 취소" : "좋아요"}
+            onClick={handleLike}
+          />
+            </div>
+            </>
           )}
 
           {/* 앨범 제목 및 수정 삭제 버튼 */}
           <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
             <h1>{albumData.title}</h1>
+
             
             <div>
               {loggedInUserId === albumData.userId && (

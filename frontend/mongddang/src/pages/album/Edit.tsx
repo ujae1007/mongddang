@@ -19,7 +19,6 @@ function Edit() {
   // 앨범 상세 정보 조회
   useEffect(() => {
     const fetchAlbumDetail = async () => {
-      setIsLoading(true);
       try {
         const response = await axiosInstance.get(`/albums/detail/${albumId}`);
         
@@ -47,9 +46,8 @@ function Edit() {
         console.error("앨범 상세 정보 조회 실패:", error);
         alert("앨범 정보를 불러오는데 실패했습니다.");
         navigate(-1);
-      } finally {
-        setIsLoading(false);
       }
+      4
     };
 
     fetchAlbumDetail();

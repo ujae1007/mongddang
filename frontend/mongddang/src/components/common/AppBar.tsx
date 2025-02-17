@@ -21,7 +21,7 @@ const AppBar = () => {
   return (
     <div className="appbar">
       <img src="/assets/logo.png" alt="logo" className="logoimg"/>
-      <div onClick={() => navigate(`/profile/${loggedInUserId}`)}>
+      <div onClick={() => navigate(`/profile/${loggedInUserId}`)} style={{display: "flex", alignItems: "center"}}>
         <img src={loggedInUserProfile} alt="profile" className="profileimg"/>
       </div>
     </div>

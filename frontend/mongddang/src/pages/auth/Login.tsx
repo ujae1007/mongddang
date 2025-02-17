@@ -5,21 +5,21 @@ import Button from "../../components/common/Button"
 import InputBox from "../../components/common/input"
 import axiosInstance from "../../api/axiosInstance"
 import { authTokenAtom } from "../../recoil/userAtom"
-import { useRecoilValue } from "recoil"
+// import { useRecoilValue } from "recoil"
 import './Login.css'
 
 
 function Login () {
 
   const nav = useNavigate()
-  const authToken = useRecoilValue(authTokenAtom)
+  // const authToken = useRecoilValue(authTokenAtom)
 
-  useEffect(() => { 
-    if (authToken) {
-      alert("로그아웃 후 이용하세요.");
-      nav(-1);
-    } 
-  }, [authToken, nav]);
+  // useEffect(() => { 
+  //   if (authToken) {
+  //     alert("로그아웃 후 이용하세요.");
+  //     nav(-1);
+  //   } 
+  // }, [authToken]);
 
 
 

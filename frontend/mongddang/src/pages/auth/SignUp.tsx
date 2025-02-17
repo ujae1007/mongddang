@@ -4,21 +4,21 @@ import Button from "../../components/common/Button"
 import InputBox from "../../components/common/input"
 import FavoriteInput from "../../components/common/favoriteInput"
 import axiosInstance from "../../api/axiosInstance"
-import { useRecoilValue } from "recoil"
-import { authTokenAtom } from "../../recoil/userAtom"
+// import { useRecoilValue } from "recoil"
+// import { authTokenAtom } from "../../recoil/userAtom"
 import './SignUp.css'
 function SignUp () {
 
   // const defaultImage = "REMOVED"
   const nav = useNavigate()
-  const authToken = useRecoilValue(authTokenAtom)
+  // const authToken = useRecoilValue(authTokenAtom)
 
-  useEffect(() => { 
-    if (authToken) {
-      alert("로그아웃 후 이용하세요.");
-      nav(-1);
-    } 
-  }, [authToken, nav]);
+  // useEffect(() => { 
+  //   if (authToken) {
+  //     alert("로그아웃 후 이용하세요.");
+  //     nav(-1);
+  //   } 
+  // }, [authToken, nav]);
   
   //상태변화 감지
   // const [profileImage, setProfileImage] = useState<string>(defaultImage)
@@ -31,6 +31,7 @@ function SignUp () {
   const [selecetedGenres, setSelecetedGenres] = useState<string[]>([])
   const [selecetedPlaces, setSelecetedPlaces] = useState<string[]>([])
   
+   
   // 사진, 이메일, 인증코드, 비밀번호 유효성 검사
   // const [profileImageValid, setProfileImageValid] = useState<boolean>(true)
 
@@ -112,7 +113,7 @@ function SignUp () {
     setSecondPassword(newSecondPassword)
     // setSecondPasswordValid(secondPassword.length > 0 && password === secondPassword);
     if (password === newSecondPassword){
-      setPasswordMatchMessage("비밀번호가 일치합니다.")
+      setPasswordMatchMessage("")
       setSecondPasswordValid(true)
     } else {
       setPasswordMatchMessage("비밀번호가 일치하지 않습니다.")
@@ -272,9 +273,11 @@ function SignUp () {
       </div> */}
 
 
+{/* 인풋값 전체 wrap */}
+<div className="SignUpInputWrap">
 
-{/* 이메일 */}
-        <div className="emailWrap">
+        {/* 이메일 & 확인버튼 */}
+        <div className="SignUpemailWrap">
           <InputBox 
             type="default" 
             mode="signup"
@@ -292,16 +295,18 @@ function SignUp () {
             disabled={!emailValid}
           />
         </div>
-          <div className="errorMessageWrap">
-            {
-              !emailValid && email.length > 0 && (
-                <div>올바른 이메일을 입력해주세요.</div>
-              )
-            }
-          </div>
+        {/* 에러메세지 */}
+        <div className={`SignUperrorMessageWrap ${!emailValid && email.length > 0 ? "show" : ""}`}>
+          {
+            !emailValid && email.length > 0 && (
+              <div>올바른 이메일을 입력해주세요.</div>
+            )
+          }
+        </div>
 
-{/* 인증코드 */}
-        <div className="certifyWrap">
+
+        {/* 인증코드 & 확인 & 재전송*/}
+        <div className="SignUpcertifyWrap">
           <InputBox 
             type="default" 
             mode="signup"
@@ -320,10 +325,12 @@ function SignUp () {
             type="confirm"
             onClick={handleEmailVerification}
             disabled={!isEmailAvailable}
-          />          
+          />   
+      
         </div>
+        
 
-{/* 닉네임 */}
+        {/* 닉네임 */}
         <div className="nickNameWrap"> 
           <InputBox 
             type="default" 
@@ -336,7 +343,7 @@ function SignUp () {
           />
         </div>
 
-{/* 자기소개 */}
+      {/* 자기소개 */}
       <div className="introduceWrap">
         <InputBox 
           type="default"
@@ -347,11 +354,10 @@ function SignUp () {
           }}
           value={introduce}
         />
-
       </div>
 
-{/* 비밀번호 */}
-        <div className="passwordWrap">
+      {/* 비밀번호 */}
+        <div className="SignUpPasswordWrap">
           <InputBox 
             type="password" 
             mode="signup"
@@ -360,7 +366,7 @@ function SignUp () {
             value={password}
           />
         </div>
-        <div className="errorMessageWrap">
+        <div className={`SignUperrorMessageWrap ${!passwordValid && password.length > 0 ? "show" : ""}`}>
           {
             !passwordValid && password.length > 0 && (
               <div>영문, 숫자, 특수문자 포함 8자 이상 입력해주세요.</div>
@@ -368,7 +374,7 @@ function SignUp () {
           }
         </div>
 
-{/* 비밀번호 확인 */}
+        {/* 비밀번호 확인 */}
         <div className="secondPasswordWrap">
           <InputBox 
             type="password" 
@@ -384,8 +390,9 @@ function SignUp () {
             disabled={!secondPassword}
           /> */}
         </div>
+        
           {passwordMatchMessage && (
-          <div className={`passwordMessage ${passwordMatchMessage.includes("일치하지 않습니다") ? "error" : "success"}`}>
+          <div className={`SignUperrorMessageWrap ${passwordMatchMessage.includes("일치하지 않습니다") ? "show" : ""}`}>
             {passwordMatchMessage}
           </div>
         )}
@@ -407,6 +414,8 @@ function SignUp () {
 
     </div>
 
+    </div>
+
 {/* 회원가입 버튼 */}
         <div className="signUpButton">
           <Button 
@@ -418,7 +427,7 @@ function SignUp () {
         </div>
 
         <div className="test">
-          <p>이미 계정이 있으신가요? <span onClick={goToLogin} style={{ color: '#9747FF' }}>로그인</span></p>
+          <p>이미 계정이 있으신가요? <span onClick={goToLogin} style={{ color: '#9747FF', fontWeight: 600 }}>로그인</span></p>
         </div>
         
           

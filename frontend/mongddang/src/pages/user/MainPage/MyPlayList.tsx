@@ -79,7 +79,6 @@ function MyPlayListSection({loggedInUser}: UserProps) {
   // 최대 5개까지만 보여주기
   const displayAlbum = album.slice(0, 5)
 
-
   return (
 
     // 각각의 앨범 조회
@@ -96,7 +95,8 @@ function MyPlayListSection({loggedInUser}: UserProps) {
 
             {/* 해당 앨범의 플레이리스트 렌더링 */}
             <div className="Playlists">
-              {currentAlbum.playlists.map((currentPlaylist) => (
+              {/* 플레이리스트 3개 이상이더라도 3개까지만 출력*/}
+              {currentAlbum.playlists.slice(0,3).map((currentPlaylist) => (
                 
                   <div className = "MyPlaylist" key={currentPlaylist.playlistId}>
                     <img className="MyAlbumPlaylistImage" src={currentPlaylist.photoUrls[0]} alt=""/>
@@ -105,7 +105,8 @@ function MyPlayListSection({loggedInUser}: UserProps) {
                       <p className="MucisInfo">{currentPlaylist.musicDetails.artistName}&nbsp;&nbsp; - &nbsp;&nbsp;{currentPlaylist.musicDetails.trackName}</p>
                     </div>
                   </div>
-              ))}   
+              ))}  
+              {currentAlbum.playlists.length > 3 && (<div style={{color:"#E6E6E8", textAlign:"right"}}>+ 더보기</div>)}
             </div>
             </div>    
           </div>
