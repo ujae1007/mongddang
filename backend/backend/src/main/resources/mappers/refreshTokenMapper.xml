@@ -23,5 +23,13 @@
         DELETE FROM refresh_token
         WHERE token = #{token}
     </delete>
-
+    
+    
+        <!-- 만료된 토큰 삭제 -->
+    <delete id="deleteExpiredTokens">
+        DELETE FROM refresh_token
+        WHERE expired_at &lt; NOW()
+    </delete>
+    
+    
 </mapper>
