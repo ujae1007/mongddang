@@ -105,8 +105,12 @@ public class AlbumController {
 
     // ✅ 특정 앨범 상세 조회 (Playlist 정보 포함)
     @GetMapping("/detail/{albumId}")
-    public ResponseEntity<AlbumResponseDto> getAlbum(@PathVariable("albumId") int albumId) {
-        AlbumResponseDto albumResponse = albumService.getAlbumById(albumId);
+    public ResponseEntity<AlbumResponseDto> getAlbum(Principal principal, @PathVariable("albumId") int albumId) {
+        if (principal == null || principal.getName() == null) {
+            return ResponseEntity.badRequest().build(); // 로그인하지 않은 경우 처리
+        }
+        int userId = userService.getUserByEmail(principal.getName()).getUserId();
+        AlbumResponseDto albumResponse = albumService.getAlbumById(albumId, userId);
         return ResponseEntity.ok(albumResponse);
     }
     
