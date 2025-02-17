@@ -1,4 +1,3 @@
-
 services:
 
   db:
@@ -16,19 +15,12 @@ services:
       - db_data:/var/lib/mysql
     healthcheck:
       test: ["CMD", "mysqladmin", "ping", "-h", "localhost"]
+      # test: ["CMD", "mysqladmin", "ping", "-h", "13.124.197.2"]
       interval: 10s
       timeout: 5s
       retries: 5
-<<<<<<< HEAD
     networks:
       - app-network
-=======
-<<<<<<< HEAD
-=======
-    networks:
-      - app-network
->>>>>>> 36fc7ed8c9d5d9c240a9d546249d48ea8ea9a72e
->>>>>>> 245df27475d1354a891faebacd4df37041fee477
 
   backend:
     image: nimoot/mongddang-backend:2.0
@@ -49,37 +41,61 @@ services:
         condition: service_healthy
     volumes:
       - db_data:/var/lib/mysql
-<<<<<<< HEAD
-=======
-<<<<<<< HEAD
-    #   - ~/.aws:root/.aws:ro
-
-  # frontend:
-  #   build: ./frontend
-  #   ports:
-  #     - "3000:3000"
-  #   depends_on:
-  #     - backend
-=======
->>>>>>> 245df27475d1354a891faebacd4df37041fee477
     networks:
       - app-network
+  
+  # fastapi:
+  #   build:
+  #     context: ./backend/ai/fast-api  # Dockerfile이 위치한 디렉토리 경로
+  #     dockerfile: Dockerfile # Dockerfile의 이름 (변경 필요 없음)
+  #   container_name: fastapi-app
+  #   ports:
+  #     - "8000:8000"
+  #   env_file:
+  #     - .env
+  #   environment:
+  #     DB_HOST: db
+  #     DB_PORT: 3306
+  #     DB_USER: ${MYSQL_USER}
+  #     DB_PASSWORD: ${MYSQL_PASSWORD}
+  #     DB_NAME: ${MYSQL_DATABASE}
+  #   depends_on:
+  #     db:
+  #       condition: service_healthy
+  #   networks:
+  #     - app-network
 
   frontend:
-    build:
-      context: .
-      dockerfile: frontend/mongddang/Dockerfile
+    image: nimoot/mongddang-frontend:2.0
     ports:
       - "3000:3000"
+    environment:
+      - VITE_API_URL=/api
     depends_on:
       - backend
     networks:
       - app-network
-<<<<<<< HEAD
-=======
->>>>>>> 36fc7ed8c9d5d9c240a9d546249d48ea8ea9a72e
->>>>>>> 245df27475d1354a891faebacd4df37041fee477
-
+  # nginx:
+  #   # image: nginx:latest
+  #   build: 
+  #     context: .
+  #   ports:
+  #     - "80:80"
+  #   # volumes:
+  #   #   - /mnt/c/Users/SSAFY/Desktop/dev/S12P11B209/nginx.conf:/etc/nginx/nginx.conf
+  #   #   - ./frontend/mongddang/dist:/usr/share/nginx/html
+  nginx:
+    image: nginx:latest
+    ports:
+      - "80:80"
+    volumes:
+      - /mnt/c/Users/SSAFY/Desktop/dev/S12P11B209/nginx.conf/etc/nginx/nginx.conf
+      - ./frontend/mongddang/dist:/usr/share/nginx/html
+    depends_on:
+      - frontend
+      - backend
+    networks:
+      - app-network
 
 volumes:
   db_data:
