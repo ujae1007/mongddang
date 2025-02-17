@@ -27,22 +27,25 @@ export interface ProfileData {
 }
 
 function ProfilePage () {
+
+  const nav = useNavigate()
   
   // 보려는 프로파일 페이지 사람의 정보
   const {userId} = useParams<{userId: string}>()
   const numberUserId = userId ? parseInt(userId, 10):null
+
+  // 만약 해당 프로파일 사람의 정보가 없다면
+  const [isUserNotFound, setIsUserNotFound] = useState(false)
   
   // 현재 로그인한 사람의 정보 가지고오기
   const loggedInUser = useAuth()
   const [loggedInUserId, setLoggedInUserId] = useState<number>()
+
   useEffect(() => {
     if(loggedInUser) {
       setLoggedInUserId(loggedInUser.userId)
     }
   }, [loggedInUser, userId])
-
-
-
   
   // 프로필 상태 변화 감지
   const [profileData, setProfileData] = useState<ProfileData>(
@@ -74,15 +77,32 @@ function ProfilePage () {
 
         try {
           const res = await axiosInstance.get<ProfileData>(`/profile/${userId}`,)
-          setProfileData(res.data)
-          console.log('프로필 주인 데이터:', res.data);  
+          console.log('프로필 주인 데이터:', res.data); 
+
+        //프로필 데이터가 정상적인지 검증
+        if (!res.data || !res.data.userId) {
+          throw new Error("해당 유저의 데이터가 존재하지 않습니다.")
+        }
+
+          // albums가 존재하지 않으면 빈 배열로 설정
+          setProfileData({
+            ...res.data,
+            albums: res.data.albums ?? [], // albums가 undefined면 빈 배열로 대체
+          })
+
+          setIsUserNotFound(false)
         } catch (err) {
           console.log('프로필 정보 확인 실패', err);
+          alert("존재하지 않는 유저입니다.");
+          nav(-1);
+          setIsUserNotFound(true)
         }
       };  
       fetchProfileData();
-    }, [userId]);
+    }, [userId, nav]);
 
+    // 만약 존재하지 않는 유저일경우 밑에 코드 다 무효화
+    if(isUserNotFound) return null
 
     //팔로우 버튼 눌렀을 때 FollowStatus값 바꿔주기
     const changeFollowStatus = async () => {
@@ -115,7 +135,6 @@ function ProfilePage () {
     }
 
     // 프로필 페이지로 이동 
-    const nav = useNavigate()
     const goToProfileEdit = () => {
       return (
         nav("/profileEdit")
@@ -133,14 +152,15 @@ function ProfilePage () {
     }
 // --------------------------------------------------------------------//
   return(
+
     <div className="profileWrap" >
 
       {/*앨범 커버 & 프로필 이미지 */}
       <div className="imageWrap">
         <img className="LatestAlbumImage"
           src={profileData.albums && profileData.albums.length > 0 && profileData.albums[0].albumImageURL ? profileData.albums[0].albumImageURL : defaultImage} width="200"
-         />
-         <br/>
+        />
+        <br/>
         <img className="ProfileImage"src={profileData.profileImageURL} width="150"/>
       </div>
 
@@ -200,6 +220,7 @@ function ProfilePage () {
       </div>
 
     </div>
+
   )
 }
 
