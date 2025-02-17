@@ -1,3 +1,5 @@
+package com.mongddang.backend.album.entity;
+
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
