@@ -16,7 +16,7 @@ function MainPage () {
   useEffect(() => {
     if (!authToken) {
       alert("로그인 후 이용하세요.")
-      nav('/login', { replace: true })
+      nav('/login')
     }
   }, [authToken, nav])
 

@@ -1,14 +1,28 @@
-import { useState } from "react"
+import { useState, useEffect } from "react"
 import { useNavigate } from "react-router-dom"
 import { setRecoil } from "recoil-nexus"
 import Button from "../../components/common/Button"
 import InputBox from "../../components/common/input"
 import axiosInstance from "../../api/axiosInstance"
 import { authTokenAtom } from "../../recoil/userAtom"
+import { useRecoilValue } from "recoil"
 import './Login.css'
+
+
 function Login () {
 
   const nav = useNavigate()
+  const authToken = useRecoilValue(authTokenAtom)
+
+  useEffect(() => { 
+    if (authToken) {
+      alert("로그아웃 후 이용하세요.");
+      nav(-1);
+    } 
+  }, [authToken, nav]);
+
+
+
 
   //사용자 입력에 따른 상태관리
   const [email, setEmail] = useState<string>("")

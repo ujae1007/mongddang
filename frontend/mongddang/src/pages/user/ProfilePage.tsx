@@ -6,6 +6,8 @@ import axiosInstance from "../../api/axiosInstance"
 import AlbumList from "../../components/album/AlbumCardList"
 import Button from "../../components/common/Button"
 import FollowButton from "../../components/common/followButton"
+import { useRecoilValue } from "recoil"
+import { authTokenAtom } from "../../recoil/userAtom"
 import './ProfilePage.css'
 
 export interface MyAlbum {
@@ -29,7 +31,18 @@ export interface ProfileData {
 function ProfilePage () {
 
   const nav = useNavigate()
+  const authToken = useRecoilValue(authTokenAtom)
+
+  useEffect(() => { 
+    if (!authToken) {
+      alert("로그인 후 이용하세요.");
+      nav("/login");
+    } 
+  }, [authToken, nav]); 
+
+  if (!authToken) return null
   
+
   // 보려는 프로파일 페이지 사람의 정보
   const {userId} = useParams<{userId: string}>()
   const numberUserId = userId ? parseInt(userId, 10):null

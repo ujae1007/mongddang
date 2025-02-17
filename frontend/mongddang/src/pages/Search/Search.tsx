@@ -2,6 +2,9 @@ import { useState } from "react";
 import { useEffect } from "react";
 import axiosInstance from "../../api/axiosInstance";
 import './Search.css'
+import { useRecoilValue } from "recoil";
+import { useNavigate } from "react-router-dom";
+import { authTokenAtom } from "../../recoil/userAtom";
 
 interface User {
   userId: number;
@@ -17,6 +20,16 @@ interface Album {
 }
 
 function SearchPage () {
+
+  const nav = useNavigate()
+  const authToken = useRecoilValue(authTokenAtom)
+  
+  useEffect(() => { 
+    if (!authToken) {
+      alert("로그인 후 이용하세요.");
+      nav("/login");
+    } 
+  }, [authToken, nav]);
 
   // 검색어 값 저장 상태
   const [searchTerm, setSearchTerm] = useState<string>('')

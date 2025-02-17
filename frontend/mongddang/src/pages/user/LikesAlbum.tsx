@@ -1,14 +1,29 @@
 import useAuth from "../../hooks/useAuth"
-// import { useNavigate } from "react-router-dom"
+import { useNavigate } from "react-router-dom"
+import { authTokenAtom } from "../../recoil/userAtom"
+import { useRecoilValue } from "recoil"
 import LikesAlbumList from "./LikesAlbumList"
-import { useRef } from "react"
+import { useRef, useEffect } from "react"
+
 import './LikeAlbumList.css'
 
 function LikeAlbumsPage () {
+
+  const nav = useNavigate()
+  const authToken = useRecoilValue(authTokenAtom)
+
+  useEffect(() => { 
+    if (!authToken) {
+      alert("로그인 후 이용하세요.");
+      nav("/login");
+    } 
+  }, [authToken, nav]);
+
   
   const loggedInuser = useAuth() // 객체를 반환 
   const loggedInUserNickname = loggedInuser?.nickname 
   const thirdSectionRef = useRef<HTMLDivElement>(null)
+
 
   // 로딩페이지
   if (!loggedInUserNickname) {
