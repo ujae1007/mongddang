@@ -1,8 +1,7 @@
 # app/routers/inference.py
-from fastapi import APIRouter, BackgroundTasks
+from fastapi import APIRouter, HTTPException
 from pydantic import BaseModel
-# from app.internal import recommendation as rec_internal
-from app import dependencies
+from app.internal import recommendation as rec_internal
 
 
 router = APIRouter()
@@ -21,10 +20,34 @@ class RecommendationCoverRequest(BaseModel):
 @router.post("/recommendation")
 async def recommendation_endpoint(request: RecommendationCoverRequest):
     """
+    POST 엔드포인트로 전달된 사용자 정보(유저 id, 선호 지역/장르)를 활용해 추천 결과를 반환합니다.
+    """
+    try:   
+        # 내부 모듈의 추천 함수를 호출합니다.
+        rec_posts_list = rec_internal.recommend_posts_for_user_input(
+            user_id=request.user_id,
+            like_region1=request.like_region1,
+            like_region2=request.like_region2,
+            like_region3=request.like_region3,
+            like_genre1=request.like_genre1,
+            like_genre2=request.like_genre2,
+            like_genre3=request.like_genre3,
+            top_n=3
+        )
+        return {"recommendation_albums": rec_posts_list}
+    
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
+
+
+
+@router.post("/test")
+async def recommendation_endpoint():
+    """
+    POST 엔드포인트로 전달된 사용자 정보(유저 id, 선호 지역/장르)를 활용해 추천 결과를 반환합니다.
     """
     try:
-        print(request.user_id, request.like_genre1, request.like_region1)
-        return {"recommendation_albums": [5, 8, 10]}
-
+        rec_internal.train_and_save_model()
+    
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
