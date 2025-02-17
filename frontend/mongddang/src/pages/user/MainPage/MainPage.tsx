@@ -28,14 +28,14 @@ function MainPage () {
       <p style={{marginLeft:10, fontSize: 18, fontWeight:400, color:"#252525"}}>반갑습니다. {loggedInUsernickname}님!</p>
       
       {/* 첫번째 랜덤 앨범 */}
-      <div>
+      <>
         <RamdomSection loggedInUser={String(loggedInUsernickname)}/>
-      </div>
+      </>
 
       {/* 지도 */}
-      <div>
+      <>
         <Map />
-      </div>
+      </>
 
       {/* 내 플레이리스트 일단 3개만 보이도록 하자*/}
       <div style={{padding:10}}>

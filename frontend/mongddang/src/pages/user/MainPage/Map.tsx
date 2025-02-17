@@ -106,6 +106,7 @@ function Map () {
               <div>
                 {selectedPlaylist.photoUrls.length > 0 && (
                   <img
+                    style={{ width: 100, height: 100 }}
                     src={selectedPlaylist.photoUrls[0]}
                     alt="플레이리스트 사진"
                   />
