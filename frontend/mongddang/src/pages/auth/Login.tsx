@@ -52,7 +52,7 @@ function Login () {
       // 즉 authTokenAtom에 accessToken을 저장하겠다는 의미
       setRecoil(authTokenAtom, accessToken)
       console.log("로그인 성공")
-      alert("로그인에 성공했습니다.")
+      // alert("로그인에 성공했습니다.")
       nav("/mainpage", {replace:true})
       }catch(err) {
         console.log(err, "로그인실패")
@@ -66,6 +66,13 @@ function Login () {
     nav("/signup", { replace: true });
   };
 
+  // 엔터를 했을 경우 로그인 버튼이 눌러지도록
+
+  const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
+    if (e.key === "Enter" && emailValid && password) {
+      handleLogin()
+    }
+  }
   return (      
   
     <div className="LoginPage">
@@ -87,6 +94,7 @@ function Login () {
                 mode="login"
                 placeholder="이메일을 입력해주세요."
                 onChange={handleEmail}
+                onKeyDown={handleKeyDown}
                 value={email}
                 />
             </div>
@@ -105,6 +113,7 @@ function Login () {
                 mode="login"
                 placeholder="비밀번호를 입력해주세요."
                 onChange={handlePassword}
+                onKeyDown={handleKeyDown}
                 value={password}
               />
             </div>
