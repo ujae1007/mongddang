@@ -11,27 +11,27 @@ from app import dependencies
 import os
 
 
-# def get_query_data():
-#     db_config = {
-#         "host": dependencies.DATABASE_HOST,   
-#         "port": dependencies.DATABASE_PORT,   # MySQL 포트 번호호
-#         "user": dependencies.DATABASE_USER,   # MySQL 사용자 이름
-#         "password": dependencies.DATABASE_PASSWORD, # MySQL 비밀번호
-#     }
+def get_query_data():
+    db_config = {
+        "host": dependencies.DATABASE_HOST,   
+        "port": dependencies.DATABASE_PORT,   # MySQL 포트 번호호
+        "user": dependencies.DATABASE_USER,   # MySQL 사용자 이름
+        "password": dependencies.DATABASE_PASSWORD, # MySQL 비밀번호
+    }
 
-#     conn = mysql.connector.connect(**db_config)
-#     cursor = conn.cursor()
+    conn = mysql.connector.connect(**db_config)
+    cursor = conn.cursor()
 
-#     cursor.execute("USE mongddang;")
+    cursor.execute("USE mongddang;")
 
-#     query_data = """
-#         SELECT 
-#             user_id, like_region1, like_region2, like_region3, like_genre1, like_genre2, like_genre3 
-#         FROM user;
-#     """
-#     cursor.execute(query_data)
-#     query_rec = cursor.fetchall()
-#     print(type(query_rec))
+    query_data = """
+        SELECT album_id FROM album ORDER BY RAND() LIMIT 3;
+    """
+    cursor.execute(query_data)
+    query_rec = cursor.fetchall()
+    rand_albums = [num[0] for num in query_rec]
+
+    return rand_albums
 
 
 def export_data_to_csv():
@@ -295,7 +295,9 @@ def recommend_posts_for_user_input(user_id: int,
     try:
         encoded_user_id = int(user_encoder.transform([user_id])[0])
     except Exception as e:
-        return [1, 2, 3]
+        print("유저 id 랜덤")
+        rand_albums = get_query_data()
+        return rand_albums
         # raise ValueError(f"입력받은 user_id({user_id}) 인코딩 오류: {e}")
 
     try:
@@ -306,7 +308,9 @@ def recommend_posts_for_user_input(user_id: int,
         encoded_like_genre2 = int(encoders['like_genre2_encoder'].transform([like_genre2])[0])
         encoded_like_genre3 = int(encoders['like_genre3_encoder'].transform([like_genre3])[0])
     except Exception as e:
-        return [4, 5, 6]
+        print("유저 like 랜덤")
+        rand_albums = get_query_data()
+        return rand_albums
         # raise ValueError(f"입력받은 선호 정보(지역/장르) 인코딩 오류: {e}")
 
     # 게시글 스칼라 컬럼 인코딩
