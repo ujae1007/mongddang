@@ -46,7 +46,7 @@ public class EmailVerificationService {
 		emailVerificationRepository.insertEmailVerification(verificationDTO);
 		
 		// 실제 이메일 발송
-		String subject = "[서비스명] 이메일 인증 안내";
+		String subject = "mongddang 이메일 인증 안내";
         String text = "요청하신 인증번호는 [" + verificationCode + "] 입니다.\n"
                     + "해당 인증번호를 " + CODE_EXPIRATION_MINUTES + "분 이내에 입력해주세요.";
         emailService.sendSimpleMail(email, subject, text);
