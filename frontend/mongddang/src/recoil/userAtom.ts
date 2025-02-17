@@ -14,10 +14,10 @@ export const authTokenAtom = atom<string | null>({
     ({ onSet }) => {
       onSet((newValue) => {
         if (newValue) {
-        // 새로운 토큰 값이 설정될 경우 세션 스토리지에 저장
+        // 새로운 토큰 값이 설정될 경우 세션션 스토리지에 저장
         sessionStorage.setItem("auth_token", newValue as string);
       } else {
-        // 토큰이 null일 경우 세션 스토리지에서 제거
+        // 토큰이 null일 경우 로컬 스토리지에서 제거
         sessionStorage.removeItem("auth_token");
       }
     });

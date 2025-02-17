@@ -21,6 +21,7 @@ import Edit from "./pages/album/Edit";
 
 import SlideWrapper from "./pages/NewIntro/Slider";
 import BottomNav from "./components/common/BottomNav";
+import AppBar from "./components/common/AppBar";
 
 function App() {
   // 특정 페이지에서 하단 네비게이션을 숨기기 위해 AppContent로 분리해서 사용 
@@ -41,30 +42,34 @@ function AppContent() {
   const hideBottomNav = ["/", "/login", "/signup"]; // 하단 네비게이션 숨길 페이지
   const showBottomNav = !hideBottomNav.includes(location.pathname); 
 
+  const hideAppBar = ["/", "/login", "/signup"]; // 앱바 숨길 페이지
+  const showAppbar = !hideAppBar.includes(location.pathname); 
+
   return (
 
     <>
+        {showAppbar && <AppBar/>}
       <Routes>
-          <Route path="/" element={<SlideWrapper />} />
-          <Route path="/login" element={<Login />} />
-          <Route path="/signup" element={<SignUp />} />
+        <Route path="/" element={<SlideWrapper />} />
+        <Route path="/login" element={<Login />} />
+        <Route path="/signup" element={<SignUp />} />
 
-          <Route path="/mainpage" element={<MainPage />} />
-          <Route path="/search" element={<SearchPage/>} />
-          <Route path="/likes" element={<LikeAlbumsPage />} />
-          
-          <Route path="/profile/:userId" element={<ProfilePage />} />
-          <Route path="/profileEdit" element={<ProfileEdit />} />
-          <Route path="/follow" element={<FollowPage />} />
+        <Route path="/mainpage" element={<MainPage />} />
+        <Route path="/search" element={<SearchPage/>} />
+        <Route path="/likes" element={<LikeAlbumsPage />} />
+        
+        <Route path="/profile/:userId" element={<ProfilePage />} />
+        <Route path="/profileEdit" element={<ProfileEdit />} />
+        <Route path="/follow" element={<FollowPage />} />
 
-          <Route path="/create" element={<Create />} />
-          <Route path="/albums/:albumId" element={<AlbumDetail />} />
-          <Route path="/edit/:albumId" element={<Edit />} />
+        <Route path="/create" element={<Create />} />
+        <Route path="/albums/:albumId" element={<AlbumDetail />} />
+        <Route path="/edit/:albumId" element={<Edit />} />
 
-          
-          <Route path="*" element={<ErrorPage />} />
-        </Routes>
-          {showBottomNav && <BottomNav/>}
+        
+        <Route path="*" element={<ErrorPage />} />
+      </Routes>
+        {showBottomNav && <BottomNav/>}
     </>
   );
 }
