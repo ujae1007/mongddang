@@ -93,7 +93,7 @@ function MapBox({ playlists, onPlaylistSelect }: MapBoxProps) {
         // 경계에 맞춰 지도 이동
         map.current.fitBounds(bounds, {
           padding: 50,
-          maxZoom: 15  // 너무 가까이 줌인되는 것 방지
+          maxZoom: 10  // 너무 가까이 줌인되는 것 방지
         });
 
 
