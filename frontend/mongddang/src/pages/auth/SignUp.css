@@ -30,7 +30,7 @@
 }
 
 
-.emailWrap {
+.SignUpemailWrap {
   width: 333px;
   display: flex;
   align-items: center;
@@ -39,7 +39,7 @@
 
 }
 
-.certifyWrap {
+.SignUpcertifyWrap {
   width: 333px;
   display: flex;
   align-items: center;
@@ -47,6 +47,21 @@
   margin-bottom: 10px;
 }
 
+.SignUperrorMessageWrap {
+  font-size: 13px;
+  color: #ff0000;
+  min-height: 0px;
+  max-height: 0px;
+  opacity: 0; /* 투명 상태 */
+  transition: max-height 0.3s ease-in-out, opacity 0.3s ease-in-out;;
+}
+
+.SignUperrorMessageWrap.show {
+  margin-top: 5px;
+  padding-bottom: 10px;
+  max-height: 20px; /* 에러 메시지가 나타날 때 높이 지정 */
+  opacity: 1; /* 투명도를 1로 변경하여 표시 */
+}
 .nickNameWrap,
 .secondPasswordWrap,
 .introduceWrap {
@@ -55,7 +70,7 @@
   margin-bottom: 10px;
 }
 
-.passwordWrap, 
+.SignUpPasswordWrap, 
 .secondPasswordWrap
 {
   width: 333px;
