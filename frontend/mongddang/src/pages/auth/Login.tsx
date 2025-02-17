@@ -87,7 +87,7 @@ function Login () {
 
           <div className="contentwrap">
 
-          <div style={{height:"70px"}}>
+          <div>
             <div className="emailInputWrap">
               <InputBox 
                 type="default"
@@ -98,7 +98,7 @@ function Login () {
                 value={email}
                 />
             </div>
-            <div className="errorMessageWrap">
+            <div className={`errorMessageWrap ${!emailValid && email.length > 0 ? "show" : ""}`}>
               {
                 !emailValid && email.length > 0 && (
                   <div>올바른 이메일을 입력해주세요.</div>
@@ -121,8 +121,9 @@ function Login () {
           </div>
 
           {/* 에러메세지 */}
-          {errorMessage && <p>{errorMessage}</p>}
-
+          <div className="wrong-input">
+            {errorMessage && <p>{errorMessage}</p>}
+          </div>    
           <div>
               <Button 
                 text="로그인" 
@@ -133,7 +134,7 @@ function Login () {
           </div>
           <div className="test">
             <p>
-              계정이 없으신가요? <span onClick={goToSignUp} style={{ color: '#9747FF' }}>가입하기</span>
+              계정이 없으신가요? <span onClick={goToSignUp} style={{ color: '#9747FF', fontWeight: 600 }}>가입하기</span>
             </p>
           </div>
 
