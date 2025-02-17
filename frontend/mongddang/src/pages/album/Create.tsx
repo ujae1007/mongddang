@@ -288,7 +288,7 @@ function Create() {
   return (
     <>
       {step === 1 && !showTempAlbums && (
-        <div style={{marginTop:"140px"}}>
+        <div style={{marginTop:"80px"}}>
           <div className="TempCount">
             <a
               onClick={handleShowTempAlbums}

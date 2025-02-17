@@ -11,7 +11,7 @@
   background-color: #252525;
   margin-right: 8px; /* 카드 간격 주기 */
   border-radius: 5px;
-  height: 411px;
+  height: 431px;
 }
 
 .MyPlayList .MyPlayListInfo {
@@ -68,7 +68,7 @@
   flex-direction: column;
   justify-content: center;
   padding-left: 10px;
-  width: 200px;
+  width: 230px;
 }
 
 .MyPlaylist .text p {
