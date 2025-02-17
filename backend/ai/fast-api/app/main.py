@@ -17,9 +17,9 @@ app = FastAPI(
 # scheduler.add_job(rec_retrain.train_and_save_model, 'cron', hour=*, minute=0)
 # scheduler.start()
 
-scheduler = BackgroundScheduler()
-scheduler.add_job(rec_retrain.train_and_save_model, 'interval', minutes=1)
-scheduler.start()
+# scheduler = BackgroundScheduler()
+# scheduler.add_job(rec_retrain.train_and_save_model, 'interval', minutes=1)
+# scheduler.start()
 
 
 # 커버 이미지 생성 라우터를 포함
