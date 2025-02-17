@@ -2,7 +2,7 @@
 
 /* Error.tsx 최상단의 div를 전체 컨테이너로 가정 */
 /* 최상단 div className을 error로 설정 */
-.error {
+.errorpage {
   width: 100vw;
   height: 100vh;
   position: relative; /* 이미지, 버튼 등을 배치하기 위해 relative 사용 */
@@ -11,7 +11,7 @@
 }
 
 /* 상단 제목 "Page Not Found" */
-.error > h1 {
+.errorpage > h1 {
   /* margin: 3rem 0 6.5rem 1.5rem;  */
   margin-top: 140px;
   margin-left: 25px;
@@ -21,7 +21,7 @@
 }
 
 /* 첫 번째 문단: "죄송합니다. 페이지를 찾을 수 없습니다." */
-.error > p:nth-of-type(1) {
+.errorpage > p:nth-of-type(1) {
   margin-top: 80px;
   margin-left: 25px;
   font-weight: 600;
@@ -30,7 +30,7 @@
 }
 
 /* 두 번째 문단: "존재하지 않는 주소를 입력하셨거나..." */
-.error > p:nth-of-type(2) {
+.errorpage > p:nth-of-type(2) {
   margin-top: 10px;
   margin-left: 25px;
   font-weight: 600;
@@ -40,7 +40,7 @@
 }
 
 /* 404 에러 이미지 (캐릭터 포함) */
-.error > img:nth-of-type(1) {
+.errorpage > img:nth-of-type(1) {
   position: absolute;
   top: 58%;
   left: 50%;
@@ -49,7 +49,7 @@
 }
 
 /* 구름 이미지 */
-.error > img:nth-of-type(2) {
+.errorpage > img:nth-of-type(2) {
   position: absolute;
   bottom: 18%;
   left: 40%;
@@ -58,7 +58,7 @@
 }
 
 /* 마지막 문단: "메인으로 가기 →" */
-.error > p:nth-of-type(3) {
+.errorpage > p:nth-of-type(3) {
   position: absolute;
   bottom: 18%;
   left: 40%;
@@ -69,6 +69,6 @@
   transition: opacity 0.2s ease;
 }
 
-.error > p:nth-of-type(3):hover {
+.errorpage > p:nth-of-type(3):hover {
   opacity: 0.7;
 }
