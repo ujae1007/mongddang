@@ -39,7 +39,7 @@ function MainPage () {
 
       {/* 내 플레이리스트 일단 3개만 보이도록 하자*/}
       <div style={{padding:10}}>
-        <p style={{fontSize:20, fontWeight:500}}>나의 플레이리스트</p>
+        <p style={{fontSize:20, fontWeight:500}}>나의 앨범</p>
         <MyPlayListSection loggedInUser={String(loggedInUsernickname)}/>
       </div>
 

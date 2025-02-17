@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react';
 import MapBox from "../../../components/album/MapBox"
 import axiosInstance from "../../../api/axiosInstance"
 import { fi } from 'date-fns/locale';
-
+import './Map.css'
 // 앨범 정보
 interface AlbumDetail {
   userId: number;
@@ -83,51 +83,53 @@ function Map () {
   }
   
   return (
-    <div>
+    <>
       {latestAlbum && (
-        <div>
+        <>
           {/* 지도 */}
-          <div>
+          <div className="MainPage-MapSection"style={{margin:"10px"}}>
             {mapBoxPlaylists.length > 0 && (
-              <div>
-                <h3>{latestAlbum.title}</h3>
+            <>
+              <h3 style={{marginTop:"0px"}}> 최근 여행지로 떠나볼까요?</h3>
+              <div style={{height:"225px"}}>
                 <MapBox 
                   playlists={mapBoxPlaylists}
                   onPlaylistSelect={handlePlaylistSelect}
                 />
               </div>
+            </>  
             )}
           </div>
 
           {/* 선택된 플레이리스트 정보 */}
           {selectedPlaylist && (
-            <div>
+            <div className='SelectPlayListInfo'>
               {/* 첫 번째 사진 */}
-              <div>
+              
                 {selectedPlaylist.photoUrls.length > 0 && (
                   <img
-                    style={{ width: 100, height: 100 }}
+                    style={{width:"80px", height: "80px", margin:"10px"}}
                     src={selectedPlaylist.photoUrls[0]}
                     alt="플레이리스트 사진"
                   />
                 )}
-              </div>
+              
 
+              <div style={{display:"flex", flexDirection:"column", justifyContent:"center", fontSize:"14px", fontWeight:600}}>
               {/* 위치 */}
-              <div>
-                <h4>{selectedPlaylist.locationAddress}</h4>
+                <h4 style={{margin:"0px"}}>{selectedPlaylist.locationAddress}</h4>  
+              {/* 음악 */}
+                <p style={{marginBottom:"0px", color:"#858585", fontSize:"12px", fontWeight:500}}>
+                  {selectedPlaylist.musicDetails.trackName} - {selectedPlaylist.musicDetails.artistName}
+                </p>
               </div>
               
-              {/* 음악 */}
-              <div>
-                <p>{selectedPlaylist.musicDetails.trackName} - {selectedPlaylist.musicDetails.artistName}</p>
-              </div>
               
             </div>
           )}
-        </div>
+        </>
       )}
-    </div>
+    </>
   )
 }
 
