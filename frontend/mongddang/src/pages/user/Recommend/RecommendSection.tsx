@@ -1,6 +1,7 @@
 import axiosInstance from "../../../api/axiosInstance";
 import { useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
+import './RecommendSection.css'
 
 interface MusicDetail {
   musicId : number // 해당 앨범의 노래 아이디
@@ -23,7 +24,7 @@ interface Playlists {
 
 interface Album {
   albumId: number // 해당 앨범의 아이디
-  nickName: string
+  nickname: string
   userId: number
   title: string;
   albumImageUrl: string;
@@ -35,7 +36,6 @@ interface Album {
 
 type RecommendAlbumResponse = Album[]
 
-
 const RecommendSection = () => {
 
   const nav = useNavigate()
@@ -45,7 +45,7 @@ const RecommendSection = () => {
   useEffect(() => {
     const fetchAlbums = async () => {
       try {
-        const res = await axiosInstance.get('albums/recommends')
+        const res = await axiosInstance.get('/albums/recommendation')
         setLists(res.data)
         console.log("추천 앨범 불러오기 성공: ", res.data)
       }catch (err) {
@@ -55,7 +55,7 @@ const RecommendSection = () => {
       }
     }
     fetchAlbums()
-  })
+  },[nav])
 
   if (isloading) {
     return (
@@ -69,12 +69,12 @@ const RecommendSection = () => {
     nav(`/album/${albumId}`)
   }
   return (
-    <div>
+    <div className="RecoWrap">
 
       {/* 텍스트 section */}
-      <div>
-        <h1>For you</h1>
-        <h2>좋아하실만한 앨범들을 추천해드릴게요!</h2>
+      <div className="RecoTitleWrap">
+        <div className="RecoTitle" >For you</div>
+        <div className="RocoSubTitle">좋아하실만한 앨범들을 추천해드릴게요!</div>
       </div>
       
       {/* 앨범 section */}
@@ -84,14 +84,15 @@ const RecommendSection = () => {
         {/* 앨범 상단 */}
         {lists.map((album) => (
           <div key={album.albumId} onClick={() => goToDetail(String(album.albumId))}>
-            <img src={album.albumImageUrl} alt="" />
-            <p>{album.nickName}</p>
+            <img src={album.albumImageUrl} alt="" width={200}/>
+            <p>{album.nickname}</p>
             <p>{album.title}</p>
         
             {/* 앨범 하단 */}
             {album.playlists.map((playlist) =>(
               <div key={playlist.playlistId}>
-                <img src={playlist.photoUrls[0]} alt="" />
+                {/* <img src={playlist.photoUrls[0]} alt="" /> */}
+                <img src="/assets/minjeong_profile.png" alt="" />
                 <p>{playlist.locationAddress}</p>
                 <p>{playlist.musicDetails.artistName}&nbsp;-&nbsp;{playlist.musicDetails.trackName}</p>
           </div>
