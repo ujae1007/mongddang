@@ -7,6 +7,7 @@ public class LikeTopTenDTO {
 	private String title;
 	private String albumImageURL;
 	private String authorNickname;
+	private String authorProfileURL;
 	private List<LikeTopTenPlaylistDTO> playlists;
 	public int getAlbumId() {
 		return albumId;
@@ -31,6 +32,13 @@ public class LikeTopTenDTO {
 	}
 	public void setAuthorNickname(String authorNickname) {
 		this.authorNickname = authorNickname;
+	}
+	
+	public String getAuthorProfileURL() {
+		return authorProfileURL;
+	}
+	public void setAuthorProfileURL(String authorProfileURL) {
+		this.authorProfileURL = authorProfileURL;
 	}
 	public List<LikeTopTenPlaylistDTO> getPlaylists() {
 		return playlists;

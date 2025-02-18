@@ -113,6 +113,7 @@
 		<result property="title" column="title"/>
 		<result property="albumImageURL" column="albumImageURL"/>
 		<result property="authorNickname" column="authorNickname"/>
+		<result property="authorProfileURL" column="authorProfileURL"/>
 		<collection property="playlists" ofType="LikeTopTenPlaylistDTO" resultMap="LikeTopTenPlaylistMap"/>
 	</resultMap>
 	
@@ -130,6 +131,7 @@
 			a.title as title,
 			a.album_image_URL as albumImageURL,
 			u.nickname as authorNickname,
+			u.profile_image_URL as authorProfileURL,
 			p.playlist_id as playlistId,
 			p.location_address as locationAddress,
 			m.track_id as trackId,
