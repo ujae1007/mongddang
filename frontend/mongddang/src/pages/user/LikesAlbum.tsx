@@ -5,7 +5,7 @@ import { useRecoilValue } from "recoil"
 import LikesAlbumList from "./LikesAlbumList"
 import { useRef, useEffect } from "react"
 
-import './LikeAlbumList.css'
+
 
 function LikeAlbumsPage () {
 

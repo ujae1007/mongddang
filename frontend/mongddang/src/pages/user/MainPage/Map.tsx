@@ -90,7 +90,7 @@ function Map () {
           <div className="MainPage-MapSection"style={{margin:"10px"}}>
             {mapBoxPlaylists.length > 0 && (
             <>
-              <h3 style={{marginTop:"0px"}}> 최근 여행지로 떠나볼까요?</h3>
+              <h2 style={{marginTop:"0px", marginLeft:"20px", margin:"10px"}}> 최근 여행지로 떠나볼까요?</h2>
               <div style={{height:"225px"}}>
                 <MapBox 
                   playlists={mapBoxPlaylists}
@@ -103,25 +103,25 @@ function Map () {
 
           {/* 선택된 플레이리스트 정보 */}
           {selectedPlaylist && (
-            <div className='SelectPlayListInfo'>
+            <div className='SelectPlayListInfo'style={{boxShadow:"2px 2px 10px rgba(0,0,0,0.1)"}}>
               {/* 첫 번째 사진 */}
               
                 {selectedPlaylist.photoUrls.length > 0 && (
                   <img
-                    style={{width:"80px", height: "80px", margin:"10px"}}
+                    style={{width:"60px", height: "60px", margin:"10px", borderRadius:"5px"}}
                     src={selectedPlaylist.photoUrls[0]}
                     alt="플레이리스트 사진"
                   />
                 )}
               
 
-              <div style={{display:"flex", flexDirection:"column", justifyContent:"center", fontSize:"14px", fontWeight:600}}>
+              <div style={{display:"flex", flexDirection:"column", justifyContent:"center", fontWeight:600, gap:"8px"}}>
               {/* 위치 */}
-                <h4 style={{margin:"0px"}}>{selectedPlaylist.locationAddress}</h4>  
+                <h3 style={{marginTop:"5px",marginBottom:"0px" }}>{selectedPlaylist.locationAddress}</h3>  
               {/* 음악 */}
-                <p style={{marginBottom:"0px", color:"#858585", fontSize:"12px", fontWeight:500}}>
+                <h3 style={{margin:"0px",color:"#858585", fontWeight:500}}>
                   {selectedPlaylist.musicDetails.trackName} - {selectedPlaylist.musicDetails.artistName}
-                </p>
+                </h3>
               </div>
               
               

@@ -1,3 +1,16 @@
 user_id,like_region1,like_region2,like_region3,like_genre1,like_genre2,like_genre3
+<<<<<<< HEAD
 1,강릉,서울,대전,인디,발라드,락
 2,포항,부산,안양,댄스,포크,팝
+=======
+1,Seoul,Daegu,Daejeon,Comedy,Action,Horror
+2,Daegu,Seoul,Incheon,Horror,,Action
+3,Seoul,Daejeon,Incheon,Drama,Horror,Action
+4,Daegu,Daegu,Seoul,Sci-Fi,,Horror
+5,Busan,,Daegu,Horror,Action,
+6,Daejeon,Busan,Daegu,Action,Drama,Horror
+7,Busan,Busan,Daegu,Action,Drama,Drama
+8,Busan,Incheon,Daejeon,Horror,Comedy,Sci-Fi
+9,Seoul,,Seoul,Comedy,,Drama
+10,Busan,,Incheon,Drama,Comedy,
+>>>>>>> e7cd952c4376c7540829b503e80c10e654c1ae85
