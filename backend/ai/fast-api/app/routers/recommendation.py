@@ -22,6 +22,7 @@ async def recommendation_endpoint(request: RecommendationCoverRequest):
     """
     POST 엔드포인트로 전달된 사용자 정보(유저 id, 선호 지역/장르)를 활용해 추천 결과를 반환합니다.
     """
+    print("요청")
     try:   
         # 내부 모듈의 추천 함수를 호출합니다.
         rec_posts_list = rec_internal.recommend_posts_for_user_input(
@@ -34,6 +35,7 @@ async def recommendation_endpoint(request: RecommendationCoverRequest):
             like_genre3=request.like_genre3,
             top_n=3
         )
+        print(rec_posts_list)
         return {"recommendation_albums": rec_posts_list}
     
     except Exception as e:
