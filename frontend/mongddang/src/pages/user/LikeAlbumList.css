@@ -13,21 +13,22 @@
   background-image: url('../../../public/assets/밑바닥.png');
   background-size: 300px;
   background-repeat: no-repeat;
+  background-position-x: -8px;
 }
 
 .AlbumImage{
   position: relative;
-  width: 198px;
+  width: 200px;
   border-radius: 50%;
-  right: -82.5px;
-  top: 23px;
+  right: -72.5px;
+  top: 20px;
   z-index:1;
 }
 
 .PlayButton {
   position: relative;
-  right: 33px;
-  top:-50px;
+  right: 46px;
+  top:-55px;
   z-index: 2;
 }
 
