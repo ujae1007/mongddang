@@ -11,6 +11,8 @@ import Comment from '../../components/comment/Comment';
 
 import YoutubePlayer from '../youtube/youtubePrac';
 
+import './AlbumDetail.css';
+
 // 앨범 정보
 interface AlbumDetail {
   userId: number;
@@ -60,8 +62,12 @@ function AlbumDetail() {
 
   const [isLiked, setIsLiked] = useState(false); // 좋아요 여부
 
-  const likeIcon = "/assets/좋아요.svg";
-  const likedIcon = "/assets/안좋아요.svg"
+  const likeIcon = "/assets/안좋아요.svg"; // 좋아요 누르기 전 
+  const likedIcon = "/assets/좋아요.svg"  // 좋아요 누른 후
+
+  const line = "/assets/구분선.svg"; // 구분선 이미지
+
+  const [currentMediaIndex, setCurrentMediaIndex] = useState(0); // iframe 및 사진 중 현재 선택한 미디어의 인덱스 정보
 
 
   // 현재 로그인한 사용자 정보
@@ -172,84 +178,90 @@ function AlbumDetail() {
    }
   }
 
-
-
   return (
-    <div>
+    <>
       {/* albumData가 있을 때만 렌더링 */}
       {albumData && (
         <>
-          {/* 앨범 생성자 정보 */}
-          {albumUser && (
-            <>
-            <div style={{ display: "flex", alignItems: "center", gap: "15px" }}>
-              <img 
-                src={albumUser.profileImageURL} 
-                alt="프로필 이미지" 
-                style={{ width: '30px', height: '30px', borderRadius: '50%' }}
-                onClick={() => navigate(`/profile/${albumUser.userId}`)}
-              />
-              <span>{albumUser.nickname}</span>
-            </div>
-            <div>
-            <img 
-            src={isLiked ? likedIcon : likeIcon}
-            alt={isLiked ? "좋아요 취소" : "좋아요"}
-            onClick={handleLike}
-          />
-            </div>
-            </>
-          )}
+          <div className='detailContainer'>
+            {/* 앨범 생성자 정보 */}
+            {albumUser && (
+              <>
+              <div className='profileContainer'>
+                <div className='profileInfo'>
+                  <img
+                    className='profileImg'
+                    src={albumUser.profileImageURL} 
+                    alt="프로필 이미지" 
+                    onClick={() => navigate(`/profile/${albumUser.userId}`)}
+                  />
+                  <p className='profileNickname'>{albumUser.nickname}</p>
+                </div>
+              <div className='likeButton'>
+                <img 
+                  className='likeIcon'
+                  src={isLiked ? likedIcon : likeIcon}
+                  alt={isLiked ? "좋아요 취소" : "좋아요"}
+                  onClick={handleLike}
+                />
+              </div>
+              </div>
+              </>
+            )}
 
-          {/* 앨범 제목 및 수정 삭제 버튼 */}
-          <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
-            <h1>{albumData.title}</h1>
+            {/* 앨범 제목 및 수정 삭제 버튼 */}
+            <div className='titleContainer'>
+            <h1 className='titleInfo'>{albumData.title}</h1> 
+              <div className='buttonContainer'>
+                {loggedInUserId === albumData.userId && (
+                  <div className='buttonItem'>
+                    <Button 
+                      text='수정'
+                      type='edit'
+                      onClick={() => navigate(`/edit/${albumId}`)}
+                    />
+                    <Button 
+                      text='삭제'
+                      type='delete'
+                      onClick={() => setIsModalOpen(true)}
+                    />
+                  </div>
+                )}
+              </div>
 
+              
+            </div>
             
-            <div>
-              {loggedInUserId === albumData.userId && (
-                <>
-                  <Button 
-                    text='수정'
-                    type='edit'
-                    onClick={() => navigate(`/edit/${albumId}`)}
-                  />
-                  <Button 
-                    text='삭제'
-                    type='delete'
-                    onClick={() => setIsModalOpen(true)}
-                  />
-                </>
-              )}
+            {/* 생성된 앨범 커버와 LP */}
+            <div className='lpContainer'>
+              <div className='lpWithCover'>
+                <img src={albumData.albumImageUrl} alt="생성된 커버 이미지" className='coverImg'/>
+                <img src={lpimage} alt="LP" className='lpImg'/>
+              </div>
             </div>
           </div>
-          
-          {/* 생성된 앨범 커버와 LP */}
-          <div style={{ display: "flex", justifyContent: "space-between" }}>
-            <img src={albumData.albumImageUrl} alt="생성된 커버 이미지" style={{width:"150px"}}/>
-            <img src={lpimage} alt="LP" style={{width:"150px"}}/>
-          </div>
+      
+          <img src={line} alt="" style={{marginBottom:"10px", marginTop:"10px"}}/>
 
           {/* MapBox */}
-          {mapBoxPlaylists.length > 0 && (
-            <div>
-              <MapBox 
-                playlists={mapBoxPlaylists} 
-                onPlaylistSelect={handlePlaylistSelect}
-              />
-            </div>
-          )}
-          <hr />
+          <div style={{ height: '300px', width: '100%', display: 'flex', justifyContent: 'center' }}>
+            <MapBox
+              playlists={mapBoxPlaylists} 
+              onPlaylistSelect={handlePlaylistSelect}
+            />
+          </div>
+
+          <img src={line} alt="" style={{marginBottom:"10px", marginTop:"10px"}}/>
           
           {selectedPlaylist && (
             <div key={selectedPlaylist.playlistId}>
                 {/* 선택된 플레이리스트 장소명*/}
-                <div>
-                  <img src="/assets/지도마커2.svg" alt="" />
+                <div style={{ display: "flex", alignItems: "center", gap: "5px", justifyContent: "center" }}>
+                  <img src="/assets/지도마커2.svg" alt="" style={{width:"18px"}}/>
                   <h4>{selectedPlaylist.locationAddress}</h4>
                 </div>
                 {/* 이미지 및 iframe*/}
-                <div>
+                {/* <div>
                   {selectedPlaylist.photoUrls && selectedPlaylist.photoUrls.map((photo, photoIndex) => (
                     <img
                       key={photoIndex}
@@ -260,23 +272,85 @@ function AlbumDetail() {
                   ))}
                   <YoutubePlayer 
                     playlistIndex = {selectedPlaylistIndex}/>
+                </div> */}
+
+                {/* 슬라이더 */}
+
+                <div className="sliderContainer">
+                  {/* 이전버튼 */}
+                  <button 
+                    onClick={() => {
+                      const totalItems = selectedPlaylist.photoUrls.length + 1; // 이미지와 iframe을 합친 총 아이템 수
+                      setCurrentMediaIndex(prev => prev === 0 ? totalItems - 1 : prev - 1);
+                    }}
+                    className='sliderButton'
+                  >
+                    <img src="/assets/이전버튼.svg" alt="이전버튼" className='sliderArrow' />
+                  </button>
+
+                  {/* 이미지 및 iframe */}
+                  <div className='mediaContainer'>
+                    {[
+                      {
+                        type: 'youtube',
+                        content : <YoutubePlayer playlistIndex={selectedPlaylistIndex} />
+                      },
+                      ...selectedPlaylist.photoUrls.map(url => ({
+                        type: 'image',
+                        content: (
+                          <img
+                            src={url}
+                            alt="이미지"
+                            className='mediaImage'
+                          />
+                        )
+                      }))
+                    ].map((item, index) => {
+                      const isSelect = currentMediaIndex === index;
+                      return (
+                        <div
+                          key={index}
+                          className={`mediaItem ${isSelect ? 'selected' : ''}`}
+                        >
+                          {item.content}
+                          {!isSelect && <div className='mediaOverlay'/>}
+                        </div>
+                      )
+                    })}
+                  </div>
+                    
+                  {/* 다음버튼 */}
+                  <button 
+                    onClick={() => {
+                      const totalItems = selectedPlaylist.photoUrls.length + 1; // 이미지와 iframe을 합친 총 아이템 수
+                      setCurrentMediaIndex(prev => prev === totalItems - 1 ? 0 : prev + 1);
+                    }}
+                    className='sliderButton'
+                  >
+                    <img src="/assets/다음버튼.svg" alt="다음버튼" className='sliderArrow' />
+                  </button>
+
                 </div>
-                <div>
+
                 {/*음악정보*/}
-                <div>
-                  <img src="/assets/음표.svg" alt="" />
+                <div style={{ display: "flex", alignItems: "center", gap: "5px", justifyContent: "center" }}>
+                  <img src="/assets/음표.svg" alt="" style={{width:"16px"}}/>
                   <p>{selectedPlaylist.musicDetails.trackName} - {selectedPlaylist.musicDetails.artistName}</p>
                 </div>
-                </div>
+
             </div>
           )}
 
+          <img src={line} alt="" style={{marginBottom:"10px", marginTop:"10px"}}/>
+
           {/*댓글*/}
           {loggedInUser && (
-          <Comment 
-            albumId={Number(albumId)}
-            userProfileImage={loggedInUser.profileImageURL}
-          />
+            <div style={{ marginBottom: "70px" }}>
+              <Comment 
+                albumId={Number(albumId)}
+                userProfileImage={loggedInUser.profileImageURL}
+              />
+            </div>
           )}
 
         </>
@@ -293,7 +367,7 @@ function AlbumDetail() {
           setIsModalOpen(false);
         }}
       />
-    </div>
+    </>
   );
 }
 

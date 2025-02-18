@@ -11,7 +11,7 @@ const CommentList = ({ comments, onDelete }: CommentListProps) => {
   const commentArray = Array.isArray(comments) ? comments : []; // 댓글이 없을 경우 빈 배열로 처리 
 
   return (
-    <div>
+    <div style={{ display: "flex", flexDirection: "column", gap: "10px" }}>
       {commentArray.length === 0 ? (
         <div>아직 작성된 댓글이 없습니다.</div>
       ) : (

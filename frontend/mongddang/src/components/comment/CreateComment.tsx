@@ -1,6 +1,8 @@
 import { useState } from "react";
 import axiosInstance from "../../api/axiosInstance";
-import SearchMusic from "../album/SearchMusic";
+import AlbumMusicComment from "../album/AlbumMusicComment";
+
+import "./CreateComment.css";
 
 // 음악 검색 결과 타입
 interface Music {
@@ -39,16 +41,21 @@ const CreateComment = ({ albumId, userProfileImage, onCommentCreated }: CreateCo
   };
 
   return (
-    <div>
-      {/* 프로필 이미지 */}
-      <img 
-        src={userProfileImage} 
-        alt="profile" 
-        style={{ width: "50px", height: "50px", borderRadius: "50%" }}
-      />
-      
-      {/* 음악 검색 */}
-      <SearchMusic onSelectMusic={handleMusicSelect} />
+    <div className="CommentCreateContainer">
+
+      <div className="CommentCreateProfile">
+        {/* 프로필 이미지 */}
+        <img 
+          src={userProfileImage} 
+          alt="profile" 
+          style={{ width: "50px", height: "50px", borderRadius: "50%" }}
+        />
+      </div>
+
+      <div>
+        {/* 음악 검색 */}
+        <AlbumMusicComment onSelectMusic={handleMusicSelect} />
+      </div>
     </div>
   );
 };

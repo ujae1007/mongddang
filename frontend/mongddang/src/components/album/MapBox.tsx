@@ -186,7 +186,7 @@ function MapBox({ playlists, onPlaylistSelect }: MapBoxProps) {
     };
    }, [markerInfos, selectedLocation]);
 
-   return <div ref={mapContainer} style={{ width: '100%', height: '100%' }} />;
+   return <div ref={mapContainer} style={{ width: '90%', height: "300px", display:"flex", justifyContent:"center"}} />;
 }
 
 export default MapBox;

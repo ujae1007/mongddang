@@ -7,6 +7,8 @@
   height: 60px;
   width: 100%;
   background-color: #fff;
+  /* margin-bottom: 60px; */
+  z-index: 100; /* 다른 요소 위에 위치하도록 설정 */
 }
 
 .logoimg {

@@ -12,14 +12,14 @@ import './Login.css'
 function Login () {
 
   const nav = useNavigate()
-  const authToken = useRecoilValue(authTokenAtom)
+  // const authToken = useRecoilValue(authTokenAtom)
 
-  useEffect(() => { 
-    if (authToken) {
-      alert("로그아웃 후 이용하세요.");
-      nav(-1);
-    } 
-  }, [authToken, nav]);
+  // useEffect(() => { 
+  //   if (authToken) {
+  //     alert("로그아웃 후 이용하세요.");
+  //     nav(-1);
+  //   } 
+  // }, [authToken, nav]);
 
 
 

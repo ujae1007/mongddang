@@ -1,6 +1,8 @@
 import { useState } from 'react';
 import axiosInstance from "../../api/axiosInstance";
 
+import './SearchMusic.css';
+
 
 interface Music {
   musicId: number;
@@ -20,8 +22,9 @@ function SearchMusic({ onSelectMusic, defaultKeyword = '' }: SearchMusicProps) {
   const [keyword, setKeyword] = useState(defaultKeyword);
   const [musicList, setMusicList] = useState<Music[]>([]);
   const [isSearching, setIsSearching] = useState(false);
-  const [showResults, setShowResults] = useState(false);
   const [selectedMusic, setSelectedMusic] = useState<Music | null>(null);
+
+  const[isModalOpen, setIsModalOpen] = useState(false); // 모달 창 열기/닫기
 
   const searchMusic = async () => {
     if (!keyword.trim()) {
@@ -52,112 +55,92 @@ function SearchMusic({ onSelectMusic, defaultKeyword = '' }: SearchMusicProps) {
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    if (selectedMusic) {
-      // 음악이 선택된 상태면 댓글 생성
-      onSelectMusic(selectedMusic);
-    } else {
-      // 음악이 선택되지 않은 상태면 검색 실행
       searchMusic();
-      setShowResults(true);
     }
-  };
+
 
   const handleSelectMusic = (music: Music) => {
     onSelectMusic(music);
+    setSelectedMusic(music);
     setKeyword(`${music.trackName} - ${music.artistName}`);  // input에 선택된 음악 표시
     setMusicList([]); // 선택 후 검색 결과 초기화
-    setShowResults(false);
+    setIsModalOpen(false);
   };
 
-  const handleInputClick = () => {
-    if (selectedMusic) {
-      // 음악이 선택된 상태에서 input 클릭 시 초기화
-      setSelectedMusic(null);
-      setKeyword('');
-    }
+  const handleOpenModal = () => {
+    setIsModalOpen(true);
+    setSelectedMusic(null);
+    setKeyword('');
   };
+
 
   return (
     <div>
-      <form onSubmit={handleSubmit}>
-        <input
-          type="text"
-          value={keyword}
-          onChange={(e) => setKeyword(e.target.value)}
-          onClick={handleInputClick}
-          placeholder="노래 제목을 입력하세요"
-        />
-        <button type="submit" disabled={isSearching}>
-          {/* 선택된 음악이 있으면 '작성', 없으면 '검색' 버튼 표시 */}
-          {selectedMusic ? '작성' : (isSearching ? '검색 중...' : '검색')}
-        </button>
-      </form>
-
-      {showResults && musicList.length > 0 && (
-      <div style={{
-        position: 'fixed',
-        top: 0,
-        left: 0,
-        width: '100%',
-        height: '100%',
-        backgroundColor: 'rgba(0, 0, 0, 0.5)',
-        display: 'flex',
-        justifyContent: 'center',
-        alignItems: 'center',
-        zIndex: 1000
-      }}>
-
-    {/* 모달 컨텐츠 */}
-    <div style={{
-      width: '80%',
-      maxHeight: '80%',
-      backgroundColor: 'white',
-      borderRadius: '8px',
-      padding: '20px',
-      overflow: 'auto'
-    }}>
-      <div style={{
-        display: 'flex',
-        justifyContent: 'space-between',
-        alignItems: 'center',
-        marginBottom: '20px'
-      }}>
-        <h3 style={{ margin: 0 }}>음악 검색 결과</h3>
-        <button 
-          onClick={() => setShowResults(false)}
-          style={{
-            border: 'none',
-            background: 'none',
-            fontSize: '20px',
-            cursor: 'pointer'
-          }}
-        >
-          ✕
+      <div>
+        <button onClick={handleOpenModal} className='album-music-search-btn' > 
+          <div className="album-music-search-text">
+            <img src="/assets/음표.svg" alt="" style={{width:"18px"}}/>
+            <div> 노래 추가 </div>
+          </div>
+          <img src="/assets/화살표.svg" alt="" />
         </button>
       </div>
-      
-      <ul style={{ 
-        listStyle: 'none', 
-        padding: 0,
-        margin: 0
-      }}>
-        {musicList.map((music) => (
-          <li
-            key={music.musicId}
-            onClick={() => handleSelectMusic(music)}
-            style={{
-              padding: '15px',
-              borderBottom: '1px solid #eee',
-              cursor: 'pointer'
-            }}
-          >
-            {music.trackName} - {music.artistName}
-          </li>
-        ))}
-      </ul>
-    </div>
-  </div>
-)}
+
+      {/* 선택된 음악 표시 */}
+      {/* {selectedMusic && (
+        <div stylle>
+          <p>{selectedMusic.trackName} - {selectedMusic.artistName}</p>
+        </div>
+      )} */}
+
+      {isModalOpen && ( 
+        <div className='MusicSearchModal'>
+          <div className='MusicSearchModalContent'>
+            {/* 창닫기 버튼 */}
+            <div className='MusicSearchCloseBtn'>
+              <img src="/assets/창닫기.svg" alt="" onClick={() => setIsModalOpen(false)} />
+            </div>
+
+            {/* 검색 폼 부분*/}
+            <form onSubmit={handleSubmit}>
+              <div className='MusicSearchForm'>
+                <input 
+                  type="text" 
+                  value={keyword}
+                  onChange={(e) => setKeyword(e.target.value)}
+                  placeholder="노래 제목을 입력하세요"
+                  className='MusicSearchInput'
+                />
+
+                <img 
+                  src="/assets/검색2.svg" 
+                  alt="" 
+                  onClick={() => searchMusic()}
+                  className='MusicSearchIcon'
+                />
+              </div>
+            </form>
+
+            {/* 검색 결과 리스트*/}
+            {musicList.length > 0 && (
+              <ul className='MusicSearchList'>
+                {musicList.map((music) => (
+                  <div className='MusicSearchItemResult'>
+                    <img src="/assets/음표3.svg" alt="" />
+                    <div
+                      key={music.musicId} 
+                      onClick={() => handleSelectMusic(music)}>
+                      <div className='MusicSearchResultMusic'> {music.trackName} </div>
+                      <div className='MusicSearchResultArtist'> {music.artistName} </div>
+                    </div>
+                  </div>
+                ))}
+              </ul>
+            )}
+
+          </div>
+        </div>
+      )}
     </div>
   );
 }
