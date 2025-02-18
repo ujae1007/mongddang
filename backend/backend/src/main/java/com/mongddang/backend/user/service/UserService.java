@@ -83,40 +83,64 @@ public class UserService {
 			throw new UserPrincipalNotFoundException("사용자 정보를 찾을 수 없다");
 		}
 		// 수정
-		if (updateUserDTO.getNickname() != null) {
+		boolean flag = false; // 뭔가 하나라도 수정했다면 flag -> true
+		// 유저가 정보를 변경했다면 
+		if (!updateUserDTO.getNickname().equals(currentUser.getNickname())) {
 			currentUser.setNickname(updateUserDTO.getNickname());
+			flag = true;
 		}
-		if (updateUserDTO.getLikeRegion1() != null) {
+		if (!updateUserDTO.getLikeRegion1().equals(currentUser.getLikeRegion1())) {
 			currentUser.setLikeRegion1(updateUserDTO.getLikeRegion1());
+			flag = true;
 		}
-		if (updateUserDTO.getLikeRegion2() != null) {
+		if (!updateUserDTO.getLikeRegion2().equals(currentUser.getLikeRegion2())) {
 			currentUser.setLikeRegion2(updateUserDTO.getLikeRegion2());
+			flag = true;
 		}
-		if (updateUserDTO.getLikeRegion3() != null) {
+		if (!updateUserDTO.getLikeRegion3().equals(currentUser.getLikeRegion3())) {
 			currentUser.setLikeRegion3(updateUserDTO.getLikeRegion3());
+			flag = true;
 		}
-		if (updateUserDTO.getLikeGenre1() != null) {
+		if (!updateUserDTO.getLikeGenre1().equals(currentUser.getLikeGenre1())) {
 			currentUser.setLikeGenre1(updateUserDTO.getLikeGenre1());
+			flag = true;
 		}
-		if (updateUserDTO.getLikeGenre2() != null) {
+		if (!updateUserDTO.getLikeGenre2().equals(currentUser.getLikeGenre2())) {
 			currentUser.setLikeGenre2(updateUserDTO.getLikeGenre2());
+			flag = true;
 		}
-		if (updateUserDTO.getLikeGenre3() != null) {
+		if (!updateUserDTO.getLikeGenre3().equals(currentUser.getLikeGenre3())) {
 			currentUser.setLikeGenre3(updateUserDTO.getLikeGenre3());
+			flag = true;
 		}
-		if (updateUserDTO.getIntroduce() != null) {
+		if (!updateUserDTO.getIntroduce().equals(currentUser.getIntroduce())) {
 			currentUser.setIntroduce(updateUserDTO.getIntroduce());
+			flag = true;
 		}
 
 		// 프로필 이미지 업로드 처리
 		MultipartFile profileImage = updateUserDTO.getProfileImage();
+		// 새로운 이미지를 줬다면
 		if (profileImage != null && !profileImage.isEmpty()) {
 			String imageUrl = s3StorageService.uploadFile(profileImage, "profile");
-			System.out.println(imageUrl);
 			currentUser.setProfileImageURL(imageUrl);
 		} else {
-			currentUser.setProfileImageURL(defaultProfileImageUrl);
+			// 이미지를 주지 않았다면 null인 경우
+			// 원래 잇던 사람이 안줬을 수도 있고(사진 삭제) -> 이때는 defaulimageurl 주소를 넣어주면 됨 
+			// 또는 원래 있었는데 다른 것만 수정한 사람도 null 로 보내줌 -> 이때는 현재 저장된 사용자의 정보를 바꾸면 안됨
+			
+			// 프로필 이미지가 있었지만 다른 정보만 수정하느라 회원 수정 요청을 보낼 경우 -> 그대로 유지
+			if (!currentUser.getProfileImageURL().equals(defaultProfileImageUrl) && flag ) {
+				currentUser.setProfileImageURL(currentUser.getProfileImageURL());
+				// 프로필 이미지가 있었지만 사진만 삭제한 경우 
+			} else if (!currentUser.getProfileImageURL().equals(defaultProfileImageUrl) && !flag) {
+				currentUser.setProfileImageURL(defaultProfileImageUrl);
+				// 프로필 이미지가 있었지만 사진을 삭제하고 다른 정보도 수정한 경우
+			} else if (!currentUser.getProfileImageURL().equals(defaultProfileImageUrl) && flag) {
+				currentUser.setProfileImageURL(defaultProfileImageUrl);
+			} 
 		}
+		
 		// 사용자 정보 업데이트
 		int result = userRepository.updateUser(currentUser);
 		return result == 1;
