@@ -42,13 +42,14 @@ function ProfileEdit () {
         loggedInUser.likeRegion3,
       ].filter(Boolean) as string[]
       setSelectedPlaces(places)
-
+      console.log(loggedInUser.likeGenre1)
       const genres = [
         loggedInUser.likeGenre1,
         loggedInUser.likeGenre2,
         loggedInUser.likeGenre3,
       ].filter(Boolean) as string[]
       setSelectedGenres(genres)
+      
     }
   }, [loggedInUser])
 
@@ -154,11 +155,9 @@ function ProfileEdit () {
         formData.append("profileImage", fileInput.files[0])
       }
     }
-    // 이 부분 주석 -> 나중에 확인하고 그냥 삭제해
     // if (profileImage === null) {
     //   formData.append("profileImage", "");
-    // } 
-
+    // }
     try { 
       const res = await axiosInstance.put("/auth/update", formData, {
         headers: {
