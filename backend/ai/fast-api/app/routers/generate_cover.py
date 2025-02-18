@@ -34,7 +34,7 @@ async def generate_cover_endpoint(request: GenerateCoverRequest):
             raise HTTPException(status_code=500, detail="S3 업로드 실패")
         
         # 4. 결과 반환
-        return {"generated_image_url": s3_url}
+        return {"image_url": s3_url}
 
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
