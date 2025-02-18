@@ -1,0 +1,24 @@
+post_id,author,title,region,genres
+1,1,Album 1,"Address 3, Address 2, Address 1, Address 4","genre3, genre1, genre4, genre2"
+2,1,Album 2,"Address 3, Address 2, Address 1, Address 4","genre3, genre1, genre4, genre2"
+3,1,Album 3,"Address 3, Address 21, Address 11, Address 30, Address 20","genre7, genre2, genre3, genre19, genre4"
+4,1,Album 4,Address 4,genre4
+5,1,Album 5,Address 5,genre5
+6,2,Album 2,Address 6,genre6
+7,3,Album 3,Address 7,genre7
+8,4,Album 4,Address 8,genre8
+9,5,Album 5,Address 9,genre9
+10,6,Album 6,Address 10,genre10
+11,7,Album 7,Address 11,genre11
+12,8,Album 8,Address 12,genre12
+13,9,Album 9,Address 13,genre13
+14,10,Album 10,Address 14,genre14
+15,11,Album 11,Address 15,genre15
+16,12,Album 12,Address 16,genre16
+17,13,Album 13,Address 17,genre17
+18,14,Album 14,Address 18,genre18
+19,15,Album 15,Address 19,genre19
+20,16,Album 16,Address 20,genre20
+45,21,대전 여행,"성심당 롯데백화점 대전점, 한밭수목원, 갑천근린공원","genre3, genre1, genre8"
+46,21,제주도 여행,스누피가든,genre2
+48,21,test,성심당 본점,genre5
