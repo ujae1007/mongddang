@@ -11,7 +11,7 @@ from app import dependencies
 import os
 
 
-def get_query_data():
+def get_query_data(user_id):
     db_config = {
         "host": dependencies.DATABASE_HOST,   
         "port": dependencies.DATABASE_PORT,   # MySQL 포트 번호호
