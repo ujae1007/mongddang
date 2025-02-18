@@ -13,14 +13,14 @@
   width: 291px;
   border: none;
   border-bottom: 1px solid;
-  background-color: rgb(249,249,249);
+  background-color: white;
 
 }
 
 .SearchBar button {
   border: none;
   border-bottom: 1px solid;
-  background-color: rgb(249,249,249);
+  background-color: white;
 }
 
 .SearchTab {
@@ -30,7 +30,7 @@
 
 .SearchTab .SearchButton {
   border: none;
-  background-color:rgb(249,249,249);
+  background-color: white;
   height: 14px;
   font-size: 14px;
   color: #9999A1;

@@ -42,13 +42,14 @@ function ProfileEdit () {
         loggedInUser.likeRegion3,
       ].filter(Boolean) as string[]
       setSelectedPlaces(places)
-
+      console.log(loggedInUser.likeGenre1)
       const genres = [
         loggedInUser.likeGenre1,
         loggedInUser.likeGenre2,
         loggedInUser.likeGenre3,
       ].filter(Boolean) as string[]
       setSelectedGenres(genres)
+      
     }
   }, [loggedInUser])
 
@@ -128,14 +129,14 @@ function ProfileEdit () {
    // 수정하기 axios 전송
    const handleSubmit = async () => {
     console.log("프로필 수정 시도")
-    console.log(
-      "업데이트 된 데이터:",
-      // profileImage,  
-      changedNickName,
-      changedIntroduce,
-      selectedPlaces,
-      selectedGenres,
-    ) // 변화된 값이 담겨있음 확인 완료 
+    // console.log(
+    //   "업데이트 된 데이터:",
+    //   profileImage,  
+    //   changedNickName,
+    //   changedIntroduce,
+    //   selectedPlaces,
+    //   selectedGenres,
+    // ) // 변화된 값이 담겨있음 확인 완료 
 
     const formData = new FormData()
     formData.append("nickname", changedNickName)
@@ -154,9 +155,9 @@ function ProfileEdit () {
         formData.append("profileImage", fileInput.files[0])
       }
     }
-    if (profileImage === null) {
-      formData.append("profileImage", "");
-    }
+    // if (profileImage === null) {
+    //   formData.append("profileImage", "");
+    // }
     try { 
       const res = await axiosInstance.put("/auth/update", formData, {
         headers: {

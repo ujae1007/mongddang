@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react"
 import axiosInstance from "../../api/axiosInstance";
 import { useNavigate } from "react-router-dom";
-
+import './LikeAlbumList.css'
 interface Music {
   musicId : number // 해당 앨범의 노래 아이디
   trackName : string;
@@ -96,10 +96,9 @@ function LikesAlbumList ({loggedInuser, thirdSectionRef}:UserProps) {
         </div>
       
       {/* 첫 번째 앨범 렌더링 일단 사진만 누르면 해당 상세페이지로 이동하게함*/}
-        <div>
+        <div style={{marginTop:"20px"}}>
           {/* 밑바닥 위에 앨범커버 넣고, 위에 버튼 올리면돼~! 고마워~!! */}
-          <div className="LP">
-            <img src="../../public/assets/밑바닥.png" alt=""  width="300"/>
+          <div className="LikeAlbumImages">
             <img className="AlbumImage"src={secondSection.albumImageURL} onClick={() => goToAlbumDetail(String(secondSection.albumId))}/>
             <img className="PlayButton"src="../../public/assets/탑.png" alt="" />
           </div>
@@ -125,7 +124,7 @@ function LikesAlbumList ({loggedInuser, thirdSectionRef}:UserProps) {
           </div>
           
         {/* 네번째 앨범부터 다시 렌더링 */}
-          <div className = "LikeAlbums" ref={thirdSectionRef} style={{marginTop:20}} >
+          <div className = "LikeAlbums" ref={thirdSectionRef} style={{marginTop:"20px", marginBottom:"20px"}} >
             {thirdSection.map((album) => (
               <div className="LikeAlbum" key={album.albumId} onClick={() => goToAlbumDetail(String(album.albumId))}> 
                 <img src={album.albumImageURL} width={100}/>

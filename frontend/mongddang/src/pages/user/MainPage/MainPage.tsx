@@ -25,21 +25,18 @@ function MainPage () {
 
   return (
     <div style={{width:"100%"}}>
-      <p style={{marginLeft:10, fontSize: 18, fontWeight:400, color:"#252525"}}>반갑습니다. {loggedInUsernickname}님!</p>
-      
       {/* 첫번째 랜덤 앨범 */}
-      <>
-        <RamdomSection loggedInUser={String(loggedInUsernickname)}/>
-      </>
+      <div style={{marginBottom:"30px"}}>
+        <RamdomSection loggedInUser={String(loggedInUsernickname)} />
+      </div>
 
       {/* 지도 */}
-      <>
+      <div style={{marginBottom:"30px"}}>
         <Map />
-      </>
+      </div>
 
       {/* 내 플레이리스트 일단 3개만 보이도록 하자*/}
       <div style={{padding:10}}>
-        <p style={{fontSize:20, fontWeight:500}}>나의 앨범</p>
         <MyPlayListSection loggedInUser={String(loggedInUsernickname)}/>
       </div>
 
