@@ -18,5 +18,8 @@ public interface UserRepository {
     
     // 회원탈퇴
     public int deleteUser(String email);
+    
+    // 사용자 ID로 사용자 정보 조회 (추가)
+    public UserDTO getUserById(int userId);
 
 }

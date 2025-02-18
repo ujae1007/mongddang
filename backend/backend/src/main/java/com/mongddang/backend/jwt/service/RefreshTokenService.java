@@ -2,6 +2,7 @@ package com.mongddang.backend.jwt.service;
 
 import java.util.Date;
 
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 
 import com.mongddang.backend.jwt.JWTUtil;
@@ -48,6 +49,13 @@ public class RefreshTokenService {
 	public void deleteRefreshToken(String refreshToken) {
 		refreshTokenRepository.deleteRefreshToken(refreshToken);
 	}
+	
+    // 10초마다 만료된 토큰 자동 삭제
+    @Scheduled(fixedRate = 3600000)
+    public void deleteExpiredTokens() {
+        int deletedCount = refreshTokenRepository.deleteExpiredTokens();
+        System.out.println("[Scheduled Task] Expired Refresh Tokens Deleted: " + deletedCount);
+    }
 	
 	
 }

@@ -21,7 +21,7 @@ public class FastAPIService {
         String fastApiUrl = "http://127.0.0.1:8000/generate_cover";
 
         // FastAPI에 보낼 JSON 데이터 생성
-        Map<String, Object> payload = Map.of("genres", genres, "imageurls",imageUrls);
+        Map<String, Object> payload = Map.of("genres", genres, "imageUrls",imageUrls);
 
         // FastAPI 호출 및 JSON 데이터 전송
         ResponseEntity<Map> response = restTemplate.postForEntity(fastApiUrl, payload, Map.class);
