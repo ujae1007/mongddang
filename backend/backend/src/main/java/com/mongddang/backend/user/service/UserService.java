@@ -127,8 +127,17 @@ public class UserService {
 	public UserDTO getUserByEmail(String email) {
 		return userRepository.getUserByEmail(email);
 	}
-
-	// 회원탈퇴
+	
+	// 사용자 ID로 조회 (추가)
+	public UserDTO getUserById(int userId) {
+	    UserDTO user = userRepository.getUserById(userId);
+	    if(user == null) {
+	        throw new IllegalArgumentException("해당 사용자를 찾을 수 없습니다: " + userId);
+	    }
+	    return user;
+	}
+	
+	//회원탈퇴
 	@Transactional
 	public boolean signout(String email) {
 		return userRepository.deleteUser(email) == 1;

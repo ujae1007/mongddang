@@ -187,12 +187,21 @@ public class AlbumService {
         return albums.stream().map(this::toSimpleAlbumResponseDto).collect(Collectors.toList());
     }
 
-    // ✅ 내 앨범 조회 (Playlist 정보 포함)
+    // ✅ 내 완료된 앨범 조회 (Playlist 정보 포함)
     @Transactional(readOnly = true)
     public List<AlbumResponseDto> getMyAlbums(Principal principal) {
         String email = principal.getName();
         int userId = userService.getUserByEmail(email).getUserId();  
         List<Album> albums = albumRepository.findByUserIdAndStatus(userId, true);
+        return albums.stream().map(this::toDetailedAlbumResponseDto).collect(Collectors.toList());
+    }
+    
+    // ✅ 내 임시저장 앨범 조회 (Playlist 정보 포함)
+    @Transactional(readOnly = true)
+    public List<AlbumResponseDto> getMyUncompletedDetailAlbums(Principal principal) {
+        String email = principal.getName();
+        int userId = userService.getUserByEmail(email).getUserId();  
+        List<Album> albums = albumRepository.findByUserIdAndStatus(userId, false);
         return albums.stream().map(this::toDetailedAlbumResponseDto).collect(Collectors.toList());
     }
     
@@ -253,19 +262,22 @@ public class AlbumService {
         Album album = albumRepository.findById(albumId)
                 .orElseThrow(() -> new IllegalArgumentException("해당 앨범을 찾을 수 없습니다: " + albumId));
         
-        if (!album.isStatus()) {
-            throw new IllegalArgumentException("해당 앨범은 비공개 상태입니다.");
-        }
+//        if (!album.isStatus()) {
+//            throw new IllegalArgumentException("해당 앨범은 비공개 상태입니다.");
+//        }
 
         // ✅ 사용자가 좋아요를 눌렀는지 여부 확인 (⭐ 특정 앨범 상세 조회에서만 실행)
         boolean isLiked = myLikeRepository.existsByUserIdAndAlbumId(userId, albumId);
+        
+        UserDTO albumOwner = userService.getUserById(album.getUserId()); // getUserById 메서드가 존재한다고 가정
+        String nickname = albumOwner != null ? albumOwner.getNickname() : "";
 
         // ✅ 상세 응답을 생성하며, 좋아요 상태 포함
-        return toDetailedAlbumResponseDto(album, isLiked);
+        return toDetailedAlbumResponseDto(album, isLiked, nickname);
     }
     
  // ✅ Playlist + Music 정보를 포함한 AlbumResponseDto 생성
-    private AlbumResponseDto toDetailedAlbumResponseDto(Album album, boolean isLiked) {
+    private AlbumResponseDto toDetailedAlbumResponseDto(Album album, boolean isLiked, String nickname) {
         // 플레이리스트 정보 조회
         List<PlaylistDto> playlists = playlistRepository.findByAlbum_AlbumId(album.getAlbumId()).stream()
                 .map(playlist -> {
@@ -296,13 +308,16 @@ public class AlbumService {
                 album.getCreatedAt(),
                 album.getUpdatedAt(),
                 playlists, // ✅ Playlist 정보 추가
-                isLiked
+                isLiked,
+                nickname
         );
     }
     
     // ✅ 좋아요 상태 없이 반환하는 오버로딩된 메서드
     private AlbumResponseDto toDetailedAlbumResponseDto(Album album) {
-        return toDetailedAlbumResponseDto(album, false); // 기본값 false로 설정
+        UserDTO albumOwner = userService.getUserById(album.getUserId());
+        String nickname = albumOwner != null ? albumOwner.getNickname() : "";
+        return toDetailedAlbumResponseDto(album, false, nickname);
     }
     
     // ✅ Playlist 정보 제외한 AlbumResponseDto 생성
