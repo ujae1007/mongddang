@@ -11,7 +11,7 @@ from app import dependencies
 import os
 
 
-def get_query_data():
+def get_query_data(user_id):
     db_config = {
         "host": dependencies.DATABASE_HOST,   
         "port": dependencies.DATABASE_PORT,   # MySQL 포트 번호호
@@ -24,14 +24,53 @@ def get_query_data():
 
     cursor.execute("USE mongddang;")
 
-    query_data = """
-        SELECT album_id FROM album ORDER BY RAND() LIMIT 3;
-    """
-    cursor.execute(query_data)
+    query = """
+        SELECT 
+            a.album_id,
+            a.title,
+            (
+                -- 지역 매칭 횟수
+                SUM(
+                    CASE 
+                        WHEN p.location_address IN (u.like_region1, u.like_region2, u.like_region3) 
+                        THEN 1 
+                        ELSE 0 
+                    END
+                )
+                +
+                -- 장르 매칭 횟수
+                SUM(
+                    CASE 
+                        WHEN m.genre IN (u.like_genre1, u.like_genre2, u.like_genre3) 
+                        THEN 1 
+                        ELSE 0 
+                    END
+                )
+            ) AS total_match
+        FROM album AS a
+        JOIN playlist AS p 
+            ON a.album_id = p.album_id
+        JOIN music AS m 
+            ON p.music_id = m.music_id
+        JOIN user AS u
+            ON u.user_id = %s
+        -- liked 테이블을 LEFT JOIN
+        LEFT JOIN `like` AS l
+            ON l.album_id = a.album_id
+            AND l.user_id = %s 
+        WHERE 
+            a.user_id != %s  
+            AND l.album_id IS NULL
+        GROUP BY a.album_id
+        ORDER BY total_match DESC
+        LIMIT 3;
+        """
+    cursor.execute(query, (user_id, user_id, user_id))
     query_rec = cursor.fetchall()
-    rand_albums = [num[0] for num in query_rec]
 
-    return rand_albums
+    query_data = [num[0] for num in query_rec]
+
+    return query_data
 
 
 def export_data_to_csv():
@@ -47,8 +86,6 @@ def export_data_to_csv():
     cursor = conn.cursor()
 
     cursor.execute("USE mongddang;")
-
-
 
 
     try:
@@ -296,8 +333,8 @@ def recommend_posts_for_user_input(user_id: int,
         encoded_user_id = int(user_encoder.transform([user_id])[0])
     except Exception as e:
         print("유저 id 랜덤")
-        rand_albums = get_query_data()
-        return rand_albums
+        query_list = get_query_data(user_id)
+        return query_list
         # raise ValueError(f"입력받은 user_id({user_id}) 인코딩 오류: {e}")
 
     try:
@@ -309,8 +346,8 @@ def recommend_posts_for_user_input(user_id: int,
         encoded_like_genre3 = int(encoders['like_genre3_encoder'].transform([like_genre3])[0])
     except Exception as e:
         print("유저 like 랜덤")
-        rand_albums = get_query_data()
-        return rand_albums
+        query_list = get_query_data(user_id)
+        return query_list
         # raise ValueError(f"입력받은 선호 정보(지역/장르) 인코딩 오류: {e}")
 
     # 게시글 스칼라 컬럼 인코딩

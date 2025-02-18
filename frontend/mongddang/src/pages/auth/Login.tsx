@@ -5,7 +5,7 @@ import Button from "../../components/common/Button"
 import InputBox from "../../components/common/input"
 import axiosInstance from "../../api/axiosInstance"
 import { authTokenAtom } from "../../recoil/userAtom"
-import { useRecoilValue } from "recoil"
+// import { useRecoilValue } from "recoil"
 import './Login.css'
 
 
@@ -19,7 +19,7 @@ function Login () {
   //     alert("로그아웃 후 이용하세요.");
   //     nav(-1);
   //   } 
-  // }, [authToken, nav]);
+  // }, [authToken]);
 
 
 

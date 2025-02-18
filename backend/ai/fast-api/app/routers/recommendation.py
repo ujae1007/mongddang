@@ -34,6 +34,7 @@ async def recommendation_endpoint(request: RecommendationCoverRequest):
             like_genre3=request.like_genre3,
             top_n=3
         )
+        print(rec_posts_list)
         return {"recommendation_albums": rec_posts_list}
     
     except Exception as e:

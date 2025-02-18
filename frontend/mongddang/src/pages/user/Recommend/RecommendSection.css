@@ -1,0 +1,20 @@
+.RecoWrap {
+    display: flex;
+    flex-direction: column;
+    margin: 20px;
+}
+.RecoTitleWrap {
+    display: flex;
+    flex-direction: column;
+}
+
+.RecoTitle {
+    font-size: 30px;
+    font-weight: 600;
+    margin-bottom: 5px;
+}
+
+.RecoSubTitle {
+    font-size: 20px;
+    font-weight: 400;
+}

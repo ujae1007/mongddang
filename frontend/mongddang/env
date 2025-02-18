@@ -1,5 +1,0 @@
-VITE_API_URL=http://localhost:8080/api
-VITE_KAKAO_MAP_API_KEY =92ef48494190faaab47c80d040adc2a3
-VITE_MAPBOX_TOKEN=pk.eyJ1IjoiaHllbWluaSIsImEiOiJjbTZ3Ym8xcXowY2RmMmpxeWpwOW90djVuIn0._VJp1hgb_XMmQgh1epIIwA
-VITE_MAPBOX_STYLE=mapbox://styles/hyemini/cm6wbbk1e00b101sl6v4vgf66
-VITE_YOUTUBE_KEY=AIzaSyDxDjbwLZ6DXNBQRPdnB8iofxABXKENGMI

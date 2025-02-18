@@ -1,5 +1,11 @@
 import { useState, useEffect } from "react"
 import './favoriteInput.css'
+
+interface GenreOption {
+  label: string;
+  value: string;
+}
+
 interface FavoriteProps{
   type: "genre" | "place"
   placeholder: string
@@ -8,15 +14,30 @@ interface FavoriteProps{
   mode: "signup" | "edit"
 }
 
-const genreOptions = [
-"acoustic", "alternative", "blues", "classical",
-"club", "country", "dance", "disco", "edm",
-"electronic", "emo","folk", "funk", "garage",
-"groove", "heavy-metal", "hip-hop", "house",
-"indie", "k-pop", "movies", "new-age", "party",
-"pop", "punk", "r-n-b", "reggae", "rock", "soul", "tango",
-]
-const placeOptions = [
+  const genreOptions: GenreOption[] = [
+  { label: "케이팝", value: "k-pop" },
+  { label: "팝", value: "pop" },
+  { label: "재즈", value: "jazz" },
+  { label: "락", value: "rock" },
+  { label: "인디", value: "indie" },
+  { label: "클래식", value: "classical" },
+  { label: "제이팝", value: "j-pop" },
+  { label: "댄스", value: "dance" },
+  { label: "얼터너티브", value: "alternative" },
+  { label: "메탈", value: "metal" },
+  { label: "힙합", value: "hip-hop" },
+  { label: "포크", value: "folk" },
+  { label: "레게", value: "reggae" },
+  { label: "하우스", value: "house" },
+  { label: "컨트리", value: "country" },
+  { label: "R&B", value: "r-n-b" },
+  { label: "어쿠스틱", value: "acoustic" },
+  { label: "블루스", value: "blues" },
+  { label: "EDM", value: "edm" },
+  { label: "뉴에이지", value: "new-age" },
+];
+
+const placeOptions: string[] = [
   "인천", "서울", "경기도", "강원도", "세종", "충청남도", "충청북도",
   "대전", "경상북도", "대구", "전라북도", "광주", "전라남도",
   "경상남도", "울산", "부산", "제주"
@@ -24,7 +45,7 @@ const placeOptions = [
 
 const FavoriteInput = ({type, placeholder, onChange, defaultValues =[], mode}: FavoriteProps) => {
 
-  const options = type === "genre" ? genreOptions : placeOptions
+  const options: GenreOption[] | string[] = type === "genre" ? genreOptions : placeOptions
   const [selectedItems, setSelectedItems ] = useState<string[]>([])
 
   //수정페이지라면 해당 데이터 보여주기 
@@ -33,6 +54,12 @@ const FavoriteInput = ({type, placeholder, onChange, defaultValues =[], mode}: F
       setSelectedItems(defaultValues)
     }
   }, [defaultValues, mode])
+
+
+  const isGenreOption = (option: GenreOption | string): option is GenreOption => {
+    return typeof option === 'object' && 'value' in option && 'label' in option;
+  };
+
 
   // 선택한 항목 추가/삭제
   const handleSelect = (e: React.ChangeEvent<HTMLSelectElement>) => {
@@ -65,24 +92,38 @@ const FavoriteInput = ({type, placeholder, onChange, defaultValues =[], mode}: F
     : "SelectOptionWrap placeWrap";
 
   return(
-    <div className={wrapClassName}>
+
+      <div className={wrapClassName}>
       <select onChange={handleSelect} value="">
-        <option value=""> {placeholder}</option>
-        {options.map(option =>(
-          <option 
-            key={option} 
-            value={option}
-            disabled={selectedItems.includes(option)} 
-          >
-            {option}
-          </option>)         
+        <option value="">{placeholder}</option>
+        {options.map((option) =>
+          isGenreOption(option) ? (
+            <option 
+              key={option.value} 
+              value={option.value} 
+              disabled={selectedItems.includes(option.value)}
+            >
+              {option.label}
+            </option>
+          ) : (
+            <option 
+              key={option} 
+              value={option} 
+              disabled={selectedItems.includes(option)}
+            >
+              {option}
+            </option>
+          )
         )}
       </select>
 
       <div className="selectedItemsWrap">
         {selectedItems.map(item => (
-          <span key={item} style={{ marginRight: "8px"}}>
-            {item}
+          <span key={item} style={{ marginRight: "8px" }}>
+            {type === "genre" 
+              ? genreOptions.find(opt => opt.value === item)?.label 
+              : item
+            }
             <button
               onClick={() => handleRemove(item)}
               style={{
@@ -96,7 +137,7 @@ const FavoriteInput = ({type, placeholder, onChange, defaultValues =[], mode}: F
                 cursor: "pointer",
               }}
             >
-            X
+              X
             </button>
           </span>
         ))}

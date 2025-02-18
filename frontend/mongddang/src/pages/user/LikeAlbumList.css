@@ -8,22 +8,28 @@
   justify-content: center;
 }
 
-.LP {
-  position: relative;
+.LikeAlbumImages {
+  height: 250px;
+  background-image: url('../../../public/assets/밑바닥.png');
+  background-size: 300px;
+  background-repeat: no-repeat;
+  background-position-x: -8px;
 }
 
 .AlbumImage{
-  width: 198px;
+  position: relative;
+  width: 200px;
   border-radius: 50%;
-  position: absolute;
-  right: 110px;
-  top: 22px;
+  right: -72.5px;
+  top: 20px;
+  z-index:1;
 }
 
 .PlayButton {
-  position: absolute;
-  right: 185px;
-  top:100px;
+  position: relative;
+  right: 46px;
+  top:-55px;
+  z-index: 2;
 }
 
 .AlbumAuthor {

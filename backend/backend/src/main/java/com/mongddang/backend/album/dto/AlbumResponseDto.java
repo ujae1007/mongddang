@@ -14,6 +14,7 @@ public class AlbumResponseDto {
     private LocalDateTime updatedAt;
     private List<PlaylistDto> playlists;
     private boolean isLiked;
+    private String nickname;
 
     public AlbumResponseDto() {}
     
@@ -30,7 +31,8 @@ public class AlbumResponseDto {
         this.playlists = null; // ✅ 기본값으로 null 설정
     }
     
-    public AlbumResponseDto(int albumId, int userId, String title, String albumImageUrl, boolean status, LocalDateTime createdAt, LocalDateTime updatedAt, List<PlaylistDto> playlists, boolean isLiked) {
+    public AlbumResponseDto(int albumId, int userId, String title, String albumImageUrl, boolean status, LocalDateTime createdAt, 
+    		LocalDateTime updatedAt, List<PlaylistDto> playlists, boolean isLiked, String nickname) {
         this.albumId = albumId;
         this.userId = userId;
         this.title = title;
@@ -40,6 +42,7 @@ public class AlbumResponseDto {
         this.updatedAt = updatedAt;
         this.playlists = playlists;
         this.isLiked = isLiked;
+        this.nickname = nickname;
     }
 
     public int getAlbumId() { return albumId; }
@@ -51,6 +54,7 @@ public class AlbumResponseDto {
     public LocalDateTime getUpdatedAt() { return updatedAt; }
     public List<PlaylistDto> getPlaylists() { return playlists; }
     public boolean isLiked() { return isLiked; }
+    public String getNickname() { return nickname; }
     
     // ✅ Setter 추가 (선택적으로 사용 가능)
     public void setLiked(boolean liked) { isLiked = liked; }

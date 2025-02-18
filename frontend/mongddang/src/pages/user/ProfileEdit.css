@@ -5,7 +5,7 @@
   display: flex;
   flex-direction: column;
   align-items: center;     /* 수직 중앙 정렬 */
-  padding-top: 100px;
+  padding-top: 50px;
 }
 
 /* 프로필 이미지 부분 */
@@ -43,14 +43,17 @@
   font-size: 0.9rem;
 }
 
-.deleteButton {
-  background-color: red;
+.EditdeleteButton {
+  background-color: rgb(255, 103, 103);
   color: white;
   border: none;
   padding: 6px 12px;
   border-radius: 4px;
   font-size: 0.9rem;
   cursor: pointer;
+}
+.EditdeleteButton:hover {
+  background-color: rgb(255, 0, 0);
 }
 
 /* 폼 전체 컨테이너 */
@@ -80,11 +83,27 @@
   margin-top: 16px;
 }
 
+
+.SignoutLogout {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  align-items: center;
+  justify-content: center;
+  box-sizing: border-box;
+}
+
+.logoutText {
+  margin-top: 30px;
+  font-size: 0.9rem;
+  cursor: pointer;
+}
+
 /* 계정 삭제 텍스트 */
 .deleteUserText {
-  margin-top: 20px;
+  margin-top: 50px;
   font-size: 0.9rem;
   color: #d9534f;
   cursor: pointer;
-  text-align: center;
+  margin-bottom: 50px;
 }

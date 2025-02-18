@@ -74,7 +74,7 @@ function MyPlayListSection({loggedInUser}: UserProps) {
   }
 
   // 만약 앨범이 없을 경우
-  if (!album.length) return <div>앨범이 없습니다.</div>;
+  // if (!album.length) return <div>앨범이 없습니다.</div>;
 
   // 최대 5개까지만 보여주기
   const displayAlbum = album.slice(0, 5)
@@ -82,25 +82,28 @@ function MyPlayListSection({loggedInUser}: UserProps) {
   return (
 
     // 각각의 앨범 조회
+    <>
+    {!album.length? "" : <h2 style={{marginLeft:"20px", margin:"10px"}}>나의 앨범</h2>}
     <div className="MyAlbums">
       {displayAlbum.map((currentAlbum) => (
         <div className="MyPlayList" key={currentAlbum.albumId} onClick={() =>{nav(`/albums/${currentAlbum.albumId}`)}}>
           <div className="MyPlayListInfo">
+
               <div className="ImageTitle">
                 {/* 앨범 정보 렌더링 */}
-                <img src={currentAlbum.albumImageUrl} alt=""  width="100"/>
+                <img src={currentAlbum.albumImageUrl} alt=""  width="100" style={{borderRadius:"10px"}}/>
                 <h3>{currentAlbum.title}</h3>
               </div>
-            <p>지금 당신의 플레이리스트를 감상하세요.</p>
+            <p style={{margin:"15px 0", fontWeight:"semibold"}}>지금 당신의 플레이리스트를 감상하세요.</p>
 
             {/* 해당 앨범의 플레이리스트 렌더링 */}
             <div className="Playlists">
               {/* 플레이리스트 3개 이상이더라도 3개까지만 출력*/}
               {currentAlbum.playlists.slice(0,3).map((currentPlaylist) => (
                 
-                  <div className = "MyPlaylist" key={currentPlaylist.playlistId}>
+                  <div className = "MyPlaylist" key={currentPlaylist.playlistId} style={{margin:"10px 0px"}}>
                     <img className="MyAlbumPlaylistImage" src={currentPlaylist.photoUrls[0]} alt=""/>
-                    <div className="text">
+                    <div className="text" >
                       <p className="LocationAddress">{currentPlaylist.locationAddress}</p>
                       <p className="MucisInfo">{currentPlaylist.musicDetails.artistName}&nbsp;&nbsp; - &nbsp;&nbsp;{currentPlaylist.musicDetails.trackName}</p>
                     </div>
@@ -110,10 +113,12 @@ function MyPlayListSection({loggedInUser}: UserProps) {
             </div>
             </div>    
           </div>
+          
       ))}
 
 
     </div>
+    </>
   )
 }
 

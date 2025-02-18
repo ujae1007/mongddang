@@ -11,7 +11,7 @@ function TempAlbumList({ albums, onSelectAlbum, onBack }: TempAlbumListProps) {
 
   return (
     <div>
-      <div>
+      <div style={{display:"flex"}}>
         <img 
           src="../assets/뒤로가기.svg" 
           alt="뒤로가기기" 

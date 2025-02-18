@@ -2,64 +2,60 @@
 
 /* Error.tsx 최상단의 div를 전체 컨테이너로 가정 */
 /* 최상단 div className을 error로 설정 */
-.errorpage {
-  width: 100vw;
-  height: 100vh;
-  position: relative; /* 이미지, 버튼 등을 배치하기 위해 relative 사용 */
+.ErrorPage {
+  width: 100%;
+  height: 100%;
   background-color: #fff;
-  overflow: hidden; /* 필요 시 스크롤 제거 */
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+
+
 }
 
 /* 상단 제목 "Page Not Found" */
-.errorpage > h1 {
-  /* margin: 3rem 0 6.5rem 1.5rem;  */
-  margin-top: 140px;
-  margin-left: 25px;
+.ErrorPage > h1 {
+  width: 100%;
+  margin: 50px 0px 0px 30px;
   font-size: 1.7rem;
   font-weight: 700;
-  color: #333;
+  color: #000;
 }
 
 /* 첫 번째 문단: "죄송합니다. 페이지를 찾을 수 없습니다." */
-.errorpage > p:nth-of-type(1) {
-  margin-top: 80px;
-  margin-left: 25px;
-  font-weight: 600;
+.ErrorPage > p:nth-of-type(1) {
+  width: 100%;
+  margin: 50px 0px 13px 30px;
+  font-weight: 400;
   font-size: 0.78rem;
-  color: #666;
+  color: #000;
 }
 
 /* 두 번째 문단: "존재하지 않는 주소를 입력하셨거나..." */
-.errorpage > p:nth-of-type(2) {
-  margin-top: 10px;
-  margin-left: 25px;
-  font-weight: 600;
+.ErrorPage > p:nth-of-type(2) {
+  width: 100%;
+  margin: 10px 0px 13px 30px;
+  font-weight: 400;
   font-size: 0.78rem;
-  color: #666;
+  color: #000;
   line-height: 1.5;
 }
 
 /* 404 에러 이미지 (캐릭터 포함) */
-.errorpage > img:nth-of-type(1) {
-  position: absolute;
-  top: 58%;
-  left: 50%;
-  transform: translate(-50%, -60%); /* 원하는 위치로 조정 */
-  width: 300px !important;  /* TSX에서 width가 지정되어 있어도 덮어씌우기 */
+.ErrorPage > .ErrorPage-404ErrorImage {
+  margin-top: 50px;
 }
 
 /* 구름 이미지 */
-.errorpage > img:nth-of-type(2) {
-  position: absolute;
+.ErrorPage > img:nth-of-type(2) {
+
   bottom: 18%;
   left: 40%;
-  transform: translateX(-50%);
-  width: 80px !important;
+
 }
 
 /* 마지막 문단: "메인으로 가기 →" */
-.errorpage > p:nth-of-type(3) {
-  position: absolute;
+.ErrorPage > p:nth-of-type(3) {
   bottom: 18%;
   left: 40%;
   font-size: 0.8rem;
@@ -69,6 +65,22 @@
   transition: opacity 0.2s ease;
 }
 
-.errorpage > p:nth-of-type(3):hover {
-  opacity: 0.7;
+.ErrorPage-Bottom {
+  width: 100%;
+  margin-left: 220px;
+  position: relative;
+}
+
+.ErrorPage-Bottom .ErrorPage-BottomImage {
+
+  z-index: 1;
+}
+.ErrorPage-Bottom > p {
+  position:relative;
+  top:40px;
+  left: 35px;
+  font-size: 12px;
+  font-weight: 500;
+  color: #000000;
+  z-index: 2;
 }

@@ -19,6 +19,9 @@ async def generate_cover_endpoint(request: GenerateCoverRequest):
     요청을 받은 후 S3에서 기존 이미지를 다운로드하고,
     새로운 이미지를 생성하여 S3에 저장한 후 URL을 반환합니다.
     """
+    print("test")
+    print(request.genres, request.imageurls)
+
     try:
         # 1. S3에서 기존 이미지 다운로드
         reference_image = gen_internal.fetch_image_from_s3(request.imageurls, dependencies.S3_BUCKET)
@@ -33,8 +36,9 @@ async def generate_cover_endpoint(request: GenerateCoverRequest):
         if not s3_url:
             raise HTTPException(status_code=500, detail="S3 업로드 실패")
         
+        print(s3_url)
         # 4. 결과 반환
-        return {"generated_image_url": s3_url}
+        return {"image_url": s3_url}
 
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
