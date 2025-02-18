@@ -18,6 +18,7 @@ import FollowPage from "./pages/user/FollowPage";
 import LikeAlbumsPage from "./pages/user/LikesAlbum";
 import ErrorPage from "./pages/Error";
 import Edit from "./pages/album/Edit";
+import RecommendPage from "./pages/user/Recommend/Recommend";
 
 import SlideWrapper from "./pages/NewIntro/Slider";
 import BottomNav from "./components/common/BottomNav";
@@ -57,6 +58,7 @@ function AppContent() {
         <Route path="/mainpage" element={<MainPage />} />
         <Route path="/search" element={<SearchPage/>} />
         <Route path="/likes" element={<LikeAlbumsPage />} />
+        <Route path="/recommend" element={<RecommendPage />} />
         
         <Route path="/profile/:userId" element={<ProfilePage />} />
         <Route path="/profileEdit" element={<ProfileEdit />} />
