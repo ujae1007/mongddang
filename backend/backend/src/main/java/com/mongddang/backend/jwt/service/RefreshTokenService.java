@@ -51,7 +51,7 @@ public class RefreshTokenService {
 	}
 	
     // 10초마다 만료된 토큰 자동 삭제
-    @Scheduled(fixedRate = 10000)
+    @Scheduled(fixedRate = 3600000)
     public void deleteExpiredTokens() {
         int deletedCount = refreshTokenRepository.deleteExpiredTokens();
         System.out.println("[Scheduled Task] Expired Refresh Tokens Deleted: " + deletedCount);

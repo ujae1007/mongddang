@@ -89,6 +89,13 @@ public class AlbumController {
         return ResponseEntity.ok(myAlbums);
     }
     
+    // ✅ 내 앨범 중 status=false 인 값들만 상세 조회 (Playlist 정보 포함)
+    @GetMapping("/uncompleted/detail/my")
+    public ResponseEntity<List<AlbumResponseDto>> getMyUncompletedDetailAlbums(Principal principal) {
+        List<AlbumResponseDto> myAlbums = albumService.getMyUncompletedDetailAlbums(principal);
+        return ResponseEntity.ok(myAlbums);
+    }
+    
     // ✅ 내 앨범 중 status=false 인 값들만 조회 (Playlist 정보 제외)
     @GetMapping("/my/uncompleted")
     public ResponseEntity<List<AlbumResponseDto>> getMyUncompletedAlbums(Principal principal) {

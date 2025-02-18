@@ -63,4 +63,12 @@
     	DELETE FROM user
     	WHERE email = #{email}
     </delete>
+    
+        <!-- 사용자 ID로 사용자 정보 조회 -->
+    <select id="getUserById" parameterType="int" resultType="com.mongddang.backend.user.dto.UserDTO">
+        SELECT user_id, email, password, nickname, like_region1, like_region2, like_region3,
+               like_genre1, like_genre2, like_genre3, profile_image_URL, introduce
+        FROM user
+        WHERE user_id = #{userId}
+    </select>
 </mapper>
