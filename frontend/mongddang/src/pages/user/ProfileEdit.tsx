@@ -6,18 +6,29 @@ import FavoriteInput from "../../components/common/favoriteInput"
 import Button from "../../components/common/Button"
 import useAuth from "../../hooks/useAuth"
 import { useRecoilValue } from "recoil"
-import { authTokenAtom } from "../../recoil/userAtom"
+import { useSetRecoilState } from "recoil"
+import { authTokenAtom, userAtom } from "../../recoil/userAtom"
+
 import './ProfileEdit.css'
 
 function ProfileEdit () {
 
     const nav = useNavigate()
     const authToken = useRecoilValue(authTokenAtom)
+
+    const setAuthToken = useSetRecoilState(authTokenAtom)
+    const setUser = useSetRecoilState(userAtom)
   
     useEffect(() => { 
       if (!authToken) {
-        alert("로그인 후 이용하세요.");
+        
+        const wasLoggedIn = sessionStorage.getItem("wasLoggedIn")
+        if(wasLoggedIn) {
+          alert("로그인 후 이용하세요.");
+        }
+        sessionStorage.getItem("wasLoggedIn")
         nav("/login");
+        
       } 
     }, [authToken, nav]); 
   
@@ -42,7 +53,7 @@ function ProfileEdit () {
         loggedInUser.likeRegion3,
       ].filter(Boolean) as string[]
       setSelectedPlaces(places)
-      console.log(loggedInUser.likeGenre1)
+      // console.log(loggedInUser.likeGenre1)
       const genres = [
         loggedInUser.likeGenre1,
         loggedInUser.likeGenre2,
@@ -201,6 +212,24 @@ function ProfileEdit () {
       }
     }
 
+    //로그아웃 하기 
+    const Logout = async () => {
+      const isConfirmed = window.confirm("정말 로그아웃하시겠습니까?")
+      if(!isConfirmed) return 
+
+      try {
+        const res = await axiosInstance.post('/auth/logout')
+
+        //Recoil 상태 초기화 (auth_token 제거하기 )
+        setAuthToken(null)
+        setUser(null)
+        //Access Token 삭제(로컬스토리지에서 제거)
+        sessionStorage.removeItem('auth_token')
+        console.log("로그아웃 완료: ", res)
+      } catch(err){
+      }
+    }
+
   return (
     <div className="profileEditContainer">
     <div className="profileImageContainer">
@@ -217,7 +246,7 @@ function ProfileEdit () {
           accept="image/*"
           onChange={handleImageChange}
         />
-        <button onClick={handleImageDelete} className="deleteButton">삭제</button>
+        <button onClick={handleImageDelete} className="EditdeleteButton">삭제</button>
       </div>
     </div>
 
@@ -281,9 +310,14 @@ function ProfileEdit () {
       />
     </div>
 
-    <p className="deleteUserText" onClick={deleteUser}>
-      계정을 삭제하시겠습니까?
-    </p>
+    <div className="SignoutLogout">
+      <p className="logoutText" onClick={Logout}>
+        로그아웃
+      </p>
+      <p className="deleteUserText" onClick={deleteUser}>
+        계정을 삭제하시겠습니까?
+      </p>
+    </div>
     
   </div>
   )
