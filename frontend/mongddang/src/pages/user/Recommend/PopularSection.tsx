@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import axiosInstance from "../../../api/axiosInstance";
-
+import './PopularSection.css'
 interface Music {
   musicId : number // 해당 앨범의 노래 아이디
   trackName : string;
@@ -67,30 +67,37 @@ const PopularSection = () => {
   }
 
   return (
-    <div>
+    <div className="LikeTopTenWarp">
 
       {/* 텍스트 section */}
-      <div>
-        <h1>Likes TOP 10</h1> 
-        <h2>지금 가장 인기 있는 앨범을 알아보세요!</h2>
-      </div>
+
+      <h1 style={{marginLeft:"10px", marginBottom:"5px", fontSize:"30px", fontWeight:"600"}}>Likes TOP 10</h1> 
+      <p style={{marginLeft:"10px", marginTop:"0px",marginBottom:"0px",color:"#66656C"}}>지금 가장 인기 있는 앨범을 알아보세요!</p>
 
       {/* 앨범 section */}
-      <div>
+      <div className="LikeTopTenAlbums" style={{padding:"10px"}}>
         {topTenLists.likeTopTenLists.map((album) => (
 
-          <div key={album.albumId} onClick={() => {goToAlbumDetail(String(album.albumId))}}>
+          <div className="LikeTopTenAlbum" key={album.albumId} onClick={() => {goToAlbumDetail(String(album.albumId))}}>
 
-            <img src={album.albumImageURL} alt="" width={100}/>
-            <img src={album.authorProfileURL} alt="" />
-            <p>{album.authorNickname}</p>
-
-            {album.playlists.map((playlist, index) => (
-              <div key={playlist.playlistId}>
-                <p>Track {String(index + 1).padStart(2, "0")}</p>
-                <p>{playlist.locationAddress}</p>
+            <div className="LikeTopTenAlbumImage"
+              style={{backgroundImage: `url(${album.albumImageURL})`, display:"flex", flexDirection:"column"
+              }}
+            >
+              <div style={{display:"flex", flexDirection:"column", alignItems:"center"}}>
+                <p style={{color:"#ffffff", fontSize:"24px", margin:0}}>{album.title}</p>
+                <p style={{color:"#ffffff", fontSize:"16px", margin:0}}>{album.authorNickname}</p>
               </div>
-            ))}
+            </div>
+            
+            <div style={{display:"flex", flexDirection:"column"}}>
+              {album.playlists.map((playlist, index) => (
+                <div className="LikeTopTenAlbumInfo" key={playlist.playlistId}>
+                  <p style={{fontSize:"18px",marginBottom:"10px", color:"#000",fontWeight:600}}>{String(index + 1).padStart(2, "0")}. &nbsp; 
+                    <span style={{fontSize:"14px", fontWeight:500}}>{playlist.locationAddress}</span></p>
+                </div>
+              ))}
+            </div>
 
           </div>
           

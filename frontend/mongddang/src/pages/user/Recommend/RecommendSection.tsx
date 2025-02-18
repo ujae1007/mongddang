@@ -72,33 +72,37 @@ const RecommendSection = () => {
     <div className="RecoWrap">
 
       {/* 텍스트 section */}
-      <div className="RecoTitleWrap">
-        <div className="RecoTitle" >For you</div>
-        <div className="RocoSubTitle">좋아하실만한 앨범들을 추천해드릴게요!</div>
-      </div>
+        <h1 style={{marginLeft:"10px", marginBottom:"5px", fontSize:"30px", fontWeight:"600"}}>FOR YOU</h1>
+        <p style={{marginLeft:"10px", marginTop:"0px",marginBottom:"0px",color:"#66656C"}}>좋아하실만한 앨범들을 추천해드릴게요!</p>
       
       {/* 앨범 section */}
-      <div >
-
-
+      <div className="RecommendAlbums" style={{padding:"10px"}}>
         {/* 앨범 상단 */}
         {lists.map((album) => (
-          <div key={album.albumId} onClick={() => goToDetail(String(album.albumId))}>
-            <img src={album.albumImageUrl} alt="" width={200}/>
-            <p>{album.nickname}</p>
-            <p>{album.title}</p>
+          <div className="RecommendAlbum" key={album.albumId} onClick={() => goToDetail(String(album.albumId))}>
+            <div style={{display:"flex", justifyContent:"center", paddingTop:"10px", paddingBottom:"20px"}}>
+            {/* <img src={album.albumImageUrl} alt="" width={200}/> */}
+              <img className="RecommendAlbumImage" src="/assets/album_sample.png" alt="" />
+            </div>
+            <img style={{paddingLeft:"23px"}} src="/assets/구분선.svg" alt="" />
+            <div className="RecommendAlbumInfo">
+              <p style={{margin:"0px", fontSize:"24px"}}>{album.title}</p>
+              <p style={{margin:"0px", fontSize:"16px"}}>{album.nickname}</p>
+            </div>
         
             {/* 앨범 하단 */}
             {album.playlists.map((playlist) =>(
-              <div key={playlist.playlistId}>
+              <div className="RecommendAlbumPlayList"key={playlist.playlistId}>
                 {/* <img src={playlist.photoUrls[0]} alt="" /> */}
-                <img src="/assets/minjeong_profile.png" alt="" />
-                <p>{playlist.locationAddress}</p>
-                <p>{playlist.musicDetails.artistName}&nbsp;-&nbsp;{playlist.musicDetails.trackName}</p>
-          </div>
+                <div style={{padding:"18px", display:"flex"}}>
+                  <img style={{width:"80px",height:"80px"}}src="/assets/minjeong_profile.png" alt="" />
+                  <div style={{ paddingLeft:"10px"}}>
+                    <p style={{margin:"0", marginLeft:"0px", marginTop:"15px",marginBottom:"10px",fontSize:"18px", color:"#252525"}}>{playlist.musicDetails.artistName}</p>
+                    <p style={{margin:"0", marginLeft:"0px", color:"#66656C"}}>{playlist.musicDetails.trackName}</p>
+                  </div>
+                </div>
+              </div>
         ))}
-
-
           </div>
         ))}
       </div>
