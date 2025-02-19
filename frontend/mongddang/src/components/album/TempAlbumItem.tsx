@@ -8,7 +8,7 @@ interface TempAlbumItemProps {
 
 function TempAlbumItem({album,onClick}: TempAlbumItemProps) {
   return (
-    <div>
+    <div className="temp-album-item">
       <img src="../assets/지도마커.svg" alt="" />
       {/* a태그로 하려했는데 button 사용을 권장한다네요 */}
       {/* 배경을 없애고 글씨만 보이게,, 하고 싶어요 */}

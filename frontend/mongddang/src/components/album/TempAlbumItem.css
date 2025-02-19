@@ -1,0 +1,36 @@
+/* TempAlbumItem.css */
+.temp-album-item {
+    /* 리스트 간격을 위해 아래쪽에 여백을 준 예시 */
+    margin-bottom: 21px;
+    margin-left: 16px;
+  
+    /* 아이템들을 가로로 배치하고 수직 가운데 정렬 */
+    display: flex;
+    align-items: center;
+  }
+  
+  .temp-album-item img {
+    /* 아이콘과 버튼(텍스트) 사이 간격 */
+    margin-right: 20px;
+  }
+  
+  .temp-album-item button {
+    /* 버튼의 기본 스타일을 없애고 텍스트만 보이도록 */
+    background: none;
+    border: none;
+    padding: 0;
+    margin: 0;
+    font: inherit;        /* 부모 폰트 스타일을 그대로 사용 */
+    color: inherit;       /* 부모 글자색을 그대로 사용 */
+    cursor: pointer;      /* 마우스 올렸을 때 포인터 모양 */
+
+    font-size: 13px;
+    font-weight: 495;
+  }
+  
+  .temp-album-item button:hover {
+    /* 마우스 올렸을 때 텍스트 강조 효과 예시 */
+    text-shadow: 1px 1px 4px rgba(0, 0, 0, 0.2);
+    color: #9747FF; /* 보라색 계열 강조 */
+  }
+  

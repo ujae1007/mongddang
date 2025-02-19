@@ -39,7 +39,7 @@ except Exception as e:
     raise RuntimeError(f"fail model loading: {e}")
 
 
-# --- xdeepfm 모델 로드 ---
+--- xdeepfm 모델 로드 ---
 try:
     xdeepfm = tf.keras.models.load_model('./models/xdeepfm/xdeepfm.keras')
 except Exception as e:
