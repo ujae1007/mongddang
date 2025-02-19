@@ -125,7 +125,10 @@ function SearchPage () {
             <div className="SearchResults">
               {users.map((user) => (
                 <div className="UserSearchResult" key={user.userId}>
-                  <img src={user.profileImageUrl}/>
+                  <img 
+                    src={user.profileImageUrl}
+                    onClick={() => nav(`/profile/${user.userId}`)}
+                  />
                   <div style={{fontSize:16, fontWeight:400, color:"#717171"}}>{user.nickname}</div>
                 </div>
               ))}
@@ -143,7 +146,12 @@ function SearchPage () {
             <div className="SearchResults">
               {albums.map((album) => (
                 <div className="AlbumSearchResult" key={album.albumId}>
-                  <img src={album.albumImageUrl} alt="album" width={100}/>
+                  <img 
+                    src={album.albumImageUrl} 
+                    alt="album" 
+                    width={100}
+                    onClick={() => nav(`/albums/${album.albumId}`)}
+                  />
                   <div className="AlbumInfo">
                     <p style={{fontSize:"16px", fontWeight:400, color:"#717171"}}>{album.title}</p>
                     <p style={{fontSize:"12px", fontWeight:400, color:"#A6A6A6"}}>조기흠</p>  

@@ -309,7 +309,7 @@ function Create() {
       )}
     
       {step === 2 && album && (
-        <div style={{marginTop:"140px"}}>
+        <div style={{marginTop:"80px"}}>
 
           <Step2
             albumId={album.albumId || 0}
@@ -322,28 +322,32 @@ function Create() {
       )}
 
       {step === 3 && album && (
-        <Step3
-          albumId={album.albumId!}
-          playlistId={playlistId!}
-          title={album.title}
-          onUpdateTitle={handleUpdateTitle}
-          onAddPlaylist={handleAddPlaylist}
-          onCancel={handleCancelPlaylist}
-          editingPlaylist={editingPlaylist}
-        />
+        <div style={{marginTop:"80px"}}>
+          <Step3
+            albumId={album.albumId!}
+            playlistId={playlistId!}
+            title={album.title}
+            onUpdateTitle={handleUpdateTitle}
+            onAddPlaylist={handleAddPlaylist}
+            onCancel={handleCancelPlaylist}
+            editingPlaylist={editingPlaylist}
+          />
+        </div>
       )}
 
       {step === 4 && album && (
-        <Step4
-          album={album}
-          onUpdateTitle={handleUpdateTitle}
-          onComplete={handleCompleteAlbum}
-          onTempSave={handleTempSave}
-          onDeletePlaylist={handleDeletePlaylist}
-          onEditPlaylist={handleEditPlaylist}
-          onCreatePlaylist={handleCreatePlaylist}
-          onReset={handleReset}
-        />
+        <div style={{marginTop:"80px"}}>
+          <Step4
+            album={album}
+            onUpdateTitle={handleUpdateTitle}
+            onComplete={handleCompleteAlbum}
+            onTempSave={handleTempSave}
+            onDeletePlaylist={handleDeletePlaylist}
+            onEditPlaylist={handleEditPlaylist}
+            onCreatePlaylist={handleCreatePlaylist}
+            onReset={handleReset}
+          />
+        </div>
       )}
     </>
   );

@@ -9,6 +9,8 @@ import axiosInstance from "../../api/axiosInstance";
 import Button from "../common/Button";
 import TitleInput from "./TitleInput";
 
+import './Step3.css'
+
 interface Step3Props {
   albumId: number;
   playlistId: number;
@@ -193,97 +195,121 @@ function Step3({
       imageUrls.length !== (editingPlaylist?.photos?.length || 0);
 
   return (
-    <div>
-      <TitleInput
-      title={currentTitle}
-      onChange={handleTitleChange}
-       />
-
-      {/* 사진 */}
-      <div>
-        <input
-          type="file"
-          accept="image/*"
-          ref={fileInputRef}
-          onChange={handleImageSelect}
-          style={{ display: "none" }}
+    <div className="StepThreePage">
+      <div className="step3-container">
+        <p style={{fontSize:"20px", padding:"10px 0px 10px 0px", color:"#66656C" }}>앨범 제목</p>
+        <TitleInput
+            title={currentTitle}
+            onChange={handleTitleChange}
         />
-        <button
-          onClick={() => fileInputRef.current?.click()}
-          disabled={imageUrls.length >= 5}
-          style={{ backgroundColor: "white", border: "none", display: "flex", alignItems: "center", gap: "5px", marginBottom: "10px" }} 
-        >
-          <img src="/assets/추가.svg" alt="" />
+      </div>
 
-          <div > 사진 추가</div>
-        </button>
-
-        {/* 이미지 미리보기 */}
-        <div style={{ display: "flex", gap: "10px" }}>
-          {imageUrls.map((url, index) => (
-            <div key={index} style={{ position: "relative" }}>
-              <img
-                src={url}
-                alt={`Selected ${index + 1}`}
-                style={{ width: "100px", height: "100px", objectFit: "cover" }}
+      <div className="addPlayListItem">
+        {/* 사진 */}
+        <div className="step3-image">
+          <div className="addimage">
+            <div style={{ display: "flex", flexDirection: "column" }}>
+              <input
+                type="file"
+                accept="image/*"
+                ref={fileInputRef}
+                onChange={handleImageSelect}
+                style={{ display: "none" }}
               />
               <button
-                onClick={() => handleRemoveImage(url)}
-                style={{
-                  position: "absolute",
-                  top: 0,
-                  right: 0,
-                  background: "rgba(0, 0, 0, 0.5)",
-                  color: "white",
-                  border: "none",
-                }}
+                onClick={() => fileInputRef.current?.click()}
+                disabled={imageUrls.length >= 5}
+                style={{ backgroundColor: "white", border: "none", display: "flex", alignItems: "center", gap: "5px", marginBottom: "10px" }} 
               >
-                X
+                <img src="/assets/추가.svg" alt="" />
+
+                <div > 사진 추가</div>
               </button>
             </div>
-          ))}
-        </div>
-      </div>
-      
-      {/* 장소 */}
-      {imageUrls.length > 0 && (
-        <div>
-          <SearchLocation
-            onSelectPlace={handleSelectPlace}
-            defaultKeyword={placeName}
-          />
-        </div>
-      )}
-  
-      {/* 노래 */}
-      {placeName && (
-        <div>
-          <SearchMusic 
-            onSelectMusic={(music) => {
-              setMusic(music.musicId);
-              setSelectedMusic(music); // 선택한 음악 정보 저장
-            }} 
-            defaultKeyword={music} />
-          {music && (
+            {/* 이미지 미리보기 */}
             <div>
-              <p>{selectedMusic.trackName} - {selectedMusic.artistName}</p>
+
+            <div style={{ display: "flex", gap: "5px", flex: 1, flexWrap: "wrap" }}>
+              {imageUrls.map((url, index) => (
+                <div key={index} style={{ position: "relative" }}>
+                  <img
+                    src={url}
+                    alt={`Selected ${index + 1}`}
+                    style={{ width: "120px", height: "120px", objectFit: "cover", marginLeft: "20px", gap: "10px" }}
+                  />
+                  <button
+                    onClick={() => handleRemoveImage(url)}
+                    style={{
+                      position: "absolute",
+                      top: 0,
+                      right: 0,
+                      background: "rgba(0, 0, 0, 0.5)",
+                      color: "white",
+                      border: "none",
+                    }}
+                  >
+                    X
+                  </button>
+                </div>
+              ))}
+            </div>
+            </div>
+          </div>
+
+        </div>
+        
+        {/* 장소 */}
+        <div className="step3-place">
+          <div style={{}}>
+            {imageUrls.length > 0 && (
+              <div >
+                <SearchLocation
+                  onSelectPlace={handleSelectPlace}
+                  defaultKeyword={placeName}
+                />
+                <div className="searchResult"> {placeName}</div>
+              </div>
+            )}
+          </div>
+        </div>
+    
+        {/* 노래 */}
+        <div className="step3-music">
+          {placeName && (
+            <div>
+              <SearchMusic 
+                onSelectMusic={(music) => {
+                  setMusic(music.musicId);
+                  setSelectedMusic(music); // 선택한 음악 정보 저장
+                }} 
+                defaultKeyword={music} />
+              {music && (
+                <div>
+                  <p className="searchResult">{selectedMusic.trackName} - {selectedMusic.artistName}</p>
+                </div>
+              )}
             </div>
           )}
         </div>
-      )}
+      </div>
 
-      <Button
-        type="Large"
-        text="취소하기"
-        onClick={onCancel}
-        />
 
-      <Button
-        type="Large"
-        text={isSaving ? "저장 중..." : (editingPlaylist ? "수정하기" : "추가하기")}
-        onClick={handleSubmit}
-        disabled={editingPlaylist ? !hasChanges : !isFormValid || isSaving}
-        />
+      <div className="step3-button">
+        <Button
+          type="Middium"
+          text="취소하기"
+          onClick={onCancel}
+          />
+
+        <Button
+          type="Middium"
+          text={isSaving ? "저장 중..." : (editingPlaylist ? "수정하기" : "추가하기")}
+          using="Album2"
+          onClick={handleSubmit}
+          disabled={editingPlaylist ? !hasChanges : !isFormValid || isSaving}
+          />
+      </div>
+
     </div>
   );
 }

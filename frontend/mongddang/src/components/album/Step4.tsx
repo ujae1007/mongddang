@@ -10,6 +10,8 @@ import Button from "../common/Button";
 import PlaylistItem from "./PlayListItem";
 import Popup from "./Popup"
 
+import './Step4.css'
+
 interface Step4Props {
   album: Album;
   onUpdateTitle: (newTitle: string) => void;
@@ -107,8 +109,7 @@ function Step4({
 
       if (isEditMode) {
         // 수정 모드일 때는 바로 앨범 상세 페이지로 이동
-        // 제목 수정 API 넣어서 수정 예정 
-        // navigate(`/albums/${album.albumId}`);
+        navigate(`/albums/${album.albumId}`);
       } else {
         // 생성 모드일 때는 앨범 완료처리 및 정보 받아오기기
         const { albumDetail } = await onComplete(album.albumId);
@@ -130,11 +131,14 @@ function Step4({
   };
 
   return (
-    <div>
-      <TitleInput
-      title={currentTitle}
-      onChange={handleTitleChange}
-      />
+    <div className="stepFourPage">
+      <div className="stepFourContainer">
+      <p style={{fontSize:"20px", padding:"10px 0px 10px 0px", color:"#66656C" }}>앨범 제목</p>
+        <TitleInput
+        title={currentTitle}
+        onChange={handleTitleChange}
+        />
+      </div>
 
       <div>
       {album.playlists.map((playlist, index) => {
@@ -151,7 +155,7 @@ function Step4({
         })}
       </div>
 
-      <div>
+      <div className="stepFourAddButton">
       {album.playlists.length < 5 && (
           <Button
             type="Large"
@@ -162,18 +166,21 @@ function Step4({
       )}
       </div>
       <>
-      {!isEditMode && (
+      <div className="stepFourButton">
+        {!isEditMode && (
+          <Button
+            type="Middium"
+            onClick={onTempSave}
+            text="임시저장"
+          />
+        )}
         <Button
-          type="Large"
-          onClick={onTempSave}
-          text="임시저장"
+          type="Middium"
+          using="Album2"
+          onClick={handleComplete}
+          text={isEditMode ? "수정완료" : "생성완료"}
         />
-      )}
-      <Button
-        type="Large"
-        onClick={handleComplete}
-        text={isEditMode ? "수정완료" : "생성완료"}
-      />
+      </div>
 
       <div>
         {showPopup && <Popup isLoading={true} />}
