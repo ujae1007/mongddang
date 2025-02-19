@@ -2,5 +2,5 @@
   display: flex;
   justify-content: flex-end; /* 오른쪽 정렬 */
   width: 100%; /* 컨테이너가 전체 너비를 차지 */
-  padding-right: 30px;
+  /* padding-right: 30px; */
 }

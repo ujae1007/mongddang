@@ -76,7 +76,7 @@ const RecommendSection = () => {
         <p style={{marginLeft:"10px", marginTop:"0px",marginBottom:"0px",color:"#66656C"}}>좋아하실만한 앨범들을 추천해드릴게요!</p>
       
       {/* 앨범 section */}
-      <div className="RecommendAlbums" style={{padding:"10px"}}>
+      <div className="RecommendAlbums" style={{margin:"10px", boxSizing:"border-box"}}>
         {/* 앨범 상단 */}
         {lists.map((album) => (
           <div className="RecommendAlbum" key={album.albumId} onClick={() => goToDetail(String(album.albumId))}>

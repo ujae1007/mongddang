@@ -89,13 +89,13 @@ function Map () {
       {latestAlbum && (
         <>
           {/* 지도 */}
-          <div className="MainPage-MapSection"style={{margin:"10px"}}>
+          <div className="MainPage-MapSection"style={{}}>
             {mapBoxPlaylists.length > 0 && (
             <>
               <h2 style={{marginTop:"0px", marginLeft:"20px", margin:"10px"}} onClick={() => nav(`/albums/${latestAlbum.albumId}`)}> 
                 최근 여행지로 떠나볼까요?
               </h2>
-              <div style={{width:"410px", margin:"0px", height:"300px", display:"flex", alignItems:"center"}}>
+              <div className="mapWrapper">
                 <MapBox 
                   playlists={mapBoxPlaylists}
                   onPlaylistSelect={handlePlaylistSelect}

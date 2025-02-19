@@ -8,7 +8,7 @@
   width: 100%;
   overflow-x: auto;
   gap: 15px;
-  height: 200px;
+  height: 220px;
   margin-bottom: 20px;
 }
 
@@ -28,12 +28,23 @@
 .LikeTopTenAlbumImage {
   width: 180px;
   height: 180px;
+  margin-right: 10px;
   background-size: cover;
   background-repeat: no-repeat;
-  border-radius: 20px;
-  filter: brightness(55%);
-  opacity: 90%;
-  /* background: linear-gradient(to top, rgba(0, 0, 0, 0.8) 10%, rgba(0, 0, 0, 0.3) 50%, rgba(0, 0, 0, 0) 90%); */
+  border-radius: 10px;
+  position: relative; /* 오버레이를 위한 상대 위치 */
+  overflow: hidden; 
+}
+
+.LikeTopTenAlbumImage::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.5); /* 어두운 오버레이 (0.5 = 50% 투명도) */
+  border-radius: 10px; /* 부모와 동일한 border-radius 적용 */
 }
 
 .LikeTopTenAlbumInfo{
