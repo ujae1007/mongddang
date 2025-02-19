@@ -1,5 +1,7 @@
 import { useState, useEffect } from "react";
 
+import './SearchLocation.css';
+
 interface Place {
   place_name: string; // 장소명
   address_name: string; // 주소
@@ -31,7 +33,9 @@ function SearchLocation({
   const [places, setPlaces] = useState<Place[]>([]);
   const [isSearching, setIsSearching] = useState(false);
   const [isKakaoMapLoaded, setIsKakaoMapLoaded] = useState(false); // 카카오맵 로드 여부 확인
-  const [showResults, setShowResults] = useState(false); // 팝업 표시 상태
+
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [selectedPlace, setSelectedPlace] = useState<Place | null>(null);
 
   const VITE_KAKAO_MAP_API_KEY = import.meta.env.VITE_KAKAO_MAP_API_KEY ; 
 
@@ -87,7 +91,6 @@ function SearchLocation({
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     searchPlaces();
-    setShowResults(true); // 검색 버튼 클릭 시 검색 결과 팝업 표시
   };
 
   const handleSelectPlace = (place: Place) => {
@@ -97,101 +100,82 @@ function SearchLocation({
       latitude: parseFloat(place.y),
       longitude: parseFloat(place.x),
     });
+    setSelectedPlace(place);
+    setKeyword(`${place.place_name}`); // input에 선택된 장소 표시 
     setPlaces([]); // 선택 후 검색 결과 초기화
-    setShowResults(false); // 선택 후 팝업 닫기 
+    setIsModalOpen(false);
   };
+
+  const handleOpenModal = () => {
+    setIsModalOpen(true);
+    setSelectedPlace(null);
+    setKeyword("");
+  }
+
+
 
   return (
     <div>
-      <form onSubmit={handleSubmit}>
-        <input
-          type="text"
-          value={keyword}
-          onChange={(e) => setKeyword(e.target.value)}
-          placeholder="장소를 검색하세요"
-        />
-        <button type="submit" disabled={isSearching}>
-          {isSearching ? "검색 중..." : "검색"}
+      <div>
+        <button onClick={handleOpenModal} className='LocationSearchBtn'>
+          <div className="LocationSearchText">
+            <img src="/assets/지도마커3.svg" alt="" style={{width:"12px"}}/>
+            <div> 위치 추가 </div>
+          </div>
+          <img src="/assets/화살표.svg" alt="" />
         </button>
-      </form>
+      </div>
 
-      {/* 모달 오버레이 */}
-      {/* 오버레이 형태로 보이게 하기 위해 일단 임시로 적용된 스타일 */}
-      {showResults && places.length > 0 && (
-        <div style={{
-          position: 'fixed',
-          top: 0,
-          left: 0,
-          width: '100%',
-          height: '100%',
-          backgroundColor: 'rgba(0, 0, 0, 0.5)',
-          display: 'flex',
-          justifyContent: 'center',
-          alignItems: 'center',
-          zIndex: 1000
-        }}>
-
-          {/* 모달 컨텐츠 */}
-          <div style={{
-            width: '80%',
-            maxHeight: '70%',
-            backgroundColor: 'white',
-            borderRadius: '8px',
-            padding: '20px',
-            overflow: 'auto'
-          }}>
-            <div style={{
-              display: 'flex',
-              justifyContent: 'space-between',
-              alignItems: 'center',
-              marginBottom: '20px'
-            }}>
-              <h3 style={{ margin: 0 }}>검색 결과</h3>
-              <button 
-                onClick={() => setShowResults(false)}
-                style={{
-                  border: 'none',
-                  background: 'none',
-                  fontSize: '20px',
-                  cursor: 'pointer'
-                }}
-              >
-                ✕
-              </button>
+      {isModalOpen && (
+        <div className="LocationModal">
+          {/* 창닫기 버튼 */}
+          <div className="LocationModalContent">
+            <div className='LocationSearchCloseBtn'>
+              <img src="/assets/창닫기.svg" alt="" onClick={() => setIsModalOpen(false)} />
             </div>
-            
-            <ul style={{ 
-              listStyle: 'none', 
-              padding: 0,
-              margin: 0
-            }}>
-              {places.map((place, index) => (
-                <li
-                  key={index}
-                  onClick={() => handleSelectPlace(place)}
-                  style={{
-                    padding: '15px',
-                    borderBottom: '1px solid #eee',
-                    cursor: 'pointer'
-                  }}
-                >
-                  <p style={{ 
-                    margin: '0 0 5px 0',
-                    fontSize: '16px'
-                  }}>
-                    {place.place_name}
-                  </p>
-                  <small style={{ color: '#666' }}>
-                    {place.address_name}
-                  </small>
-                </li>
+          {/* 검색 폼 부분*/}
+          <form onSubmit={handleSubmit} >
+            <div className="LocationSearchForm">
+              <input
+                type="text"
+                value={keyword}
+                onChange={(e) => setKeyword(e.target.value)}
+                placeholder="장소명을 입력하세요"
+                className="LocationSearchInput"
+              />
+
+              <img 
+                src="/assets/검색2.svg" 
+                alt="" 
+                onClick={()=>searchPlaces()}
+                className="LocationSearchIcon"
+              />
+            </div>
+          </form>
+
+          {/* 검색 결과 리스트*/}
+          {places.length > 0 && (
+            <ul className="LocationSearchList">
+              {places.map((place) => (
+                <div className="LocationSearchItemResult">
+                  <img src="/assets/지도마커.svg" alt="" />
+                  <div
+                    key={place.address_name}
+                    onClick={() => handleSelectPlace(place)}>
+                    <div className="LocationSearchResultPlace"> {place.place_name} </div>
+                    <div className="LocationSearchResultAdress"> {place.address_name} </div>
+                  </div>
+                </div>
               ))}
             </ul>
+          )}
           </div>
+
+
         </div>
       )}
     </div>
-  );
-}
 
+  )
+}
 export default SearchLocation;

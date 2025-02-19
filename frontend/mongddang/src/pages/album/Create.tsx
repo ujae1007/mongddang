@@ -117,7 +117,7 @@ function Create() {
   const handleTempSave = async () => {
     try {
       // 현재 앨범의 최신 상태를 서버에서 가져옴
-      const response = await axiosInstance.get(`/albums/detail/${album?.albumId}`);
+      // const response = await axiosInstance.get(`/albums/detail/${album?.albumId}`);
       
       // 앨범 상태 초기화 전에 서버에서 최신 데이터 불러오기기
       setAlbum(null);

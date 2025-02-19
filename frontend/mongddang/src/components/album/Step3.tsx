@@ -94,14 +94,6 @@ function Step3({
     setLongitude(place.longitude);
   };
 
-  const handleClearPlace = () => {
-    setPlaceName("");
-    setAddress("");
-    setLatitude(0);
-    setLongitude(0);
-    setMusic(""); // 장소 삭제 시 노래 정보도 초기화
-  };
-
   const handleSubmit = async () => {
 
     if (!isFormValid) return;
@@ -209,7 +201,6 @@ function Step3({
 
       {/* 사진 */}
       <div>
-        <label>사진 업로드</label>
         <input
           type="file"
           accept="image/*"
@@ -220,8 +211,11 @@ function Step3({
         <button
           onClick={() => fileInputRef.current?.click()}
           disabled={imageUrls.length >= 5}
+          style={{ backgroundColor: "white", border: "none", display: "flex", alignItems: "center", gap: "5px", marginBottom: "10px" }} 
         >
-          사진 입력
+          <img src="/assets/추가.svg" alt="" />
+
+          <div > 사진 추가</div>
         </button>
 
         {/* 이미지 미리보기 */}
@@ -239,8 +233,9 @@ function Step3({
                   position: "absolute",
                   top: 0,
                   right: 0,
-                  background: "gray",
+                  background: "rgba(0, 0, 0, 0.5)",
                   color: "white",
+                  border: "none",
                 }}
               >
                 X
@@ -253,28 +248,20 @@ function Step3({
       {/* 장소 */}
       {imageUrls.length > 0 && (
         <div>
-          <label>위치 검색</label>
           <SearchLocation
             onSelectPlace={handleSelectPlace}
             defaultKeyword={placeName}
           />
-          {placeName && (
-            <div>
-              <p> {placeName}</p>
-              <button onClick={handleClearPlace}>장소 삭제</button>
-            </div>
-          )}
         </div>
       )}
   
       {/* 노래 */}
       {placeName && (
         <div>
-          <label>노래 선택</label>
           <SearchMusic 
             onSelectMusic={(music) => {
               setMusic(music.musicId);
-              setSelectedMusic(music); // 선택한 음악 정보 저장장
+              setSelectedMusic(music); // 선택한 음악 정보 저장
             }} 
             defaultKeyword={music} />
           {music && (

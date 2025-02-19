@@ -1,0 +1,209 @@
+.detailContainer {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 100%;
+    margin-top: 20px;
+}
+
+/* 앨범 생성자 정보 관련 */
+.detailContainer .profileContainer {
+    display: flex;
+    align-items: center;
+    width: 100%;
+    justify-content: space-between;
+}
+
+.profileInfo {
+    display: flex;
+    align-items: center;
+}
+
+.profileImg {
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    object-fit: cover;
+    margin-left: 25px;
+}
+
+.profileNickname {
+    font-size: 14px;
+    font-weight: 600;
+    color: #66656c;
+    margin-left: 10px;
+}
+
+/* 앨범 제목 및 버튼 관련*/
+.likeButton {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
+    margin-right: 20px;
+
+} 
+
+.likeIcon {
+    width: 25px;
+    height: 25px;
+}
+
+.titleContainer {
+    display: flex;
+    align-items: center;
+    width: 100%;
+    margin-bottom: 10px;
+    gap: 10px;
+    margin-left: 25px;
+}
+
+.titleInfo{
+    font-size: 22px;
+    font-weight: 600;
+    color: #111111;
+    padding-left: 10px;
+    margin: 0; /* 기본 마진 제거 */
+    white-space: nowrap; /* 줄바꿈 방지 */
+    overflow: visible; /* 내용이 넘쳐도 잘리지 않음 */
+}
+
+.buttonContainer{
+  display: flex;
+  justify-content :flex-start;
+  align-items: center;
+  margin-top: 0px;
+  gap:5px
+
+}
+
+.buttonItem {
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    cursor: pointer;
+}
+
+.buttonItem > Button {
+  transform: scale(0.8);
+}
+
+/* 생성된 앨범 커버 및 lp 관련 */
+.lpContainer {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.lpWithCover{
+    position: relative;
+    width: 100%;
+    height: 240px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.coverImg {
+  position: absolute;
+  width: 240px;
+  height: 240px;
+  object-fit: cover; /* 이미지 비율 유지 */
+  transform: translate(-20%, 0%); /*위치 조정*/
+  z-index: 2;
+
+}
+
+.lpImg {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-25%, -50%); /*위치 조정*/
+  z-index: 1;
+  width: 255px;
+  height: 255px;
+  opacity: 0.7;
+}
+
+/* iframe, img 관련 */
+/* iframe, img 관련 */
+.sliderContainer {
+    position: relative;
+    width: 350px;
+    height: 220px;
+    display: flex;
+    justify-content: center;
+    padding: 10px 0;
+    overflow: hidden;
+}
+
+.sliderButton{
+    position: absolute;
+    z-index: 10;
+    background: none;
+    border: none;
+    width: 30px;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+/* 이전 버튼은 왼쪽에 */
+.sliderButton:first-child {
+    left: 0;
+}
+
+/* 다음 버튼은 오른쪽에 */
+.sliderButton:last-child {
+    right: 0;
+}
+
+.sliderArrow {
+    width: 20px;
+    height: 20px;
+}
+
+.mediaContainer {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+    width: 250px;
+    padding: 0 40px;
+}
+
+.mediaItem{
+    position: relative;
+    width: 180px;
+    height: 180px;
+    transition: all 0.3s ease;
+    margin: 0 -60px; /* 겹치는 효과를 위한 마진 */
+    transform-origin: center; 
+}
+
+.mediaItem.selected {
+    min-width: 200px;
+    height: 200px;
+    z-index: 5;
+    transform: scale(1.2);
+}
+
+.mediaItem iframe,
+.mediaItem img {
+    width: 180px;
+    height: 180px;
+    object-fit: cover;
+    border: none;
+}
+
+.mediaOverlay{
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(0, 0, 0, 0.3);
+    width: 180px;
+    height: 180px;
+}

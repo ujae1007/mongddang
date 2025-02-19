@@ -85,8 +85,6 @@ const MusicPlayer: React.FC<MusicPlayerProps> = ({trackName, artistName}) => {
   return (
     <div>
     <iframe
-      width="200"
-      height="200"
       // src={`https://www.youtube.com/embed/${videoId}`}
       src={`https://www.youtube-nocookie.com/embed/${videoId}`}
 
