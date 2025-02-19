@@ -81,18 +81,18 @@ const PopularSection = () => {
           <div className="LikeTopTenAlbum" key={album.albumId} onClick={() => {goToAlbumDetail(String(album.albumId))}}>
 
             <div className="LikeTopTenAlbumImage"
-              style={{backgroundImage: `url(${album.albumImageURL})`, display:"flex", flexDirection:"column"
+              style={{backgroundImage: `url(${album.albumImageURL})`, marginLeft:"10px"
               }}
             >
-              <div style={{display:"flex", flexDirection:"column", alignItems:"center"}}>
-                <p style={{color:"#ffffff", fontSize:"24px", margin:0}}>{album.title}</p>
-                <p style={{color:"#ffffff", fontSize:"16px", margin:0}}>{album.authorNickname}</p>
-              </div>
+            </div>
+            <div className="LikeTopTenAlbumInfo">
+              <p style={{fontSize:"24px", margin:0, textAlign:"center"}}>{album.title}</p>
+              <p style={{fontSize:"16px", margin:0}}>{album.authorNickname}</p>
             </div>
             
             <div style={{display:"flex", flexDirection:"column"}}>
               {album.playlists.map((playlist, index) => (
-                <div className="LikeTopTenAlbumInfo" key={playlist.playlistId}>
+                <div className="LikeTopTenAlbumPlayListInfo" key={playlist.playlistId}>
                   <p style={{fontSize:"18px",marginBottom:"10px", color:"#000",fontWeight:600}}>{String(index + 1).padStart(2, "0")}. &nbsp; 
                     <span style={{fontSize:"14px", fontWeight:500}}>{playlist.locationAddress}</span></p>
                 </div>

@@ -12,8 +12,8 @@
   margin-right: 8px; /* 카드 간격 주기 */
   border-radius: 20px;
   height: 485px;
-  border: 2px solid #f5f5f5;
-  box-shadow: 5px 5px 10px rgba(0, 0, 0, 0.1);
+  border: 2px solid #E9D9FF;
+  box-shadow: 5px 5px 10px rgba(151, 71, 255, 0.1);
 }
 
 .MyPlayList .MyPlayListInfo {

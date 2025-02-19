@@ -107,7 +107,7 @@ function Map () {
 
           {/* 선택된 플레이리스트 정보 */}
           {selectedPlaylist && (
-            <div className='SelectPlayListInfo'style={{boxShadow:"2px 2px 10px rgba(0,0,0,0.1)"}}>
+            <div className='SelectPlayListInfo'>
               {/* 첫 번째 사진 */}
               
                 {selectedPlaylist.photoUrls.length > 0 && (
