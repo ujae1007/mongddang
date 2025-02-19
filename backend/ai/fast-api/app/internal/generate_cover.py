@@ -91,65 +91,22 @@ def run_generate_cover(genres: list, reference_image: Image.Image) -> Image.Imag
     genre = ', '.join(random.sample(genres, 1))
 
     # Prompt with caption
-    prompt = f"abstract oil painting illustration of {caption} inspired by music genre rock"
-    detailed = ", full frame, no borders, no background distractions, highly detailed brushstrokes"
-    prompt += detailed
-    print(prompt)
+    prompt = f"""
+        "illustration of {caption} inspired by music genre {genre}, diverse soft pastel tones, "
+        "gentle and flowing brushstrokes, full frame with a continuous composition, minimal distractions, "
+        "no segmented parts, no borders, no prominent figures or animals"
+        "full frame, uncropped, complete composition with no segmentation, no borders, no background distractions "
+    """
 
     # Negative prompt
-    neg_prompt = '''FastNegativeV2,(bad-artist:1.0),
-    (worst quality, low quality:1.4), (bad_prompt_version2:0.8),
-    bad-hands-5, lowres, bad anatomy, bad hands, ((text)), (watermark),
-    error, missing fingers, extra digit, fewer digits, cropped, realistic scene, people, person,
-    worst quality, low quality, normal quality, ((username)), blurry, vivid color,
-    (extra limbs), bad-artist-anime, badhandv4, EasyNegative,
-    ng_deepnegative_v1_75t, verybadimagenegative_v1.3, BadDream,
-    (three hands:1.1),(three legs:1.1),(more than two hands:1.4),
-    (more than two legs:1.2), badhandv4, EasyNegative, ng_deepnegative_v1_75t, verybadimagenegative_v1.3,
-    (text, words, logo, watermark),
-    nude, nudity, sexual, explicit, violence, gore, disturbing, suggestive, offensive, horror, disturbing content, inappropriate, uncensored, 
-    adult, 18+, revealing clothing, unrealistic proportions, overly exaggerated anatomy, dark themes, terrifying, illegal, unethical
-    '''
+    neg_prompt = """
+        "realistic, overly saturated, harsh contrasts, "
+        "cropped, partial, cut off, painting on an easel, canvas edges"
+        "divided composition, multiple panels, clear figures, 
+        "human, animal, text, logo, watermark"
+    """
 
-    model_sd = dependencies.get_model_sd()
+    model_sd = dependencies.get_model_with_random_lora()
     result = model_sd(prompt, negative_prompt=neg_prompt, num_inference_steps=20, guidance_scale=7.5).images[0]
 
     return result
-
-
-
-# def send_result_to_backend(callback_url: str, image_url: str):
-#     """
-#     업로드된 이미지의 URL과 함께 추론 결과를 백엔드 서버에 POST 요청으로 전달합니다.
-#     """
-#     payload = {
-#         "image_url": image_url,  # S3 URL 전달
-#         "status": "success"
-#     }
-
-#     try:
-#         response = requests.post(callback_url, json=payload, timeout=10)
-#         response.raise_for_status()
-#         print(f"콜백 전송 성공: {response.status_code}")
-#     except Exception as e:
-#         print(f"콜백 전송 실패: {e}")
-
-
-# def process_generate_cover(prompt: str, callback_url: str):
-#     """
-#     전체 생성 과정을 실행:
-#       1. 모델로 이미지를 생성
-#       2. 생성된 이미지를 S3에 업로드
-#       3. S3에 업로드된 이미지 URL을 백엔드에 전달
-#     """
-#     try:
-#         image = run_generate_cover(prompt)
-#         # S3에 이미지 업로드
-#         s3_url = upload_image_to_s3(image, S3_BUCKET, S3_FOLDER)
-#         if s3_url is None:
-#             raise Exception("S3 업로드 실패")
-#     except Exception as e:
-#         print(f"생성 중 에러 발생: {e}")
-#         s3_url = ""
-#     # 백엔드(콜백 URL)로 결과 전송
-#     send_result_to_backend(callback_url, s3_url)
