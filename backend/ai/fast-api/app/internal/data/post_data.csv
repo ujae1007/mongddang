@@ -1,7 +1,7 @@
 post_id,author,title,region,genres
-1,1,Album 1,"Address 4, Address 3, Address 1, Address 2","genre1, genre4, genre3, genre2"
-2,1,Album 2,"Address 4, Address 3, Address 1, Address 2","genre1, genre4, genre3, genre2"
-3,1,Album 3,"Address 11, Address 20, Address 3, Address 30, Address 21","genre7, genre4, genre2, genre3, genre19"
+1,1,Album 1,"Address 4, Address 1, Address 3, Address 2","genre3, genre4, genre1, genre2"
+2,1,Album 2,"Address 4, Address 1, Address 3, Address 2","genre3, genre4, genre1, genre2"
+3,1,Album 3,"Address 3, Address 20, Address 30, Address 11, Address 21","genre3, genre4, genre7, genre2, genre19"
 4,1,Album 4,Address 4,genre4
 5,1,Album 5,Address 5,genre5
 6,2,Album 2,Address 6,genre6
@@ -19,9 +19,10 @@ post_id,author,title,region,genres
 18,14,Album 14,Address 18,genre18
 19,15,Album 15,Address 19,genre19
 20,16,Album 16,Address 20,genre20
-25,21,빵 투어,"한밭수목원, 성심당 본점, 하루필름 연남점",genre1
-27,21,대전 여행,"한밭수목원, 바다정원, 성심당 본점",genre1
-30,21,겨울 대전 여행,"한밭수목원, 대전실내바다낚시터",genre1
+25,21,빵 투어,"성심당 본점, 하루필름 연남점, 한밭수목원",genre1
+27,21,대전 여행,"성심당 본점, 바다정원, 한밭수목원",genre1
+30,21,겨울 대전 여행,"대전실내바다낚시터, 한밭수목원",genre1
 31,21,성욱오빠랑 세종여행,세종호수공원,genre11
-33,21,대전 1반 ,"성심당 본점, 뜨아아아 커피집, 거제식물원","genre11, genre4, genre2"
+33,21,대전 1반 ,"뜨아아아 커피집, 성심당 본점, 거제식물원","genre4, genre2, genre11"
 34,21,지훈이랑 대구여행,막삼가,genre5
+35,21,수빈이랑 꽃놀이,조천변벚꽃길,genre1

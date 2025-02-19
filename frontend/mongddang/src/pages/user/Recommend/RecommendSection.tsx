@@ -69,14 +69,15 @@ const RecommendSection = () => {
     nav(`/albums/${albumId}`)
   }
   return (
+    <>
     <div className="RecoWrap">
 
       {/* 텍스트 section */}
-        <h1 style={{marginLeft:"10px", marginBottom:"5px", fontSize:"30px", fontWeight:"600"}}>FOR YOU</h1>
-        <p style={{marginLeft:"10px", marginTop:"0px",marginBottom:"0px",color:"#66656C"}}>좋아하실만한 앨범들을 추천해드릴게요!</p>
+        <h1 style={{marginBottom:"5px", fontSize:"30px", fontWeight:"600"}}>FOR YOU</h1>
+        <p style={{marginTop:"0px",marginBottom:"20px",color:"#66656C"}}>좋아하실만한 앨범들을 추천해드릴게요!</p>
       
       {/* 앨범 section */}
-      <div className="RecommendAlbums" style={{margin:"10px", boxSizing:"border-box"}}>
+      <div className="RecommendAlbums">
         {/* 앨범 상단 */}
         {lists.map((album) => (
           <div className="RecommendAlbum" key={album.albumId} onClick={() => goToDetail(String(album.albumId))}>
@@ -110,6 +111,7 @@ const RecommendSection = () => {
 
 
     </div>
+</>
   )
 }
 

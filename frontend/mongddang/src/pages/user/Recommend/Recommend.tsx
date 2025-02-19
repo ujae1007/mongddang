@@ -19,7 +19,7 @@ const RecommendPage = () => {
 
   
   return (
-    <>
+    < >
       <RecommendSection />
       <PopularSection />
     </>

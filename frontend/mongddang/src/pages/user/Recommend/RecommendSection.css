@@ -1,5 +1,7 @@
 .RecoWrap {
     width: 100%;
+    padding-left: 20px;
+    box-sizing: border-box;
 }
 
 .RecommendAlbums {
@@ -8,9 +10,11 @@
     width: 100%;
     overflow-x: auto;
     gap: 15px;
+    box-sizing: border-box;
 }
 
 .RecommendAlbum {
+    width: 330px;
     background-color: #ffffff;
     margin-right: 8px; /* 카드 간격 주기 */
     border-radius: 20px;
@@ -18,6 +22,7 @@
     border: 2px solid #E9D9FF;
     box-shadow: 5px 5px 10px rgba(151, 71, 255, 0.1);
     position: relative;
+    box-sizing: border-box;
 }
 
 .RecommendAlbum .RecommendAlbumImage {
@@ -44,6 +49,6 @@
 }
 
 .RecommendAlbum .RecommendAlbumPlayList{
-    width: 330px;
+    width: 100%;
 }
 

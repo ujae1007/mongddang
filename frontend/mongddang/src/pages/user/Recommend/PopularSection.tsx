@@ -72,10 +72,10 @@ const PopularSection = () => {
       {/* 텍스트 section */}
 
       <h1 style={{marginLeft:"10px", marginBottom:"5px", fontSize:"30px", fontWeight:"600"}}>Likes TOP 10</h1> 
-      <p style={{marginLeft:"10px", marginTop:"0px",marginBottom:"0px",color:"#66656C"}}>지금 가장 인기 있는 앨범을 알아보세요!</p>
+      <p style={{marginLeft:"10px", marginTop:"0px",marginBottom:"20px",color:"#66656C"}}>지금 가장 인기 있는 앨범을 알아보세요!</p>
 
       {/* 앨범 section */}
-      <div className="LikeTopTenAlbums" style={{padding:"10px", boxSizing:"border-box"}}>
+      <div className="LikeTopTenAlbums">
         {topTenLists.likeTopTenLists.map((album) => (
 
           <div className="LikeTopTenAlbum" key={album.albumId} onClick={() => {goToAlbumDetail(String(album.albumId))}}>
