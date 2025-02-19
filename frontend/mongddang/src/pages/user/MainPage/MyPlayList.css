@@ -17,7 +17,7 @@
 }
 
 .MyPlayList .MyPlayListInfo {
-  width: 300px;
+  width: 280px;
   padding: 18px;
   color: #3a3a3a;
  
@@ -74,6 +74,9 @@
   padding-left: 10px;
   width: 230px;
   gap: 10px;
+  overflow: hidden;           /* 넘치는 텍스트 숨김 */
+  text-overflow: ellipsis;    /* 넘칠 경우 ... 표시 */
+  white-space: nowrap;        /* 텍스트를 한 줄로 표시 */
 }
 
 .MyPlaylist .text p {

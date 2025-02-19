@@ -95,7 +95,7 @@ const RecommendSection = () => {
               <div className="RecommendAlbumPlayList"key={playlist.playlistId}>
                 {/* <img src={playlist.photoUrls[0]} alt="" /> */}
                 <div style={{padding:"18px", display:"flex"}}>
-                  <img style={{width:"80px",height:"80px"}}src="/assets/minjeong_profile.png" alt="" />
+                  <img style={{width:"80px",height:"80px", borderRadius:"5px"}}src="/assets/minjeong_profile.png" alt="" />
                   <div style={{ paddingLeft:"10px"}}>
                     <p style={{margin:"0", marginLeft:"0px", marginTop:"15px",marginBottom:"10px",fontSize:"18px", color:"#252525"}}>{playlist.musicDetails.artistName}</p>
                     <p style={{margin:"0", marginLeft:"0px", color:"#66656C"}}>{playlist.musicDetails.trackName}</p>
