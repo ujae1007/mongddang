@@ -1,4 +1,5 @@
 user_id,like_region1,like_region2,like_region3,like_genre1,like_genre2,like_genre3
+<<<<<<< HEAD
 1,Seoul,Daegu,Daejeon,Comedy,Action,Horror
 2,Daegu,Seoul,Incheon,Horror,,Action
 3,Seoul,Daejeon,Incheon,Drama,Horror,Action
@@ -11,3 +12,7 @@ user_id,like_region1,like_region2,like_region3,like_genre1,like_genre2,like_genr
 10,Busan,,Incheon,Drama,Comedy,
 12,세종,대전,경기도,hip-hop,folk,reggae
 14,전라북도,광주,서울,blues,edm,r-n-b
+=======
+1,전라남도,경상남도,경상북도,heavy-metal,hip-hop,pop
+4,대전,서울,제주,dance,funk,electronic
+>>>>>>> feature/frontend-앨범생성css

@@ -1,0 +1,17 @@
+.stepFourPage {
+  display: flex;
+  flex-direction: column;
+  /* align-items: start; */
+}
+
+.stepFourContainer {
+  display: flex;
+  gap: 15px;
+}
+
+.stepFourButton {
+  display: flex;
+  justify-content: center;
+  gap: 30px;
+  margin-top: 50px;
+}

@@ -1,0 +1,42 @@
+.StepThreePage {
+  display: flex;
+  flex-direction: column;
+  /* align-items: start; */
+}
+
+.step3-container {
+  display: flex;
+  gap: 15px;
+}
+
+.addPlayListItem {
+  margin-left: 80px;
+}
+
+.step3-button {
+  display: flex;
+  gap: 30px;
+  justify-content: center;
+}
+
+.addimage {
+  display: flex;
+  flex-direction: column;
+}
+
+.step3-place .LocationSearchBtn {
+  width: 250px;
+  margin-bottom: 20px;
+}
+
+.step3-music .album-music-search-btn {
+  width: 250px;
+  margin-bottom: 20px;
+}
+
+.searchResult {
+  margin-left: 10px;
+  margin-top: 0px;
+  color: #9747FF;
+}
+

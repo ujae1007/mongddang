@@ -99,7 +99,7 @@ function RamdomSection({loggedInUser}: UserProps) {
       {isLoading ? (
         <div>로딩중...</div>
       ) : !album.length ? (
-        <div style={{display: "flex", flexDirection: "column", position:"relative", alignItems: "center"}}>
+        <div style={{display: "flex", flexDirection: "column", position:"relative", alignItems: "center"}} onClick={() => nav('/create')}>
           <p style={{position:"absolute",top:"180px", fontSize:"22px", color:"#9747FF", fontWeight:"600"}}>앨범이 없습니다.</p>
           <p style={{position:"absolute",top:"220px", fontSize:"25px", fontWeight:"700"}}>나만의 앨범을 생성해보세요!</p>
           <motion.img 

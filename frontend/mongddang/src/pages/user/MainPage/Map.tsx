@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 import MapBox from "../../../components/album/MapBox"
 import axiosInstance from "../../../api/axiosInstance"
-import { fi } from 'date-fns/locale';
 import './Map.css'
 // 앨범 정보
 interface AlbumDetail {
@@ -30,6 +30,8 @@ function Map () {
   const [latestAlbum, setlatestAlbum] = useState<AlbumDetail | null>(null); // 가장 최근 앨범
   const [selectedPlaylist, setSelectedPlaylist] = useState<AlbumDetail['playlists'][0] | null>(null); // 선택한 플레이리스트 - 초기에는 첫 번째 플레이리스트로 설정
   const [isLoading, setIsLoading] = useState(true); // 로딩 상태
+
+  const nav = useNavigate();
 
   // 가장 최근 앨범 정보 가져오기
   useEffect(() => {
@@ -90,8 +92,10 @@ function Map () {
           <div className="MainPage-MapSection"style={{margin:"10px"}}>
             {mapBoxPlaylists.length > 0 && (
             <>
-              <h2 style={{marginTop:"0px", marginLeft:"20px", margin:"10px"}}> 최근 여행지로 떠나볼까요?</h2>
-              <div style={{height:"225px"}}>
+              <h2 style={{marginTop:"0px", marginLeft:"20px", margin:"10px"}} onClick={() => nav(`/albums/${latestAlbum.albumId}`)}> 
+                최근 여행지로 떠나볼까요?
+              </h2>
+              <div style={{width:"410px", margin:"0px", height:"300px", display:"flex", alignItems:"center"}}>
                 <MapBox 
                   playlists={mapBoxPlaylists}
                   onPlaylistSelect={handlePlaylistSelect}
