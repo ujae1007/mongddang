@@ -119,7 +119,7 @@ function SearchPage () {
           <>
           {/* 유저탭인데 검색결과가 없을 때 */}
           {users.length === 0 ? (
-            <div>{noResultsMessage}</div>
+            <div className="noResultsMessage">{noResultsMessage}</div>
           ) : (
             // 유저탭인데 검색결과가 있을 때
             <div className="SearchResults">
@@ -140,7 +140,7 @@ function SearchPage () {
           <>
           {/* 앨범탭인데 검색 결과가 없을 때 */}
           {albums.length === 0 ? (
-            <div>{noResultsMessage}</div>
+            <div className="noResultsMessage">{noResultsMessage}</div>
           ) : (
             // 앨범탭인데 검색 결과가 있을 때
             <div className="SearchResults">
@@ -151,11 +151,12 @@ function SearchPage () {
                     alt="album" 
                     width={100}
                     onClick={() => nav(`/albums/${album.albumId}`)}
+                    style={{borderRadius:"10px"}}
                   />
                   <div className="AlbumInfo">
                     <p style={{fontSize:"16px", fontWeight:400, color:"#717171"}}>{album.title}</p>
-                    <p style={{fontSize:"12px", fontWeight:400, color:"#A6A6A6"}}>조기흠</p>  
-                    {/* <div>{album.nickname}</div> */}
+                    {/* <p style={{fontSize:"12px", fontWeight:400, color:"#A6A6A6"}}>조기흠</p>   */}
+                    <p style={{fontSize:"12px", fontWeight:400, color:"#A6A6A6"}} >{album.nickname}</p>
                   </div>
                   
                 </div>

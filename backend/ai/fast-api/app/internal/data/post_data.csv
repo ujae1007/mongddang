@@ -1,8 +1,27 @@
 post_id,author,title,region,genres
-247,1,성욱의 세종 사이클 여행,?몄쥌?몄닔怨듭썝,opera
-248,2,기흠이의 용산여행,?뺤뭅???쇱옄??306,reggae
-249,3,혜민의 청량리 여행,"?덈뵒釉붾（, 泥?웾?뚭?, ?쒖슱?쒕┰??숆탳","punk-rock, opera, grunge"
-250,4,혜민이의 혼자 부산 여행,?댁옱紐⑦뵾??蹂몄젏,turkish
-252,5,플레이리스트 5개 앨범,"臾댁떊???ㅽ깲?ㅻ뱶 ?깆닔??
-314,252,1142921,0,0,2025-02-16 12:47:21"", ?숇ЦA二쇱쑀??316",opera
-259,15,테스트입니다,"국립세종수목원, 금강수목원","latin, k-pop"
+1,1,Album 1,"Address 4, Address 3, Address 1, Address 2","genre1, genre4, genre3, genre2"
+2,1,Album 2,"Address 4, Address 3, Address 1, Address 2","genre1, genre4, genre3, genre2"
+3,1,Album 3,"Address 11, Address 20, Address 3, Address 30, Address 21","genre7, genre4, genre2, genre3, genre19"
+4,1,Album 4,Address 4,genre4
+5,1,Album 5,Address 5,genre5
+6,2,Album 2,Address 6,genre6
+7,3,Album 3,Address 7,genre7
+8,4,Album 4,Address 8,genre8
+9,5,Album 5,Address 9,genre9
+10,6,Album 6,Address 10,genre10
+11,7,Album 7,Address 11,genre11
+12,8,Album 8,Address 12,genre12
+13,9,Album 9,Address 13,genre13
+14,10,Album 10,Address 14,genre14
+15,11,Album 11,Address 15,genre15
+16,12,Album 12,Address 16,genre16
+17,13,Album 13,Address 17,genre17
+18,14,Album 14,Address 18,genre18
+19,15,Album 15,Address 19,genre19
+20,16,Album 16,Address 20,genre20
+25,21,빵 투어,"한밭수목원, 성심당 본점, 하루필름 연남점",genre1
+27,21,대전 여행,"한밭수목원, 바다정원, 성심당 본점",genre1
+30,21,겨울 대전 여행,"한밭수목원, 대전실내바다낚시터",genre1
+31,21,성욱오빠랑 세종여행,세종호수공원,genre11
+33,21,대전 1반 ,"성심당 본점, 뜨아아아 커피집, 거제식물원","genre11, genre4, genre2"
+34,21,지훈이랑 대구여행,막삼가,genre5

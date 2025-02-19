@@ -1,6 +1,7 @@
 .LikeAlbums {
   display: grid;
   grid-template-columns: repeat(3, 1fr); /* 3열 레이아웃 */
+  margin: 0px 10px;
 }
 
 .LikeAlbum {
@@ -16,19 +17,30 @@
   background-position-x: -8px;
 }
 
+@keyframes spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+
 .AlbumImage{
   position: relative;
-  width: 200px;
+  width: 195px;
   border-radius: 50%;
-  right: -72.5px;
-  top: 20px;
+  right: -75.5px;
+  top: 24px;
   z-index:1;
+  animation: spin 7s linear infinite;
 }
 
 .PlayButton {
   position: relative;
-  right: 46px;
-  top:-55px;
+  right: 40px;
+  top:-50px;
   z-index: 2;
 }
 

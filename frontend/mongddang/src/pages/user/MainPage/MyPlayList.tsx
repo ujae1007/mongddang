@@ -82,7 +82,7 @@ function MyPlayListSection({loggedInUser}: UserProps) {
   return (
 
     // 각각의 앨범 조회
-    <>
+    <div style={{marginBottom:"30px"}}>
     {!album.length? "" : <h2 style={{marginLeft:"20px", margin:"10px"}}>나의 앨범</h2>}
     <div className="MyAlbums">
       {displayAlbum.map((currentAlbum) => (
@@ -97,7 +97,7 @@ function MyPlayListSection({loggedInUser}: UserProps) {
             <p style={{margin:"15px 0", fontWeight:"semibold"}}>지금 당신의 플레이리스트를 감상하세요.</p>
 
             {/* 해당 앨범의 플레이리스트 렌더링 */}
-            <div className="Playlists">
+            <div className="Playlists" >
               {/* 플레이리스트 3개 이상이더라도 3개까지만 출력*/}
               {currentAlbum.playlists.slice(0,3).map((currentPlaylist) => (
                 
@@ -118,7 +118,7 @@ function MyPlayListSection({loggedInUser}: UserProps) {
 
 
     </div>
-    </>
+    </div>
   )
 }
 

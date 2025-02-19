@@ -75,7 +75,7 @@ const PopularSection = () => {
       <p style={{marginLeft:"10px", marginTop:"0px",marginBottom:"0px",color:"#66656C"}}>지금 가장 인기 있는 앨범을 알아보세요!</p>
 
       {/* 앨범 section */}
-      <div className="LikeTopTenAlbums" style={{padding:"10px"}}>
+      <div className="LikeTopTenAlbums" style={{padding:"10px", boxSizing:"border-box"}}>
         {topTenLists.likeTopTenLists.map((album) => (
 
           <div className="LikeTopTenAlbum" key={album.albumId} onClick={() => {goToAlbumDetail(String(album.albumId))}}>

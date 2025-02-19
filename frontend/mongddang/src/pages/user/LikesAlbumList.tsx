@@ -86,21 +86,25 @@ function LikesAlbumList ({loggedInuser, thirdSectionRef}:UserProps) {
   
   return (
     <div style={{marginTop:10}}>
+
       {/* 3개만 렌더링하기 */}
         <div className = "LikeAlbums">
           {firstSection.map((album) => (
             <div className="LikeAlbum"key={album.albumId}> 
-              <img src={album.albumImageURL} width={100} onClick={() => goToAlbumDetail(String(album.albumId))}/>
+
+
+              <img style={{borderRadius:"5px", width:"117px", height:"auto"}}src={album.albumImageURL} onClick={() => goToAlbumDetail(String(album.albumId))}/>
+
             </div>
           ))}
         </div>
       
       {/* 첫 번째 앨범 렌더링 일단 사진만 누르면 해당 상세페이지로 이동하게함*/}
         <div style={{marginTop:"20px"}}>
-          {/* 밑바닥 위에 앨범커버 넣고, 위에 버튼 올리면돼~! 고마워~!! */}
           <div className="LikeAlbumImages">
             <img className="AlbumImage"src={secondSection.albumImageURL} onClick={() => goToAlbumDetail(String(secondSection.albumId))}/>
-            <img className="PlayButton"src="../../public/assets/탑.png" alt="" />
+            
+            <img className="PlayButton"src="../../public/assets/탑.png" alt="" onClick={() => goToAlbumDetail(String(secondSection.albumId))}/>
           </div>
           <div className="AlbumAuthor">
             <p className="AuthorNickname">{secondSection.authorNickname}</p>
@@ -122,16 +126,18 @@ function LikesAlbumList ({loggedInuser, thirdSectionRef}:UserProps) {
               );
             })}
           </div>
-          
+
+        </div>
+
         {/* 네번째 앨범부터 다시 렌더링 */}
-          <div className = "LikeAlbums" ref={thirdSectionRef} style={{marginTop:"20px", marginBottom:"20px"}} >
+          <div className = "LikeAlbums" ref={thirdSectionRef} style={{marginBottom:"50px"}} >
             {thirdSection.map((album) => (
-              <div className="LikeAlbum" key={album.albumId} onClick={() => goToAlbumDetail(String(album.albumId))}> 
-                <img src={album.albumImageURL} width={100}/>
+              <div className="LikeAlbum" key={album.albumId} > 
+                <img style={{marginTop:"40px"}} src={album.albumImageURL} width={100} onClick={() => goToAlbumDetail(String(album.albumId))} />
+
               </div>
             ))}
           </div>
-        </div>
 
         
     </div>

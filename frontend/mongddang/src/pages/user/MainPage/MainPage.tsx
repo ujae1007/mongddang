@@ -36,7 +36,7 @@ function MainPage () {
       </div>
 
       {/* 내 플레이리스트 일단 3개만 보이도록 하자*/}
-      <div style={{padding:10}}>
+      <div style={{padding:"10px 0px 10px 10px"}}>
         <MyPlayListSection loggedInUser={String(loggedInUsernickname)}/>
       </div>
 
