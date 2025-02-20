@@ -1,6 +1,6 @@
 package com.mongddang.backend.config;
 
-import java.util.Collections;
+import java.util.List;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -14,100 +14,93 @@ import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
+import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 
 import com.mongddang.backend.jwt.JWTFilter;
 import com.mongddang.backend.jwt.JWTUtil;
 import com.mongddang.backend.jwt.LoginFilter;
-import com.mongddang.backend.jwt.service.RedisService;
 import com.mongddang.backend.jwt.service.RefreshTokenService;
-
-import jakarta.servlet.http.HttpServletRequest;
 
 @Configuration
 @EnableWebSecurity
 public class SecurityConfig {
-    //AuthenticationManager가 인자로 받을 AuthenticationConfiguraion 객체 생성자 주입
     private final AuthenticationConfiguration authenticationConfiguration;
     private final JWTUtil jwtUtil;
     private final RefreshTokenService refreshTokenService;
-    public SecurityConfig(AuthenticationConfiguration authenticationConfiguration, JWTUtil jwtUtil, RefreshTokenService refreshTokenService) {
 
+    @Value("${FRONTEND_URL}")
+    private String frontendUrl;
+
+    @Value("${FRONTEND_URL2}")
+    private String frontendUrl2;
+
+    public SecurityConfig(AuthenticationConfiguration authenticationConfiguration, JWTUtil jwtUtil, RefreshTokenService refreshTokenService) {
         this.authenticationConfiguration = authenticationConfiguration;
         this.jwtUtil = jwtUtil;
         this.refreshTokenService = refreshTokenService;
     }
-	
-	// 암호화
-	@Bean
-    public BCryptPasswordEncoder bCryptPasswordEncoder() {
 
+    @Bean
+    public BCryptPasswordEncoder bCryptPasswordEncoder() {
         return new BCryptPasswordEncoder();
     }
-	
-	// AuthenticationManager bean 등록
+
     @Bean
     public AuthenticationManager authenticationManager(AuthenticationConfiguration configuration) throws Exception {
-
         return configuration.getAuthenticationManager();
     }
-	
-	@Bean
-	public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
-		
-		//cors 설정
-		http
-        	.cors((corsCustomizer -> corsCustomizer.configurationSource(new CorsConfigurationSource() {
 
-            @Override
-            public CorsConfiguration getCorsConfiguration(HttpServletRequest request) {
-
-                CorsConfiguration configuration = new CorsConfiguration();
-
-                configuration.setAllowedOrigins(Collections.singletonList("http://localhost:5173")); //허용할 프론트앤드 서버
-                configuration.setAllowedMethods(Collections.singletonList("*"));					// 모든 메서드 허용
-                configuration.setAllowCredentials(true);											
-                configuration.setAllowedHeaders(Collections.singletonList("*"));
-                configuration.setMaxAge(3600L);														//허용할 시간
-                configuration.setExposedHeaders(Collections.singletonList("Authorization"));		// Authorization 헤더 허용
-
-                return configuration;
-            }
-        })));
-		
-		// csrf 비활성화
-		http
-			.csrf((auth) -> auth.disable());
-		
-		//From 로그인 방식 disable -> UsernamePasswordAuthenticationFilter 커스텀 해야됨
+    @Bean
+    public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http
-        	.formLogin((auth) -> auth.disable());
+            // ✅ CORS 설정 추가
+            .cors(cors -> cors.configurationSource(corsConfigurationSource()))
 
-		//http basic 인증 방식 disable
-        http
-            .httpBasic((auth) -> auth.disable());
-        
-        // 기본 LogoutFilter 비활성화 (JWT 기반 인증에서는 필요하지 않으므로)
-        http.
-        	logout(logout -> logout.disable());
-        
-        // 접근 허용 및 인증 절차
-        http
-        	.authorizeHttpRequests((auth) -> auth
-                    .requestMatchers("/", "/api/auth/signup", "/api/auth/login", "/api/auth/sendemail","/api/auth/verifycode",
-                    		"/api/auth/reissue","/api/auth/logout").permitAll()
-                    .anyRequest().authenticated());
-        //jwtfilter 등록
-        http
-        	.addFilterBefore(new JWTFilter(jwtUtil), LoginFilter.class);
+            // ✅ CSRF 비활성화 (프론트-백 분리 환경)
+            .csrf(csrf -> csrf.disable())
 
-        http
-        	.addFilterAt(new LoginFilter(authenticationManager(authenticationConfiguration), jwtUtil, refreshTokenService), UsernamePasswordAuthenticationFilter.class);
+            // ✅ 기본 로그인 방식 비활성화
+            .formLogin(form -> form.disable())
 
-        //세션 stateless 상태로 변경
-        http
-        .sessionManagement((session) -> session
-                .sessionCreationPolicy(SessionCreationPolicy.STATELESS));
-		
-		return http.build();
-	}
+            // ✅ HTTP 기본 인증 방식 비활성화
+            .httpBasic(basic -> basic.disable())
+
+            // ✅ 기본 LogoutFilter 비활성화 (JWT 기반 인증에서는 필요 없음)
+            .logout(logout -> logout.disable())
+
+            // ✅ 접근 허용 및 인증 설정
+            .authorizeHttpRequests(auth -> auth
+                .requestMatchers("/", "/api/**", "/api/auth/login", "/api/auth/sendemail",
+                                 "/api/auth/verifycode", "/api/auth/reissue", "/api/auth/logout","/api/ai/**")
+                .permitAll()
+                .anyRequest().authenticated()
+            )
+
+            // ✅ JWT 필터 추가
+            .addFilterBefore(new JWTFilter(jwtUtil), LoginFilter.class)
+            .addFilterAt(new LoginFilter(authenticationManager(authenticationConfiguration), jwtUtil, refreshTokenService),
+                         UsernamePasswordAuthenticationFilter.class)
+
+            // ✅ 세션 stateless 상태로 변경 (JWT 사용 시 필수)
+            .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS));
+
+        return http.build();
+    }
+
+    // ✅ CORS 설정 추가
+    @Bean
+    public CorsConfigurationSource corsConfigurationSource() {
+        CorsConfiguration configuration = new CorsConfiguration();
+        configuration.addAllowedOrigin(frontendUrl);
+        configuration.addAllowedOrigin(frontendUrl2);
+        configuration.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE", "OPTIONS")); // 허용할 HTTP 메서드
+        configuration.setAllowedHeaders(List.of("Content-Type","Authorization")); // 모든 헤더 허용
+        configuration.setAllowCredentials(true); // 쿠키 및 인증 정보 허용
+
+        // CORS 설정을 모든 경로에 적용
+        UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
+        source.registerCorsConfiguration("/api/**", configuration);  // 여기서 모든 경로에 적용
+
+        return source;
+    }
 }

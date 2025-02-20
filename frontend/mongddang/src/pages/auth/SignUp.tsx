@@ -250,7 +250,7 @@ function SignUp () {
       <div className="TitleWrap">
         <div className="title">Sign Up</div>
         <div className="icornImageWrap">
-          <img src="../../public/assets/회원가입.png" alt="" width="188px" />
+          <img src="/assets/회원가입.png" alt="" width="188px" />
         </div>
       </div>
 

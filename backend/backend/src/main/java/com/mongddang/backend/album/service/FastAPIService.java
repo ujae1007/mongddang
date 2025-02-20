@@ -17,8 +17,11 @@ public class FastAPIService {
 
     // FastAPI로 노래 장르 리스트, 이미지 리스트 전송 후 표지 이미지 URL 반환
 
+    @Value("${FASTAPI_URL}")
+    private String fastApiUrlStart;
+
     public String getAlbumImg(List<String> genres, List<String> imageUrls) {
-        String fastApiUrl = "http://127.0.0.1:8000/generate_cover";
+        String fastApiUrl = String.format("%s/generate_cover", fastApiUrlStart);
 
         // FastAPI에 보낼 JSON 데이터 생성
         Map<String, Object> payload = Map.of("genres", genres, "imageurls", imageUrls);
@@ -49,7 +52,7 @@ public class FastAPIService {
     
     public List<Integer> getRecommendedAlbumIds(int userId, String likeRegion1, String likeRegion2, String likeRegion3, 
     		String likeGenre1, String likeGenre2, String likeGenre3) {
-        String fastApiUrl = "http://127.0.0.1:8000/recommendation";
+        String fastApiUrl = String.format("%s/recommendation", fastApiUrlStart);
 
         // JSON 데이터 생성
         Map<String, Object> payload = Map.of(

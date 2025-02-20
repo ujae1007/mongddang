@@ -121,10 +121,10 @@
 - APScheduler 3.11.0
 - accelerate 1.3.0
 ### 4) Infra
-- 컨테이너: Docker (Docker Compose)
-- 클라우드 플랫폼: AWS EC2, S3
-- 리버스 프록시 & 로드 밸런싱: Nginx
-- 네트워크: Tailscale
+- Docker (Docker Compose)
+- AWS EC2, S3
+- Nginx
+- Tailscale
 ## 5. 협업 툴
 ### 1)  Git Lab
 ### 2) Jira
@@ -145,7 +145,7 @@
 |이름|역할|
 |--- |---|
 |남우재(팀장&BE)|- 앨범, 앨범상세, 플레이리스트, 사진 CRUD 구현 <br> - 유저, 앨범, 노래 검색 API 구현 <br> - Spring과 Fast API 연결 <br> - Spring을 통한 MySQL 스케쥴링 <br> - Git 관리 <br> - 전반적인 발표 담당|
-|조성욱(부팀장&Data)| - PM을 맡으며 전체적인 프로젝트 진행 관리<br>- BLIP, Stable Diffusion v1-5 모델을 통해 생성형 이미지 AI 기능 구현<br>- xDeepFM 모델을 활용해 앨범 추천시스템 기능 구현<br>- FastAPI와 Spring 연결|
+|조성욱(PM&Data)| - PM을 맡으며 전체적인 프로젝트 진행 관리<br>- BLIP, Stable Diffusion v1-5 모델을 통해 생성형 이미지 AI 기능 구현<br>- xDeepFM 모델을 활용해 앨범 추천시스템 기능 구현<br>- FastAPI와 Spring 연결|
 |김수민(Infra)| - 프로젝트 배포 및 인프라 관리 담당<br> - Docker(Docker Compose)를 활용한 컨테이너화 및 운영 환경 구성 <br> - AWS EC2를 이용한 백엔드 및 프론트엔드 서비스 배포 <br> - Nginx를 사용한 리버스 프록시 설정 및 FE ↔ BE 연결 <br> - Tailscale을 활용한 EC2와 로컬 FastAPI 간 네트워크 터널링 구성|
 |김민정(FE)|- 피그마 목업 디자인<br>- 회원(로그인, 회원가입, 프로필 수정 등) 관련 페이지 구현<br>- 소개페이지(애니메이션 활용) 구현<br>- 메인페이지 구현<br>- 좋아요 및 검색 페이지 구현<br>- 유튜브API 활용<br> - UCC 제작|
 |김혜민(FE)|- 피그마 목업 디자인<br> - 앨범 생성 및 상세 페이지 구현 <br> - MapBox 라이브러리 활용 및 지도 시각화 <br>- 카카오맵 API 활용한 위치 정보 수집 및 활용 <br> - access token과 refresh token 관리 기능 구현 <br> - 발표 ppt 제작작|
