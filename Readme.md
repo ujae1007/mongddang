@@ -118,6 +118,8 @@
 - TensorFlow 2.18.0 
 - torch 2.6.0 + cu118
 - uvicorn 0.34.0
+- APScheduler 3.11.0
+- accelerate 1.3.0
 ### 4) Infra
 - 컨테이너: Docker (Docker Compose)
 - 클라우드 플랫폼: AWS EC2, S3
@@ -140,7 +142,7 @@
 ## 9. 팀 구성원 및 역할
 |이름|역할|
 |--- |---|
-|남우재(팀장&BE)|-|
+|남우재(팀장&BE)|- 앨범, 앨범상세, 플레이리스트, 사진 CRUD 구현 <br> - 유저, 앨범, 노래 검색 API 구현 <br> - Spring과 Fast API 연결 <br> - Spring을 통한 MySQL 스케쥴링 <br> - Git 관리 <br> - 전반적인 발표 담당|
 |조성욱(부팀장&Data)| - PM을 맡으며 전체적인 프로젝트 진행 관리<br>- BLIP, Stable Diffusion v1-5 모델을 통해 생성형 이미지 AI 기능 구현<br>- xDeepFM 모델을 활용해 앨범 추천시스템 기능 구현<br>- FastAPI와 Spring 연결|
 |김수민(Infra)|------------|
 |김민정(FE)|- 피그마 목업 디자인<br>- 회원(로그인, 회원가입, 프로필 수정 등) 관련 페이지 구현<br>- 소개페이지(애니메이션 활용) 구현<br>- 메인페이지 구현<br>- 좋아요 및 검색 페이지 구현<br>- 유튜브API 활용<br> - UCC 제작|
