@@ -139,11 +139,11 @@
 
 ## 8. 시연영상
 ### 1) 소개페이지
-![소개페이지영상](/uploads/a176c8010d07fc8162e139dbb467f5fa/소개페이지영상.gif)
+![소개페이지영상](https://github.com/user-attachments/assets/f59262cc-78ea-41e0-8980-67008c29f2f3)
 ### 2) 플레이리스트 생성
-![플레이리스트추가](/uploads/aad68d888f197788b22b08da3e88b165/플레이리스트추가.mp4)
+![플레이리스트추가](https://github.com/user-attachments/assets/1db65dae-033b-43e1-b9fb-7c34e8dc1b7f)
 ### 3) 앨범 생성
-![앨범생성](/uploads/3dfe62715d5b8fbff12b5fabd30153c4/앨범생성.mp4)
+![앨범생성](https://github.com/user-attachments/assets/1aedf0f5-b35b-4952-8e46-dfab2d81df47)
 
 ## 9. 팀 구성원 및 역할
 |이름|역할|
